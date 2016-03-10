@@ -1,0 +1,7 @@
+type = "minionCard"
+name = "test"
+desc = "test"
+art = "test"
+cost = 1
+baseAttack = 1
+baseHealth = 1  

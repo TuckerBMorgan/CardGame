@@ -1,0 +1,2 @@
+Name = "test"
+Players = {[0] = "PlayerController", [1] = "AiController"}	
