@@ -3,16 +3,24 @@ using UnityEngine;
 using System.Collections;
 using MoonSharp.Interpreter;
 
+public enum CardType
+{
+    minion,
+    test
+}
+
 public abstract class Card : entity  {
 
     private string name;
     private string desc;
     private string art;
+    private CardType cardType;
     private Script cardFile;
     private int mana;
     private Guid guid;
     private CardAvatar cardAvatar;
-    
+   
+
     public void SetName(string name)
     {
         this.name = name;
@@ -77,6 +85,21 @@ public abstract class Card : entity  {
     public CardAvatar GetCardAvatar()
     {
         return cardAvatar;
+    }
+
+    public void SetCardType(int type)
+    {
+        if(type  > sizeof(CardType) || type < 0)
+        {
+            Debug.Log(type + " is not a valid card type");
+            return;
+        }
+
+        cardType = (CardType)type;
+    }
+    public CardType GetCardType()
+    {
+        return cardType;
     }
 
 

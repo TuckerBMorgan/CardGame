@@ -11,8 +11,6 @@ using MoonSharp.Interpreter;
 public class CreateCard : Rune {
 
     public static string TYPE = "type";
-    public static string MINION_CARD = "minionCard";
-    public static string SPELL_CARD = "spellCard";
     public static string BASE_HEALTH = "baseHealth";
     public static string BASE_ATTACK = "baseAttack";
     public static string DESC = "desc";
@@ -20,6 +18,7 @@ public class CreateCard : Rune {
     public static string COST = "cost";
     public static string NAME = "name";
     public static string CARD_FILE_LOCATION = "Cards/";
+
 
     public Guid guid;
     public string cardName;
@@ -30,16 +29,16 @@ public class CreateCard : Rune {
         this.cardName = cardName;
     }
 
-    public override void Execute(System.Action action)
+    public override void Execute(Action action)
     {
         TextAsset ta = Resources.Load<TextAsset>(CARD_FILE_LOCATION + cardName);   
         if(ta.text != null)
         {
             Script scr = new Script();
             scr.DoString(ta.text);
-            string type = scr.Globals[TYPE].ToString();
+            int type = int.Parse(scr.Globals[TYPE].ToString());
             Card card;
-            if(type == MINION_CARD)
+            if(type == (int)CardType.minion)
             {
                 card = new MinionCard();
                 card.SetMana(int.Parse(scr.Globals[COST].ToString()));
@@ -53,7 +52,7 @@ public class CreateCard : Rune {
                 mc.SetBaseHealth(int.Parse(scr.Globals[BASE_HEALTH].ToString()));
                 EntityManager.Singelton.AddEntity(guid, card);
             }
-            else if( type == SPELL_CARD)
+            else if( type == (int)CardType.test)
             {
                 //Need to implement
             }

@@ -1,4 +1,4 @@
-type = "minionCard"
+type = 0
 name = "test"
 desc = "test"
 art = "test"
