@@ -8,6 +8,7 @@ public class ConflictController : MonoBehaviour {
 
     private Script conflictScenario;
     private List<Controller> controllersInGame;
+    private PlayArea playArea;
 
     void Awake()
     {
@@ -16,7 +17,9 @@ public class ConflictController : MonoBehaviour {
 
     public void StartConflict(string conflictFile)
     {
-        controllersInGame = new List<Controller>();   
+        controllersInGame = new List<Controller>();
+        playArea = GetComponent<PlayArea>();
+        
         TextAsset ta = Resources.Load<TextAsset>("Conflicts/" + conflictFile);
         if(ta.text != null)
         {
@@ -30,8 +33,12 @@ public class ConflictController : MonoBehaviour {
                 RuneManager.Singelton.ExecuteRune(nc);
                 controllersInGame.Add(EntityManager.Singelton.GetEntity(useGuid) as Controller);
             }
-
+            
+            playArea.Setup(controllersInGame[0].GetGuid(), controllersInGame[1].GetGuid());
+            Guid saveOff;
             Guid cardGuid = controllersInGame[0].GetCardByIndex(0).GetGuid();
+            saveOff = cardGuid;
+            Debug.Log(cardGuid);
             Guid playerGuid = controllersInGame[0].GetGuid();
 
             DealCard dc = new DealCard(playerGuid, cardGuid, true);
@@ -41,6 +48,16 @@ public class ConflictController : MonoBehaviour {
             DealCard dc2 = new DealCard(playerGuid, cardGuid, true);
             RuneManager.Singelton.ExecuteRune(dc2);
 
+
+            cardGuid = controllersInGame[1].GetCardByIndex(0).GetGuid();
+            DealCard dc3 = new DealCard(controllersInGame[1].GetGuid(), cardGuid, true);
+            RuneManager.Singelton.ExecuteRune(dc3);
+
+            PlayCard pc = new PlayCard(controllersInGame[0].GetGuid(), saveOff, OriginOfCard.HAND, TypeOfRemoveFromHand.INTO_PLAY);
+            RuneManager.Singelton.ExecuteRune(pc);
+
+            PlayCard pc2 = new PlayCard(controllersInGame[1].GetGuid(), cardGuid, OriginOfCard.HAND, TypeOfRemoveFromHand.INTO_PLAY);
+            RuneManager.Singelton.ExecuteRune(pc2);
         }
         else
         {

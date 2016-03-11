@@ -8,6 +8,13 @@ public interface entity
 
 }
 
+public interface damageable
+{
+    void ModifyHealth(int amount);
+    void SetHealth(int health);
+    int GetHealth();
+}
+
 public class EntityManager : MonoBehaviour {
 
     private Dictionary<Guid, entity> entities = new Dictionary<Guid,entity>();

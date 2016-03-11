@@ -4,22 +4,22 @@ using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class Controller : MonoBehaviour, entity {
+public abstract class Controller : MonoBehaviour, entity, damageable {
+
+    public static int STARTING_HEALTH = 30;
 
     protected Guid guid;
     protected List<Card> deck;
     protected List<Card> hand;
     protected List<Card> inPlay;
-    protected List<CardAvatar> displayHand;
-    protected List<CardAvatar> displayInPlay;
+    protected int health;
 
     public void Setup()
     {
         deck = new List<Card>();
         hand = new List<Card>();
         inPlay = new List<Card>();
-        displayHand = new List<CardAvatar>();
-        displayInPlay = new List<CardAvatar>();
+        health = STARTING_HEALTH;
     }
 
     public abstract void StartTurn();
@@ -94,38 +94,6 @@ public abstract class Controller : MonoBehaviour, entity {
     {
         inPlay.Remove(card);
     }
-    private static float epsilon = .1f;
-    public void AddCardAvatarToHand(CardAvatar cardAvatar)
-    {
-        displayHand.Add(cardAvatar);
-        float width = 1.3f;
-        float halfWidth = width;// / 2.0f;
-        float startPoint = displayHand.Count * halfWidth;
-        displayHand[0].transform.position = new Vector3(-startPoint, -1, -3);
-        for (int i = 1; i < displayHand.Count; i++)
-        {
-            displayHand[i].transform.position = new Vector3(-startPoint + (halfWidth * i + epsilon), -1, -3);
-        }
-
-
-    }
-    public void RemoveCardAvatarFromHand(CardAvatar cardAvatar)
-    {
-        displayInPlay.Remove(cardAvatar);
-     
-    }
-    public CardAvatar GetCardAvatarByGuid(Guid guid)
-    {
-        for(int i = 0;i<displayHand.Count;i++)
-        {
-            if(displayHand[i].GetGuid() == guid)
-            {
-                return displayHand[i];
-            }
-        }
-        return null;
-    }
-
 
     public virtual void DrawInspector()
     {
@@ -149,5 +117,20 @@ public abstract class Controller : MonoBehaviour, entity {
         {
             EditorGUILayout.LabelField(inPlay[i].GetName());
         }
+    }
+
+    public void SetHealth(int health)
+    {
+        this.health = health;
+    }
+
+    public void ModifyHealth(int amount)
+    {
+        health += amount;
+    }
+
+    public int GetHealth()
+    {
+        return health;
     }
 }

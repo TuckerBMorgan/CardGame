@@ -8,18 +8,26 @@ public enum CardType
     minion,
     test
 }
-
+public enum CardState
+{
+    inDeck,
+    inHand,
+    inPlay,
+    inGraveyard
+}
 public abstract class Card : entity  {
 
-    private string name;
-    private string desc;
-    private string art;
-    private CardType cardType;
-    private Script cardFile;
-    private int mana;
-    private Guid guid;
-    private CardAvatar cardAvatar;
-   
+    protected string name;
+    protected string desc;
+    protected string art;
+    protected int mana;
+    protected int health; 
+    protected Guid guid;
+    protected CardAvatar cardAvatar;
+    protected Script cardFile;
+    protected CardType cardType;
+    protected CardState cardState;
+    
 
     public void SetName(string name)
     {
@@ -77,7 +85,7 @@ public abstract class Card : entity  {
 
     public void SetCardAvatar(CardAvatar cardAvatar)
     {
-        if (this.cardAvatar)
+        if (this.cardAvatar == null)
         {
             this.cardAvatar = cardAvatar;
         }
@@ -102,6 +110,15 @@ public abstract class Card : entity  {
         return cardType;
     }
 
+    public void SetCardState(CardState cardState)
+    {
+        this.cardState = cardState;
+    }
+    public CardState GetCardState()
+    {
+        return cardState;
+    }
+    
 
     //On Pulled from the deck
     public abstract void OnPull();

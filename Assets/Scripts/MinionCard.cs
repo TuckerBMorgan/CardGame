@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MinionCard : Card {
+public class MinionCard : Card, damageable {
 
-    private int baseAttack;
+    protected int baseAttack;
+    protected int baseHealth;
+    protected int useHealth;
+    
     public void SetBaseAttack(int baseAttack)
     {
         this.baseAttack = baseAttack;
@@ -12,8 +15,6 @@ public class MinionCard : Card {
     {
         return baseAttack;
     }
-
-    private int baseHealth;
     public void SetBaseHealth(int baseHealth)
     {
         this.baseHealth = baseHealth;
@@ -31,6 +32,21 @@ public class MinionCard : Card {
     public override void OnPull()
     {
         
+    }
+
+    public void ModifyHealth(int amount)
+    {
+        useHealth += amount;
+    }
+
+    public int GetHealth()
+    {
+        return useHealth;
+    }
+
+    public void SetHealth(int health)
+    {
+        useHealth = health;
     }
 
 }
