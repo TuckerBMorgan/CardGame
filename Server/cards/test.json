@@ -1,0 +1,9 @@
+{
+  "type": 1,
+  "name": "test",
+  "desc": "desc",
+  "art": "test",
+  "cost": 1,
+  "baseHealth": 1,
+  "baseAttack": 1
+}

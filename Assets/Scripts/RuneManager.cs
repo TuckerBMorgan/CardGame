@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using SimpleJson;
 
 public class RuneManager : MonoBehaviour
 {
@@ -25,6 +26,11 @@ public class RuneManager : MonoBehaviour
         gameRunes = new List<Rune>();
         currentCallbacks = 0;
         runePump = new Queue<Rune>();
+    }
+
+    public void ParseRuneAndExecute(string runeAsString)
+    {
+   
     }
 
     public void ExecuteRune(Rune rune)
