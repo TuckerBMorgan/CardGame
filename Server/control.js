@@ -82,7 +82,7 @@ function bootstrap(state) {
         var obj = {
             "guid":guid,
             "name":name,
-            "type":type
+            "controllerType":type
         }
         newController.execute(obj, state)
         state.controllersByIP[element] = state.controllers[guid];
@@ -102,12 +102,11 @@ function bootstrap(state) {
                 var contr = state.controllers[innerElement];
                 var sec = {
                     "runeType":"NewController",
-                    "controllerGuid":contr.guid,
+                    "controllerGuid":innerElement,
                     "controllerName":contr.name,
                     "type":contr.type,
                     "isMe":false
                 }
-                console.log(sec);
                 //If the one we are sending to, is the one we are creating the rune from, we tell them that, so they know who they are
                 if(contr == state.controllers[element])
                 {

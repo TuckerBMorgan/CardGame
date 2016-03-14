@@ -45,10 +45,8 @@ public class RuneManager : MonoBehaviour
 
     public void ParseRuneAndExecute(string runeAsString)
     {
-        Debug.Log(runeAsString);
         JSONObject jsonObject = new JSONObject(runeAsString);
         string typeOfRune = jsonObject[RUNE_TYPE].str;
-        Debug.Log(typeOfRune);
         var type = Type.GetType(typeOfRune);
         var runeObj = Activator.CreateInstance(type);
         for (int i = 1; i < jsonObject.keys.Count; i++)
@@ -72,8 +70,6 @@ public class RuneManager : MonoBehaviour
             }
         }
         Singelton.ExecuteRune((Rune)runeObj);
-        Debug.Log((runeObj as NewController).controllerName);
-
     }
 
     public void PlaceMessageInQueue(string message)
