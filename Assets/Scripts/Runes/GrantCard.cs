@@ -3,14 +3,13 @@ using UnityEngine;
 using System.Collections;
 
 public class GrantCard : Rune {
+    
+    public string playerGuid { get; set; }
+    public string cardGuid { get; set; }
 
-    public Guid playerGuid;
-    public Guid cardGuid;
 
-    public GrantCard(Guid playerGuid, Guid cardGuid)
+    public GrantCard()
     {
-        this.playerGuid = playerGuid;
-        this.cardGuid = cardGuid;
     }
 
     public override void Execute(Action action)

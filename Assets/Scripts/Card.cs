@@ -22,7 +22,7 @@ public abstract class Card : entity  {
     protected string art;
     protected int mana;
     protected int health; 
-    protected Guid guid;
+    protected string guid;
     protected CardAvatar cardAvatar;
     protected Script cardFile;
     protected CardType cardType;
@@ -56,11 +56,11 @@ public abstract class Card : entity  {
         return mana;
     }
     
-    public void SetGuid(Guid guid)
+    public void SetGuid(string guid)
     {
         this.guid = guid;
     }
-    public Guid GetGuid()
+    public string GetGuid()
     {
         return guid;
     }

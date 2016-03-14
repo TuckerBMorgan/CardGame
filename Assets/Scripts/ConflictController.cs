@@ -19,7 +19,9 @@ public class ConflictController : MonoBehaviour {
     {
         controllersInGame = new List<Controller>();
         playArea = GetComponent<PlayArea>();
-        
+        string str = "{\"type\":\"newConnection\"}";
+        GetComponent<Client>().SendNewMessage(str);
+        /*
         TextAsset ta = Resources.Load<TextAsset>("Conflicts/" + conflictFile);
         if(ta.text != null)
         {
@@ -63,17 +65,13 @@ public class ConflictController : MonoBehaviour {
         {
             Debug.Log("Could not find conflict file :" + conflictFile);
         }
+        */
     }
 
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.A))
         {
-            Guid cardGuid = controllersInGame[0].GetCardByIndex(2).GetGuid();
-            Guid playerGuid = controllersInGame[0].GetGuid();
-
-            DealCard dc = new DealCard(playerGuid, cardGuid, true);
-            RuneManager.Singelton.ExecuteRune(dc);
 
         }
     }

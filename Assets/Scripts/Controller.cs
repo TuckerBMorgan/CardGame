@@ -8,11 +8,12 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
 
     public static int STARTING_HEALTH = 30;
 
-    protected Guid guid;
+    protected string guid;
     protected List<Card> deck;
     protected List<Card> hand;
     protected List<Card> inPlay;
     protected int health;
+    protected string controllerName;
 
     public void Setup()
     {
@@ -25,11 +26,11 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
     public abstract void StartTurn();
     public abstract void EndTurn();
 
-    public void SetGuid(Guid guid)
+    public void SetGuid(string guid)
     {
         this.guid = guid;
     }
-    public Guid GetGuid()
+    public string GetGuid()
     {
         return guid;
     }    
@@ -44,7 +45,7 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
         return null;
     }
 
-    public Card GetCardByGUID(Guid guid)
+    public Card GetCardByGUID(string guid)
     {
         for (int i = 0; i < deck.Count; i++)
         {
@@ -123,14 +124,24 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
     {
         this.health = health;
     }
-
     public void ModifyHealth(int amount)
     {
         health += amount;
     }
-
     public int GetHealth()
     {
         return health;
     }
+
+    public void SetControllerName(string controllerName)
+    {
+        this.controllerName = controllerName;
+    }
+
+    public string GetControllerName()
+    {
+        return controllerName;
+    }
+
+
 }

@@ -17,7 +17,7 @@ public interface damageable
 
 public class EntityManager : MonoBehaviour {
 
-    private Dictionary<Guid, entity> entities = new Dictionary<Guid,entity>();
+    private Dictionary<string, entity> entities = new Dictionary<string,entity>();
 
     public static EntityManager Singelton;
 
@@ -27,7 +27,7 @@ public class EntityManager : MonoBehaviour {
     }
     
 
-    public entity GetEntity(Guid guid)
+    public entity GetEntity(string guid)
     {
         if(entities.ContainsKey(guid))
         {
@@ -37,7 +37,7 @@ public class EntityManager : MonoBehaviour {
         return null;
     }
 
-    public void AddEntity(Guid guid, entity entityNew)
+    public void AddEntity(string guid, entity entityNew)
     {
         if(entities.ContainsKey(guid))
         {

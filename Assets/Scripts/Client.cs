@@ -17,14 +17,20 @@ public class Client : MonoBehaviour {
         NetworkStream stream = client.GetStream();
         reader = new Reader();
         writer = new Writer();
-        reader.Setup(stream);
+        reader.Setup(stream, this);
         writer.Setup(stream);
     }
 
-    public void SendMessage(string message)
+    public void SendNewMessage(string message)
     {
         writer.SendMessage(message);
     }
+
+    public void ReportMessageToMainProgram(string message)
+    {
+        RuneManager.Singelton.PlaceMessageInQueue(message);
+    }
+
 
     public void OnApplicationQuit()
     {
@@ -36,14 +42,17 @@ public class Client : MonoBehaviour {
 public class Reader
 {
     private NetworkStream stream;
+    private Client client;
     private Thread readThread;
     private byte[] buffer;
 
     int byteSize = 0;
-    public void Setup(NetworkStream stream)
+    public void Setup(NetworkStream stream, Client client)
     {
+        this.client = client;
         this.stream = stream;
         readThread = new Thread(Tick);
+        readThread.Start();
         buffer = new byte[500];
     }
 
@@ -54,8 +63,10 @@ public class Reader
             byteSize = stream.Read(buffer, 0, 500);
             if(byteSize > 0)
             {
+                Debug.Log(buffer);
                 string message = findMessage(buffer, byteSize);
-
+                client.ReportMessageToMainProgram(message);
+                
             }
         }
     }
@@ -66,7 +77,7 @@ public class Reader
 
         for (int i = 0; i < length; i++)
         {
-            if (array[i] != '\0' && array[i] != null)
+            if (array[i] != '\0')
             {
                 strBuild.Append((char)array[i]);
             }
@@ -87,19 +98,22 @@ public class Writer
 
     public void Setup(NetworkStream stream)
     {
+        messages = new Queue();
         this.stream = stream;
         writeThread = new Thread(Tick);
+        writeThread.Start();
     }
 
     public void Tick()
     {
         while (Client.THREAD_GO)
-        {
+        { 
             if (!string.IsNullOrEmpty(message))
             {
                 byte[] array = Encoding.ASCII.GetBytes(message);
                 stream.Write(array, 0, array.Length);
-                if(messages.Count > 0)
+                message = null;
+                if (messages.Count > 0)
                 {
                     message = (string)messages.Dequeue();
                 }

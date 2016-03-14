@@ -7,16 +7,15 @@ var state = {
     "controllers":{},//by guid look up of all controllers
     "entities":{},
     "connections":[],
-    "controllersIP":{}
+    "controllersByIP":{}
 }
 
-var CONNCETION_NUM_NEEDED = 2;
+var CONNCETION_NUM_NEEDED = 1;
 var connectionNum = 0;
 
 var sockets = [];
 exports.routing = function (message, socket) {
     var obj;
-    
     try
     {
         obj = JSON.parse(message);
@@ -25,15 +24,16 @@ exports.routing = function (message, socket) {
     {
         console.log(e + " on message " + message + "that is not a valid json object");
     }
-    
+    console.log(obj);
     switch (obj["type"]) {
         case "newConnection":
             connectionNum++;
             if(connectionNum == CONNCETION_NUM_NEEDED)
             {
+                sockets.push(socket);
                 state.controllers = {};
                 state.entities = {};
-                state.controllersIP = {};
+                state.controllersByIP = {};
                 state.connections = [];
                 sockets.forEach(function(element) {
                     state.connections.push(element.remoteAddress);
@@ -47,7 +47,7 @@ exports.routing = function (message, socket) {
             }
             else
             {
-                console.log("someone is trying to connect to a full gam, NOPE, maybe latter a spectator");
+                console.log("someone is trying to connect to a full game, NOPE, maybe latter a spectator");
             }
             
             
@@ -59,7 +59,7 @@ exports.routing = function (message, socket) {
             for(var i = 0;i<30;i++) 
             {
                 var cc = {
-                    "runeType":"createCard",
+                    "runeType":"CreateCard",
                     "cardID":"test"
                 }
                 Rune.executeRune(cc, state);
@@ -77,7 +77,7 @@ function bootstrap(state) {
     //for each connection that we have create a controller
     state.connections.forEach(function(element, index) {
         var guid = util.createGuid();
-        var name = "name";
+        var name = "name---";
         var type = newController.PLAYER_CONTROLLER;
         var obj = {
             "guid":guid,
@@ -101,12 +101,13 @@ function bootstrap(state) {
                 //create the newControllerRune
                 var contr = state.controllers[innerElement];
                 var sec = {
-                    "runeType":"newController",
-                    "guid":contr.guid,
-                    "name":contr.name,
+                    "runeType":"NewController",
+                    "controllerGuid":contr.guid,
+                    "controllerName":contr.name,
                     "type":contr.type,
                     "isMe":false
                 }
+                console.log(sec);
                 //If the one we are sending to, is the one we are creating the rune from, we tell them that, so they know who they are
                 if(contr == state.controllers[element])
                 {

@@ -18,17 +18,15 @@ public enum TypeOfRemoveFromHand
 
 
 public class PlayCard : Rune {
-    public Guid playerGuid;
-    public Guid cardGuid;
-    public OriginOfCard originOfCard;
-    public TypeOfRemoveFromHand typeOfRemoveFromHand;
+    
+    public string playerGuid { get; set; }
+    public string cardGuid { get; set; }
+    public OriginOfCard originOfCard { get; set; }
+    public TypeOfRemoveFromHand typeOfRemoveFromHand { get; set; }
 
-    public PlayCard(Guid playerGuid, Guid cardGuid, OriginOfCard originOfCard, TypeOfRemoveFromHand typeOfRemoveFromHand)
+
+    public PlayCard()
     {
-        this.playerGuid = playerGuid;
-        this.cardGuid = cardGuid;
-        this.originOfCard = originOfCard;
-        this.typeOfRemoveFromHand = typeOfRemoveFromHand;
     }
 
     public override void Execute(Action action)

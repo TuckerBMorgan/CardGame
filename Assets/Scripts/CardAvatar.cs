@@ -16,8 +16,8 @@ public class CardAvatar : MonoBehaviour, entity
     public GameObject attackText;
     public CardAvatarState cardAvatarState;
 
-    protected Guid guid;
-    protected Guid playerGuid;
+    protected string guid;
+    protected string playerGuid;
 
     protected Card card;
 
@@ -45,7 +45,7 @@ public class CardAvatar : MonoBehaviour, entity
         }
     }
 
-    public void Setup(Card card, Guid guid, Guid playerGuid)
+    public void Setup(Card card, string guid, string playerGuid)
     {
         this.guid = guid;
         this.card = card;
@@ -59,7 +59,7 @@ public class CardAvatar : MonoBehaviour, entity
         }
     }
 
-    public Guid GetGuid()
+    public string GetGuid()
     {
         return guid;
     }
@@ -82,6 +82,7 @@ public class CardAvatar : MonoBehaviour, entity
 
     public void OnMouseUp()
     {
+        /*
         if(cardAvatarState == CardAvatarState.inTransit)
         {
             if(PlayArea.Singelton.InPlayArea(transform.position))
@@ -91,5 +92,6 @@ public class CardAvatar : MonoBehaviour, entity
                 RuneManager.Singelton.ExecuteRune(pc);
             }
         }
+        */
     }
 }

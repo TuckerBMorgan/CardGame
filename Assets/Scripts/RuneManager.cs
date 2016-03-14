@@ -1,12 +1,16 @@
 ﻿using System;
 using UnityEngine;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-using SimpleJson;
 
 public class RuneManager : MonoBehaviour
 {
+
+    public static string RUNE_TYPE = "runeType";
+
+    public static Dictionary<string, Type> stringToRune = new Dictionary<string, Type>();
 
     public List<Rune> gameRunes;
 
@@ -18,6 +22,8 @@ public class RuneManager : MonoBehaviour
 
     public int currentCallbacks;
 
+    public Queue<string> messages;
+
 
     void Awake()
     {
@@ -26,12 +32,55 @@ public class RuneManager : MonoBehaviour
         gameRunes = new List<Rune>();
         currentCallbacks = 0;
         runePump = new Queue<Rune>();
+        messages = new Queue<string>();
+    }
+
+    void Update()
+    {
+        if(messages.Count > 0)
+        {
+            ParseRuneAndExecute(messages.Dequeue());
+        }
     }
 
     public void ParseRuneAndExecute(string runeAsString)
     {
-   
+        Debug.Log(runeAsString);
+        JSONObject jsonObject = new JSONObject(runeAsString);
+        string typeOfRune = jsonObject[RUNE_TYPE].str;
+        Debug.Log(typeOfRune);
+        var type = Type.GetType(typeOfRune);
+        var runeObj = Activator.CreateInstance(type);
+        for (int i = 1; i < jsonObject.keys.Count; i++)
+        {
+            var property = type.GetProperty(jsonObject.keys[i]);
+            Debug.Log(jsonObject[jsonObject.keys[i]].type);
+            switch (jsonObject[jsonObject.keys[i]].type)
+            {
+                case JSONObject.Type.STRING:
+                    property.SetValue(runeObj, jsonObject[jsonObject.keys[i]].str, null);
+                    break;
+                case JSONObject.Type.NUMBER:
+                    property.SetValue(runeObj, (int)jsonObject[jsonObject.keys[i]].i, null);
+                    break;
+                case JSONObject.Type.BOOL:
+                    property.SetValue(runeObj, jsonObject[jsonObject.keys[i]].b, null);
+                    break;
+                default:
+                    Debug.Log("I have not done that type");
+                    break;
+            }
+        }
+        Singelton.ExecuteRune((Rune)runeObj);
+        Debug.Log((runeObj as NewController).controllerName);
+
     }
+
+    public void PlaceMessageInQueue(string message)
+    {
+        messages.Enqueue(message);
+    }
+
 
     public void ExecuteRune(Rune rune)
     {

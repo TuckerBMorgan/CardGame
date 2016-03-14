@@ -9,13 +9,14 @@ public class NewController : Rune
     public static string AI_CONTROLLER = "AiController";
     public static string CONTROLLERS_FILE_PATH = "Controllers/";
 
-    public Guid guid;
-    public string type;
+    public string controllerGuid { get; set; }
+    public string type { get; set; }
+    public string controllerName { get; set; }
+    public bool isMe { get; set; }
 
-    public NewController(string type, Guid guid)
+    public NewController()
     {
-        this.type = type;
-        this.guid = guid;
+
     }
 
     public override void Execute(System.Action action)
@@ -31,19 +32,8 @@ public class NewController : Rune
         }
         go = GameObject.Instantiate(go);
         go.GetComponent<Controller>().Setup();
-        go.GetComponent<Controller>().SetGuid(guid);
-        EntityManager.Singelton.AddEntity(guid, go.GetComponent<Controller>());
-
-        for (int i = 0; i < 30; i++)
-        {
-            Guid useGuid = Guid.NewGuid();
-            var rune = new CreateCard(useGuid, "test");
-            RuneManager.Singelton.ExecuteRune(rune);
-            var grantRune = new GrantCard(guid, useGuid);
-            RuneManager.Singelton.ExecuteRune(grantRune);
-        }
-
-
+        go.GetComponent<Controller>().SetGuid(controllerGuid);
+        EntityManager.Singelton.AddEntity(controllerGuid, go.GetComponent<Controller>());
         action();
     }
 

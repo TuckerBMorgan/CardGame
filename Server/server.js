@@ -3,9 +3,7 @@ var control = require('./control');
 var createCard = require('./runes/createCard')
 
 var server = net.createServer(function(socket) {
-    socket.write("echo");
     socket.on('data', function(data) {
-        console.log(data);
         control.routing(data, socket);
     })
     
@@ -14,6 +12,7 @@ var server = net.createServer(function(socket) {
 
 exports.sendMessage = function(message, socket)
 {
+    console.log(message);
     socket.write(message + "\n\n");
 
 }

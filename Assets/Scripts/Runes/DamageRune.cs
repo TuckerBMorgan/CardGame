@@ -11,17 +11,16 @@ public class DamageRune : Rune
 {
 
     //damage must be a negative number as in Current Amount + amount to get new health
-    public int amount;
-    public Guid source;
-    public Guid target;
-    public TargetType targetType;
+    
+    public int amount { get; set; }
+    public string source { get; set; }
+    public string target { get; set; }
+    public TargetType targetType { get; set; }
 
-    public DamageRune(int amount, Guid source, Guid target, TargetType targetType)
+
+    public DamageRune()
     {
-        this.amount = amount;
-        this.source = source;
-        this.target = target;
-        this.targetType = targetType;
+
     }
 
     public override void Execute(Action action)

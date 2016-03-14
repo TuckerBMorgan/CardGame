@@ -38,22 +38,22 @@ public class PlayArea : MonoBehaviour
     
     public static string CARD_AVATAR_PREFAB_LOCATION = "CardAvatar";
 
-    private Dictionary<Guid, List<CardAvatar>> playFields;
-    private Dictionary<Guid, List<CardAvatar>> playHands;
-    private Guid homeGuid;
-    private Guid awayGuid;
+    private Dictionary<string, List<CardAvatar>> playFields;
+    private Dictionary<string, List<CardAvatar>> playHands;
+    private string homeGuid;
+    private string awayGuid;
     private Box box;
     public static PlayArea Singelton;
 
-    public void Setup(Guid homeGuid, Guid awayGuid)
+    public void Setup(string homeGuid, string awayGuid)
     {
         this.homeGuid = homeGuid;
         this.awayGuid = awayGuid;
-        playFields = new Dictionary<Guid, List<CardAvatar>>();
+        playFields = new Dictionary<string, List<CardAvatar>>();
         playFields.Add(homeGuid, new List<CardAvatar>());
         playFields.Add(awayGuid, new List<CardAvatar>());
 
-        playHands = new Dictionary<Guid, List<CardAvatar>>();
+        playHands = new Dictionary<string, List<CardAvatar>>();
         playHands.Add(homeGuid, new List<CardAvatar>());
         playHands.Add(awayGuid, new List<CardAvatar>());
 
@@ -67,7 +67,7 @@ public class PlayArea : MonoBehaviour
     }
 
     private static float epsilon = .1f;
-    public void AddCardToHand(CardAvatar cardAvatar, Guid controllerGuid)//Will need optional paramater for origin
+    public void AddCardToHand(CardAvatar cardAvatar, string controllerGuid)//Will need optional paramater for origin
     {
         float yPos = 0;
         if (controllerGuid == homeGuid)
@@ -97,7 +97,7 @@ public class PlayArea : MonoBehaviour
         }
     }
 
-    public void RemoveCardFromHand(CardAvatar cardAvatar, Guid controllerGuid, TypeOfRemoveFromHand typeOfRemoveFromHand)
+    public void RemoveCardFromHand(CardAvatar cardAvatar, string controllerGuid, TypeOfRemoveFromHand typeOfRemoveFromHand)
     {
         float yPos = 0;
         if (controllerGuid == homeGuid)
@@ -132,7 +132,7 @@ public class PlayArea : MonoBehaviour
         }
     }
 
-    public void AddCardToPlayArea(CardAvatar cardAvatar, Guid controllerGuid, OriginOfCard originOfCard)
+    public void AddCardToPlayArea(CardAvatar cardAvatar, string controllerGuid, OriginOfCard originOfCard)
     {
         float yPos = 0;
         if (controllerGuid == homeGuid)
@@ -190,7 +190,7 @@ public class PlayArea : MonoBehaviour
 
         GameObject go = Resources.Load<GameObject>(CARD_AVATAR_PREFAB_LOCATION);
         go = GameObject.Instantiate(go);
-        Guid useGuid = Guid.NewGuid();
+        string useGuid = Guid.NewGuid().ToString();
         
         go.GetComponent<CardAvatar>().Setup(card, useGuid, player.GetGuid());
         card.SetCardAvatar(go.GetComponent<CardAvatar>());

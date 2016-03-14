@@ -3,18 +3,16 @@ using UnityEngine;
 using System.Collections;
 
 public class DealCard : Rune {
-
     
-    
-    public Guid playerGuid;
-    public Guid cardGuid;
-    public bool faceDown;
 
-    public DealCard(Guid playerGuid, Guid cardGuid, bool faceDown)
+    public string playerGuid { get; set; }
+    public string cardGuid { get; set; }
+    public bool faceDown { get; set; }
+
+
+    public DealCard()
     {
-        this.playerGuid = playerGuid;
-        this.cardGuid = cardGuid;
-        this.faceDown = faceDown;
+
     }
 
     public override void Execute(Action action)

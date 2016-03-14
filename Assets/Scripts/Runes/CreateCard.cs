@@ -19,14 +19,16 @@ public class CreateCard : Rune {
     public static string NAME = "name";
     public static string CARD_FILE_LOCATION = "Cards/";
 
+    public string cardGuid { get; set; }
+    public string cardName { get; set; }
+    public string art { get; set; }
+    public string desc { get; set; }
+    public int cost { get; set; }
+    public int baseHealth { get; set; }
+    public int baseAttack { get; set; }
 
-    public Guid guid;
-    public string cardName;
-
-    public CreateCard(Guid guid, string cardName)
+    public CreateCard()
     {
-        this.guid = guid;
-        this.cardName = cardName;
     }
 
     public override void Execute(Action action)
@@ -43,14 +45,14 @@ public class CreateCard : Rune {
                 card = new MinionCard();
                 card.SetMana(int.Parse(scr.Globals[COST].ToString()));
                 card.SetName(scr.Globals[NAME].ToString());
-                card.SetGuid(guid);
+                card.SetGuid(cardGuid);
                 card.SetCardFile(scr);
                 card.SetDesc(scr.Globals[DESC].ToString());
                 card.SetArt(scr.Globals[ART].ToString());
                 MinionCard mc = card as MinionCard;
                 mc.SetBaseAttack(int.Parse(scr.Globals[BASE_ATTACK].ToString()));
                 mc.SetBaseHealth(int.Parse(scr.Globals[BASE_HEALTH].ToString()));
-                EntityManager.Singelton.AddEntity(guid, card);
+                EntityManager.Singelton.AddEntity(cardGuid, card);
             }
             else if( type == (int)CardType.test)
             {
