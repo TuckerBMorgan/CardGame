@@ -45,14 +45,16 @@ public class RuneManager : MonoBehaviour
 
     public void ParseRuneAndExecute(string runeAsString)
     {
+        Debug.Log(runeAsString);
         JSONObject jsonObject = new JSONObject(runeAsString);
         string typeOfRune = jsonObject[RUNE_TYPE].str;
         var type = Type.GetType(typeOfRune);
         var runeObj = Activator.CreateInstance(type);
-        for (int i = 1; i < jsonObject.keys.Count; i++)
+        for (int i = 0; i < jsonObject.keys.Count; i++)
         {
             var property = type.GetProperty(jsonObject.keys[i]);
-            Debug.Log(jsonObject[jsonObject.keys[i]].type);
+            if (jsonObject.keys[i] == "runeType")
+                continue;
             switch (jsonObject[jsonObject.keys[i]].type)
             {
                 case JSONObject.Type.STRING:

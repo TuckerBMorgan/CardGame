@@ -1,3 +1,6 @@
+var fs = require('fs'); 
+
+
 exports.createGuid = function () {
     var start = 'xxxxxxxx-xxxx-xxyx-xxxx-xxxxxxxx0xxx';
     var goodCharacters = ['0','1','2','3','4','5','6','7','8','9',
@@ -23,4 +26,10 @@ exports.createGuid = function () {
         }
     }
     return newG.join('');
+}
+
+exports.loadCard = function(fileName) {
+      var contents =  fs.readFileSync("cards/" + fileName + ".json");
+      var obj = JSON.parse(contents);
+      return obj;
 }

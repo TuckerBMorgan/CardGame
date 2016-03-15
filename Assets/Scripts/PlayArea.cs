@@ -45,23 +45,15 @@ public class PlayArea : MonoBehaviour
     private Box box;
     public static PlayArea Singelton;
 
-    public void Setup(string homeGuid, string awayGuid)
+    public void Setup()
     {
-        this.homeGuid = homeGuid;
-        this.awayGuid = awayGuid;
-        playFields = new Dictionary<string, List<CardAvatar>>();
-        playFields.Add(homeGuid, new List<CardAvatar>());
-        playFields.Add(awayGuid, new List<CardAvatar>());
-
-        playHands = new Dictionary<string, List<CardAvatar>>();
-        playHands.Add(homeGuid, new List<CardAvatar>());
-        playHands.Add(awayGuid, new List<CardAvatar>());
-
+        
         Singelton = this;
 
         RuneManager.Singelton.AddListener(typeof(DealCard), DealRune);
         RuneManager.Singelton.AddListener(typeof(PlayCard), PlayRune);
         RuneManager.Singelton.AddListener(typeof(DamageRune), DamageRuneCall);
+        RuneManager.Singelton.AddListener(typeof(NewController), NewControllerRune);
         box = new Box(4, -1.5f, -6, 6);
 
     }
@@ -172,7 +164,7 @@ public class PlayArea : MonoBehaviour
     {
         DealCard dc = rune as DealCard;
 
-        Controller player = EntityManager.Singelton.GetEntity(dc.playerGuid) as Controller;
+        Controller player = EntityManager.Singelton.GetEntity(dc.controllerGuid) as Controller;
         if (player == null)
         {
             Debug.Log("Could not find controller in EntityManager, bad Guid");
@@ -195,7 +187,7 @@ public class PlayArea : MonoBehaviour
         go.GetComponent<CardAvatar>().Setup(card, useGuid, player.GetGuid());
         card.SetCardAvatar(go.GetComponent<CardAvatar>());
         EntityManager.Singelton.AddEntity(useGuid, go.GetComponent<CardAvatar>());
-        AddCardToHand(go.GetComponent<CardAvatar>(), dc.playerGuid);
+        AddCardToHand(go.GetComponent<CardAvatar>(), dc.controllerGuid);
 
         action();
     }
@@ -204,7 +196,7 @@ public class PlayArea : MonoBehaviour
     {
         PlayCard pc = rune as PlayCard;
 
-        Controller player = EntityManager.Singelton.GetEntity(pc.playerGuid) as Controller;
+        Controller player = EntityManager.Singelton.GetEntity(pc.controllerGuid) as Controller;
         if (player == null)
         {
             Debug.Log("Could not find controller in EntityManager, bad Guid");
@@ -238,6 +230,31 @@ public class PlayArea : MonoBehaviour
         {
             //once we have player avatars in do this
         }
+        action();
+    }
+
+    public void NewControllerRune(Rune rune, Action action)
+    {
+        NewController nc = rune as NewController;
+
+        playFields = new Dictionary<string, List<CardAvatar>>();
+        playHands = new Dictionary<string, List<CardAvatar>>();
+        if (nc.isMe)
+        {
+            this.homeGuid = nc.controllerGuid;
+            playFields.Add(homeGuid, new List<CardAvatar>());
+            playHands.Add(homeGuid, new List<CardAvatar>());
+        }
+        else
+        {
+            this.awayGuid = nc.controllerGuid;
+            playFields.Add(awayGuid, new List<CardAvatar>());
+            playHands.Add(awayGuid, new List<CardAvatar>());
+        }
+
+        string str = "{\"type\":\"ready\"}";
+        GetComponent<Client>().SendNewMessage(str);
+        action();
     }
 
     public bool InPlayArea(Vector3 pos)

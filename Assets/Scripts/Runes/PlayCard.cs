@@ -19,7 +19,7 @@ public enum TypeOfRemoveFromHand
 
 public class PlayCard : Rune {
     
-    public string playerGuid { get; set; }
+    public string controllerGuid { get; set; }
     public string cardGuid { get; set; }
     public OriginOfCard originOfCard { get; set; }
     public TypeOfRemoveFromHand typeOfRemoveFromHand { get; set; }
@@ -31,7 +31,7 @@ public class PlayCard : Rune {
 
     public override void Execute(Action action)
     {
-        Controller player = EntityManager.Singelton.GetEntity(playerGuid) as Controller;
+        Controller player = EntityManager.Singelton.GetEntity(controllerGuid) as Controller;
         if(player == null)
         {
             Debug.Log("Could not find controller, bad guid");

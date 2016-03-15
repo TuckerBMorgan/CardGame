@@ -63,10 +63,8 @@ public class Reader
             byteSize = stream.Read(buffer, 0, 500);
             if(byteSize > 0)
             {
-                Debug.Log(buffer);
                 string message = findMessage(buffer, byteSize);
                 client.ReportMessageToMainProgram(message);
-                
             }
         }
     }

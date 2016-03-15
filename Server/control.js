@@ -7,7 +7,8 @@ var state = {
     "controllers":{},//by guid look up of all controllers
     "entities":{},
     "connections":[],
-    "controllersByIP":{}
+    "controllersByIP":{},
+    "cards":{}
 }
 
 var CONNCETION_NUM_NEEDED = 1;
@@ -58,13 +59,25 @@ exports.routing = function (message, socket) {
         keys.forEach(function(element) {
             for(var i = 0;i<30;i++) 
             {
-                var cc = {
-                    "runeType":"CreateCard",
-                    "cardID":"test"
-                }
-                Rune.executeRune(cc, state);
+                var card = util.loadCard("test");
+                card.runeType = "CreateCard";
+                card.controllerGuid = element;
+                card.cardGuid = util.createGuid();
+                Rune.executeRune(card, state);
             }
+            
+            var cardKeys = Object.keys(state.controllers[element].deck);
+            var index = Math.floor(Math.random() * cardKeys.length);
+            console.log(index + "\n");
+            var dc = {
+                "runeType":"DealCard",
+                "controllerGuid":element,
+                "cardGuid":state.controllers[element].deck[index].cardGuid
+            }
+            Rune.executeRune(dc, state);
         })
+        
+        
         break;
         default:
             break;

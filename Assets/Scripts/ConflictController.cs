@@ -19,6 +19,7 @@ public class ConflictController : MonoBehaviour {
     {
         controllersInGame = new List<Controller>();
         playArea = GetComponent<PlayArea>();
+        playArea.Setup();
         string str = "{\"type\":\"newConnection\"}";
         GetComponent<Client>().SendNewMessage(str);
         /*

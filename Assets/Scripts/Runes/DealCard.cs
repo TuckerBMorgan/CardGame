@@ -5,7 +5,7 @@ using System.Collections;
 public class DealCard : Rune {
     
 
-    public string playerGuid { get; set; }
+    public string controllerGuid { get; set; }
     public string cardGuid { get; set; }
     public bool faceDown { get; set; }
 
@@ -17,7 +17,7 @@ public class DealCard : Rune {
 
     public override void Execute(Action action)
     {
-        Controller player = EntityManager.Singelton.GetEntity(playerGuid) as Controller;
+        Controller player = EntityManager.Singelton.GetEntity(controllerGuid) as Controller;
         if (player == null)
         {
             Debug.Log("Could not find controller in EntityManager, bad Guid");
