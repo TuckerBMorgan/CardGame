@@ -2,7 +2,7 @@ var newController = require("./runes/newController")
 var server = require('./server');
 var util = require('./util')
 var Rune = require('./RuneVM')
-
+var error = require('./errorMessages')
 var state = {
     "controllers":{},//by guid look up of all controllers
     "entities":{},
@@ -27,6 +27,11 @@ exports.routing = function (message, socket) {
     }
     console.log(obj);
     switch (obj["type"]) {
+        //valid newConnection rune
+        //{
+        // "type":"newConnection",
+        // "name":"foo"    
+        //}
         case "newConnection":
             connectionNum++;
             if(connectionNum == CONNCETION_NUM_NEEDED)
@@ -54,6 +59,10 @@ exports.routing = function (message, socket) {
             
             
             break;
+        //valid read rune
+        //{
+        // "type":"ready"    
+        //}
         case "ready":
         var keys = Object.keys(state.controllers);
         keys.forEach(function(element) {
@@ -68,17 +77,56 @@ exports.routing = function (message, socket) {
             
             var cardKeys = Object.keys(state.controllers[element].deck);
             var index = Math.floor(Math.random() * cardKeys.length);
-            console.log(index + "\n");
             var dc = {
                 "runeType":"DealCard",
                 "controllerGuid":element,
                 "cardGuid":state.controllers[element].deck[index].cardGuid
             }
             Rune.executeRune(dc, state);
+            return;
         })
         
         
         break;
+        //valid play card message
+        //{
+        // "type":"playCard",   
+        // "index":n//indexed at 0
+        //}
+        case "playCard":
+          var controller = state.controllersByIP[socket.remoteAddress];
+          var index = obj.index;
+          
+          console.log("say wahat");
+          console.log(index);
+          if(index >= 0 || index < controller.hand.length - 1)
+          {
+              var playCard = {
+                  "runeType":"PlayCard",
+                  "controllerGuid":controller.guid,
+                  "cardGuid":controller.hand[index].cardGuid,
+                  "originOfCard":0
+              }
+              Rune.executeRune(playCard, state);
+          }
+          else  
+          {
+              //bad message, not sure what responce should be
+            //  error.card
+          }
+        break;
+        //valid mulligan rune
+        //{
+        // "type":"mulligan",
+        // "cards":[n number of indexes]  
+        //}
+        case "mulligan":
+            if(obj.cards.length == 0)
+            {
+                //do shit
+            }
+        break;
+        
         default:
             break;
     }

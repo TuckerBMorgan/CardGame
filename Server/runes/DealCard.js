@@ -1,6 +1,12 @@
 var fs = require('fs'); 
 var server = require('../server');
 
+//{
+// "runeType":"DealCard",
+// "controllerGuid":"xxxxxxxx-xxxx-xxyx-xxxx-xxxxxxxx0xxx",   
+// "cardGuid":"xxxxxxxx-xxxx-xxyx-xxxx-xxxxxxxx0xxx"
+//}
+
 exports.execute = function (rune, state) {
     var socket = state.controllers[rune.controllerGuid].socket;
     var card;
@@ -13,11 +19,11 @@ exports.execute = function (rune, state) {
             index = i;
             card = deck[i];
             break;
-        }    
+        }
     }
     
     server.sendMessage(JSON.stringify(card) ,socket);
-    state.controllers[rune.controllerGuid].hand.push(state.controllers[rune.controllerGuid].deck.splice(index, 1));
+    state.controllers[rune.controllerGuid].hand.push(state.controllers[rune.controllerGuid].deck.splice(index, 1)[0]);
 }
 
 exports.canSee = function (rune, controller, state) {

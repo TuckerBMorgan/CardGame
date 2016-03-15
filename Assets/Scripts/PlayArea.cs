@@ -78,13 +78,10 @@ public class PlayArea : MonoBehaviour
             float width = 1.3f;
             float halfWidth = width + epsilon;
             float startPoint = playHands[controllerGuid].Count * halfWidth;
-            if (playHands[controllerGuid].Count > 0)
+
+            for (int i = 0; i < playHands[controllerGuid].Count; i++)
             {
-                playHands[controllerGuid][0].transform.position = new Vector3(-startPoint, yPos, -3);
-                for (int i = 1; i < playHands[controllerGuid].Count; i++)
-                {
-                    playHands[controllerGuid][i].transform.position = new Vector3(-startPoint + (halfWidth * i), yPos, -3);
-                }
+                playHands[controllerGuid][i].GetComponent<CardAvatar>().SetDestination(new Vector3(-startPoint + (halfWidth * i), yPos, -3));
             }
         }
     }
@@ -107,15 +104,13 @@ public class PlayArea : MonoBehaviour
             float width = 1.3f;
             float halfWidth = width + epsilon;
             float startPoint = playHands[controllerGuid].Count * halfWidth;
-            if (playHands[controllerGuid].Count > 0)
+
+            for (int i = 0; i < playHands[controllerGuid].Count; i++)
             {
-                playHands[controllerGuid][0].transform.position = new Vector3(-startPoint, yPos, -3);
-                for (int i = 1; i < playHands[controllerGuid].Count; i++)
-                {
-                    playHands[controllerGuid][i].transform.position = new Vector3(-startPoint + (halfWidth * i), yPos, -3);
-                }
+                playHands[controllerGuid][i].GetComponent<CardAvatar>().SetDestination(new Vector3(-startPoint + (halfWidth * i), yPos, -3));
             }
-            switch(typeOfRemoveFromHand)
+
+            switch (typeOfRemoveFromHand)
             {
                 case TypeOfRemoveFromHand.INTO_PLAY:
                     //A non case, this gets handeled by the AddCardToPlay function which will move it then
@@ -135,7 +130,7 @@ public class PlayArea : MonoBehaviour
         {
             yPos = 1.5f;
         }
-
+        
         if (playFields.ContainsKey(controllerGuid))
         {
             cardAvatar.cardAvatarState = CardAvatarState.inPlay;
@@ -147,14 +142,11 @@ public class PlayArea : MonoBehaviour
                     float width = 1.3f;
                     float halfWidth = width + epsilon;
                     float startPoint = playFields[controllerGuid].Count * halfWidth;
-                    if (playFields[controllerGuid].Count > 0)
+                    for (int i = 0; i < playFields[controllerGuid].Count; i++)
                     {
-                        playFields[controllerGuid][0].transform.position = new Vector3(-startPoint, yPos, -3);
-                        for (int i = 1; i < playFields[controllerGuid].Count; i++)
-                        {
-                            playFields[controllerGuid][i].transform.position = new Vector3(-startPoint + (halfWidth * i), yPos, -3);
-                        }
+                        playFields[controllerGuid][i].SetDestination(new Vector3(-startPoint + (halfWidth * i), yPos, -3));
                     }
+
                     break;
             }
         }
@@ -179,9 +171,19 @@ public class PlayArea : MonoBehaviour
             action();
             return;
         }
+         float yPos = 0;
+        if (dc.controllerGuid == homeGuid)
+        {
+            yPos = -2.0f;
+        }
+        else if (dc.controllerGuid == awayGuid)
+        {
+            yPos = 4.0f;
+        }
 
         GameObject go = Resources.Load<GameObject>(CARD_AVATAR_PREFAB_LOCATION);
         go = GameObject.Instantiate(go);
+        go.transform.position = new Vector3(6, yPos, -3);
         string useGuid = Guid.NewGuid().ToString();
         
         go.GetComponent<CardAvatar>().Setup(card, useGuid, player.GetGuid());
@@ -211,7 +213,6 @@ public class PlayArea : MonoBehaviour
             action();
             return;
         }
-        Debug.Log(card.GetGuid());
         RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid(), pc.typeOfRemoveFromHand);
         AddCardToPlayArea(card.GetCardAvatar(), player.GetGuid(), pc.originOfCard);
         action();

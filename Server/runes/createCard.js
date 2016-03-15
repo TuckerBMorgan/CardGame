@@ -1,11 +1,14 @@
 var fs = require('fs'); 
-
-//contents of rune
-//"guid":"foo"
-//"cardId":"cardID"
+var entity = require('../entityManager')
+//{
+//  "runeType":"CreateCard",
+//  "controllerGuid":"xxxxxxxx-xxxx-xxyx-xxxx-xxxxxxxx0xxx",
+//  "cardGuid":"xxxxxxxx-xxxx-xxyx-xxxx-xxxxxxxx0xxx"
+//   //Then the card is attached as an object after   
+//}
 exports.execute = function (rune, state) {       
-    state.controllers[rune.controllerGuid].deck.push(rune);
-    
+   state.controllers[rune.controllerGuid].deck.push(rune);
+   entity.entities[rune.cardGuid] = rune; 
 }
 
 exports.canSee = function (rune, controller, state) {

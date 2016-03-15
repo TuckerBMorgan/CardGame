@@ -9,10 +9,11 @@ public class Client : MonoBehaviour {
     private Reader reader;
     private Writer writer;
     private TcpClient client;
-
+    public static Client Singelton;
     
     public void Setup()
     {
+        Singelton = this;
         client = new TcpClient("127.0.0.1", 4884);
         NetworkStream stream = client.GetStream();
         reader = new Reader();

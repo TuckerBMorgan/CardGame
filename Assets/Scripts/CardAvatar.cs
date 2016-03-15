@@ -15,9 +15,11 @@ public class CardAvatar : MonoBehaviour, entity
     public GameObject healthText;
     public GameObject attackText;
     public CardAvatarState cardAvatarState;
+    
 
     protected string guid;
     protected string playerGuid;
+    protected Vector3 dest;
 
     protected Card card;
 
@@ -25,15 +27,23 @@ public class CardAvatar : MonoBehaviour, entity
     void Start()
     {
         cardAvatarState = CardAvatarState.inHand;
+        RuneManager.Singelton.AddListener(typeof(PlayCard), OnCardPlay);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(cardAvatarState == CardAvatarState.inTransit)
+        if (cardAvatarState == CardAvatarState.inTransit)
         {
             Vector3 transPoint = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 7));
             transform.position = new Vector3(transPoint.x, transPoint.y, transform.position.z);
+        }
+        else if(cardAvatarState == CardAvatarState.inPlay || cardAvatarState == CardAvatarState.inHand)
+        {
+            if(dest != transform.position)
+            {
+                PositionLerp();        
+            }
         }
     }
 
@@ -43,6 +53,18 @@ public class CardAvatar : MonoBehaviour, entity
         {
             this.card = card;
         }
+    }
+
+    private float speed  = 1.0f;
+    private float startTime;
+    private float journeyLength;
+    private float distCovered;
+    private float fracJounery;
+    private void PositionLerp()
+    {
+        distCovered = (Time.time - startTime) * speed;
+        fracJounery = distCovered / journeyLength;
+        transform.position = Vector3.Lerp(transform.position, dest, fracJounery);
     }
 
     public void Setup(Card card, string guid, string playerGuid)
@@ -73,7 +95,8 @@ public class CardAvatar : MonoBehaviour, entity
 
     public void OnMouseDown()
     {
-        if(cardAvatarState == CardAvatarState.inHand)
+        
+        if (cardAvatarState == CardAvatarState.inHand)
         {
             cardAvatarState = CardAvatarState.inTransit;
             transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1);
@@ -82,16 +105,35 @@ public class CardAvatar : MonoBehaviour, entity
 
     public void OnMouseUp()
     {
-        /*
-        if(cardAvatarState == CardAvatarState.inTransit)
+
+        if (cardAvatarState == CardAvatarState.inTransit)
         {
-            if(PlayArea.Singelton.InPlayArea(transform.position))
+            if (PlayArea.Singelton.InPlayArea(transform.position))
             {
-                cardAvatarState = CardAvatarState.inPlay;
-                PlayCard pc = new PlayCard(playerGuid, card.GetGuid(), OriginOfCard.HAND, TypeOfRemoveFromHand.INTO_PLAY);
-                RuneManager.Singelton.ExecuteRune(pc);
+                Controller ctr = EntityManager.Singelton.GetEntity(playerGuid) as Controller;
+
+                string playCard = "{\"type\":\"playCard\",\n " +
+                                    "\"index\":" + ctr.GetCardIndexInHand(card) + "}";
+
+                Client.Singelton.SendNewMessage(playCard);
             }
         }
-        */
+    }
+
+    public void OnCardPlay(Rune rune, System.Action action)
+    {
+        PlayCard pc = rune as PlayCard;
+        if(pc.cardGuid == card.GetGuid())
+        {
+            cardAvatarState = CardAvatarState.inPlay;
+        } 
+        action();
+    }
+
+    public void SetDestination(Vector3 dest)
+    {
+        startTime = Time.time;
+        journeyLength = Vector3.Distance(dest, transform.position);
+        this.dest = dest;
     }
 }

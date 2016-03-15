@@ -1,7 +1,14 @@
+var entity = require('../entityManager');
+
 exports.PLAYER_CONTROLLER = "PlayerController"
 exports.AI_CONTROLLER = "AiController"
 exports.FULL_PLAYER_HEALTH = 30
-
+//{
+//  "runeType":"NewController"
+//  "name":"name"
+//  "controllerType"://A Controller Type, from above
+//  "guid":"guid"
+//}
 exports.execute = function(rune, state)
 {
     if(state.controllers[rune['guid']] == null)
@@ -15,6 +22,7 @@ exports.execute = function(rune, state)
             "health":exports.FULL_PLAYER_HEALTH,
             "guid":rune['guid']
         }
+        entity.entities[rune.guid] = state.controllers[rune.guid];
     }
     else
     {

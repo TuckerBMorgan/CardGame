@@ -143,5 +143,9 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
         return controllerName;
     }
 
+    public int GetCardIndexInHand(Card card)
+    {
+        return hand.IndexOf(card);
+    }
 
 }
