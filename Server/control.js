@@ -109,7 +109,7 @@ exports.routing = function (message, socket) {
               }
               Rune.executeRune(playCard, state);
           }
-          else  
+          else
           {
               //bad message, not sure what responce should be
             //  error.card

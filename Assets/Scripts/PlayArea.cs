@@ -13,6 +13,7 @@ public class Box
     private float left;
     private float right;
 
+
     public Box(float top, float bottom, float left, float right)
     {
         this.top = top;
@@ -43,17 +44,23 @@ public class PlayArea : MonoBehaviour
     private string homeGuid;
     private string awayGuid;
     private Box box;
+    private bool gameStarted;
+
     public static PlayArea Singelton;
+
+    public int MulliganCount { get; private set; }
+    private List<int> indexes;
 
     public void Setup()
     {
-        
+        gameStarted = false;   
         Singelton = this;
 
         RuneManager.Singelton.AddListener(typeof(DealCard), DealRune);
         RuneManager.Singelton.AddListener(typeof(PlayCard), PlayRune);
         RuneManager.Singelton.AddListener(typeof(DamageRune), DamageRuneCall);
         RuneManager.Singelton.AddListener(typeof(NewController), NewControllerRune);
+        indexes = new List<int>();
         box = new Box(4, -1.5f, -6, 6);
 
     }
@@ -61,16 +68,24 @@ public class PlayArea : MonoBehaviour
     private static float epsilon = .1f;
     public void AddCardToHand(CardAvatar cardAvatar, string controllerGuid)//Will need optional paramater for origin
     {
+        
         float yPos = 0;
         if (controllerGuid == homeGuid)
         {
             yPos = -2.0f;
+            if(gameStarted)
+            {
+                yPos = 0.0f;
+            }
         }
         else if (controllerGuid == awayGuid)
         {
             yPos = 4.0f;
+            if(gameStarted)
+            {
+                yPos = 5.0f;
+            }
         }
-
         if (playHands.ContainsKey(controllerGuid))
         {
             playHands[controllerGuid].Add(cardAvatar);
@@ -258,8 +273,56 @@ public class PlayArea : MonoBehaviour
         action();
     }
 
+    public void StarGameRune(Rune rune, Action action)
+    {
+        gameStarted = true;
+        action();
+    }
+
     public bool InPlayArea(Vector3 pos)
     {
         return box.Contains(pos);
+    }
+
+    public void SetMulligan()
+    {
+
+    }
+
+    public void OnCardAvatarClickedForMulligan(int index)
+    {
+        if(indexes.Contains(index))
+        {
+            indexes.Remove(index);
+            MulliganCount--;
+            return;
+        }
+
+        indexes.Add(index);
+        MulliganCount++;
+        
+    }
+
+    public void OnMulliganButtonClick()
+    {
+        string str = "{\"type\":\"mulligan\"\n";
+        str += "\"cards\":[";
+        for(int i = 0;i<indexes.Count;i++)
+        {
+            if(i != 0)
+            {
+                str += ",";
+            }
+            str += indexes[i].ToString();
+        }
+
+        str += "]}";
+
+        Client.Singelton.SendNewMessage(str);
+    }
+
+    public bool GetGameStart()
+    {
+        return gameStarted;
     }
 }

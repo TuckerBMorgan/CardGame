@@ -95,7 +95,12 @@ public class CardAvatar : MonoBehaviour, entity
 
     public void OnMouseDown()
     {
-        
+        if(PlayArea.Singelton.GetGameStart())
+        {
+            Controller ctr = EntityManager.Singelton.GetEntity(playerGuid) as Controller;
+            PlayArea.Singelton.OnCardAvatarClickedForMulligan(ctr.GetCardIndexInHand(card));
+            return;
+        }
         if (cardAvatarState == CardAvatarState.inHand)
         {
             cardAvatarState = CardAvatarState.inTransit;
@@ -105,7 +110,6 @@ public class CardAvatar : MonoBehaviour, entity
 
     public void OnMouseUp()
     {
-
         if (cardAvatarState == CardAvatarState.inTransit)
         {
             if (PlayArea.Singelton.InPlayArea(transform.position))
@@ -114,7 +118,6 @@ public class CardAvatar : MonoBehaviour, entity
 
                 string playCard = "{\"type\":\"playCard\",\n " +
                                     "\"index\":" + ctr.GetCardIndexInHand(card) + "}";
-
                 Client.Singelton.SendNewMessage(playCard);
             }
         }
