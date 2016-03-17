@@ -7,7 +7,9 @@ var server = require('../server');
 // "runeType":"StarGame"
 //}
 
-exports.execute = function (rune, state) {}
+exports.execute = function (rune, state) {
+    
+}
 
 exports.canSee = function (rune, controller, state) {
     return true;

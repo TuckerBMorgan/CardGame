@@ -12,7 +12,7 @@ exports.cantPlayCard = function (socket) {
 }
 
 exports.cantAttack = function (socket) {
-    var cantAttackMessageCode = {
+    var cantAttackMessage = {
         "errorMessage":exports.cantAttackMessageCode
     }
     server.sendMessage(JSON.stringify(cantAttackMessage), socket);

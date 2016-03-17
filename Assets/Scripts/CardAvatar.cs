@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections;
 public enum CardAvatarState
@@ -76,8 +77,8 @@ public class CardAvatar : MonoBehaviour, entity
         if (card.GetCardType() == CardType.minion)
         {
             MinionCard mc = card as MinionCard;
-            healthText.GetComponent<TextMesh>().text = mc.GetBaseAttack().ToString();
-            attackText.GetComponent<TextMesh>().text = mc.GetBaseHealth().ToString();
+            healthText.GetComponent<Text>().text = mc.GetBaseAttack().ToString();
+            attackText.GetComponent<Text>().text = mc.GetBaseHealth().ToString();
         }
     }
 
@@ -88,9 +89,9 @@ public class CardAvatar : MonoBehaviour, entity
 
     public void ModifyHealth(int amount)
     {
-        int current = int.Parse(healthText.GetComponent<TextMesh>().text);
+        int current = int.Parse(healthText.GetComponent<Text>().text);
         current = current + amount;
-        healthText.GetComponent<TextMesh>().text = current.ToString();
+        healthText.GetComponent<Text>().text = current.ToString();
     }
 
     public void OnMouseDown()
