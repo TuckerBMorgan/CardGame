@@ -13,7 +13,7 @@ public class MulliganButton : MonoBehaviour {
 	
 	}
 
-    void OnButtonPress()
+    public void MulliganCards()
     {
         PlayArea.Singelton.OnMulliganButtonClick();
     }

@@ -60,20 +60,22 @@ public class PlayArea : MonoBehaviour
         RuneManager.Singelton.AddListener(typeof(PlayCard), PlayRune);
         RuneManager.Singelton.AddListener(typeof(DamageRune), DamageRuneCall);
         RuneManager.Singelton.AddListener(typeof(NewController), NewControllerRune);
+        RuneManager.Singelton.AddListener(typeof(ShuffleCard), ShuffleCardRune);
+
         indexes = new List<int>();
         box = new Box(4, -1.5f, -6, 6);
 
     }
 
     private static float epsilon = .1f;
-    public void AddCardToHand(CardAvatar cardAvatar, string controllerGuid)//Will need optional paramater for origin
+    public void AddCardToHand(CardAvatar cardAvatar, string controllerGuid, Action action)//Will need optional paramater for origin
     {
         
         float yPos = 0;
         if (controllerGuid == homeGuid)
         {
             yPos = -2.0f;
-            if(gameStarted)
+            if(!gameStarted)
             {
                 yPos = 0.0f;
             }
@@ -81,7 +83,7 @@ public class PlayArea : MonoBehaviour
         else if (controllerGuid == awayGuid)
         {
             yPos = 4.0f;
-            if(gameStarted)
+            if(!gameStarted)
             {
                 yPos = 5.0f;
             }
@@ -96,7 +98,7 @@ public class PlayArea : MonoBehaviour
 
             for (int i = 0; i < playHands[controllerGuid].Count; i++)
             {
-                playHands[controllerGuid][i].GetComponent<CardAvatar>().SetDestination(new Vector3(-startPoint + (halfWidth * i), yPos, -3));
+                playHands[controllerGuid][i].GetComponent<CardAvatar>().SetDestination(new Vector3(-startPoint + (halfWidth * i), yPos, -3), action);
             }
         }
     }
@@ -204,9 +206,7 @@ public class PlayArea : MonoBehaviour
         go.GetComponent<CardAvatar>().Setup(card, useGuid, player.GetGuid());
         card.SetCardAvatar(go.GetComponent<CardAvatar>());
         EntityManager.Singelton.AddEntity(useGuid, go.GetComponent<CardAvatar>());
-        AddCardToHand(go.GetComponent<CardAvatar>(), dc.controllerGuid);
-
-        action();
+        AddCardToHand(go.GetComponent<CardAvatar>(), dc.controllerGuid, action);
     }
 
     public void PlayRune(Rune rune, Action action)
@@ -230,6 +230,36 @@ public class PlayArea : MonoBehaviour
         }
         RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid(), pc.typeOfRemoveFromHand);
         AddCardToPlayArea(card.GetCardAvatar(), player.GetGuid(), pc.originOfCard);
+        action();
+    }
+
+    public void ShuffleCardRune(Rune rune, Action action)
+    {
+        ShuffleCard sc = rune as ShuffleCard;
+        if (sc == null)
+        {
+            Debug.Log("Bad rune");
+            return;
+        }
+
+
+        Controller player = EntityManager.Singelton.GetEntity(sc.controllerGuid) as Controller;
+        if (player == null)
+        {
+            Debug.Log("Could not find controller in EntityManager, bad Guid");
+            action();
+            return;
+        }
+
+        Card card = EntityManager.Singelton.GetEntity(sc.cardGuid) as Card;
+        if (card == null)
+        {
+            Debug.Log("Could not find card in EntityManager, bad Guid");
+            action();
+            return;
+        }
+        RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid(), TypeOfRemoveFromHand.DISCARDED);
+        card.GetCardAvatar().DeckIt();
         action();
     }
     
@@ -284,11 +314,6 @@ public class PlayArea : MonoBehaviour
         return box.Contains(pos);
     }
 
-    public void SetMulligan()
-    {
-
-    }
-
     public void OnCardAvatarClickedForMulligan(int index)
     {
         if(indexes.Contains(index))
@@ -305,7 +330,7 @@ public class PlayArea : MonoBehaviour
 
     public void OnMulliganButtonClick()
     {
-        string str = "{\"type\":\"mulligan\"\n";
+        string str = "{\"type\":\"mulligan\",\n";
         str += "\"cards\":[";
         for(int i = 0;i<indexes.Count;i++)
         {

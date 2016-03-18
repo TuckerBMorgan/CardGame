@@ -117,12 +117,15 @@ public class RuneManager : MonoBehaviour
 
     public void CallbackNumberUp()
     {
+        
         currentCallbacks++;
+        Debug.Log(currentCallbacks + " new high");
     }
 
     public void CallbackNumberDown()
     {
         currentCallbacks--;
+        Debug.Log(currentCallbacks + " new low");
         if (currentCallbacks != 0) return;
         if (runePump.Count > 0)
         {

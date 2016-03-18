@@ -42,6 +42,7 @@ public class CreateCard : Rune {
             scr.DoString(ta.text);
             int type = int.Parse(scr.Globals[TYPE].ToString());
             Card card;
+            
             if(type == (int)CardType.minion)
             {
                 card = new MinionCard();

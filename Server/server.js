@@ -2,13 +2,22 @@ var net = require('net');
 var control = require('./control');
 var createCard = require('./runes/createCard')
 
+var ECONNRESETCODE = "ECONNRESET";
+
 var server = net.createServer(function(socket) {
     socket.on('data', function(data) {
         control.routing(data, socket);
     })
-    
-    
+    socket.on('error', function (exec) {
+        console.log(exec);
+        if(exec.code == ECONNRESETCODE)
+        {
+            control.connectionLost();
+        }
+    })
 })
+
+
 
 exports.sendMessage = function(message, socket)
 {

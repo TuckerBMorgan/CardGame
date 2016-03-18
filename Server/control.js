@@ -3,18 +3,29 @@ var server = require('./server');
 var util = require('./util')
 var Rune = require('./RuneVM')
 var error = require('./errorMessages')
+var entities = require('./entityManager')
 var state = {
     "controllers":{},//by guid look up of all controllers
     "entities":{},
     "connections":[],
     "controllersByIP":{},
-    "cards":{}
+    "cards":{},
+    "playersReady":0
 }
 
 var CONNCETION_NUM_NEEDED = 1;
 var connectionNum = 0;
 
 var sockets = [];
+
+exports.connectionLost = function () {
+    connectionNum--;
+    if(connectionNum == 0)
+    {
+       resetGame();   
+    }
+}
+
 exports.routing = function (message, socket) {
     var obj;
     try
@@ -83,6 +94,25 @@ exports.routing = function (message, socket) {
                 "cardGuid":state.controllers[element].deck[index].cardGuid
             }
             Rune.executeRune(dc, state);
+            
+            cardKeys = Object.keys(state.controllers[element].deck);
+            index = Math.floor(Math.random() * cardKeys.length);
+            var dc2 = {
+                "runeType":"DealCard",
+                "controllerGuid":element,
+                "cardGuid":state.controllers[element].deck[index].cardGuid
+            }
+            Rune.executeRune(dc2, state);
+            
+            cardKeys = Object.keys(state.controllers[element].deck);
+            index = Math.floor(Math.random() * cardKeys.length);
+            var dc3 = {
+                "runeType":"DealCard",
+                "controllerGuid":element,
+                "cardGuid":state.controllers[element].deck[index].cardGuid
+            }
+            Rune.executeRune(dc3, state);
+            
             return;
         })
         
@@ -121,9 +151,47 @@ exports.routing = function (message, socket) {
         // "cards":[n number of indexes]  
         //}
         case "mulligan":
-            if(obj.cards.length == 0)
+            var controller = state.controllersByIP[socket.remoteAddress];
+            var shuffleCards = [];
+            for(var i = 0;i<obj.cards.length;i++)
             {
-                //do shit
+                //any bad index and we bail
+                if(obj.cards[i] < 0 || obj.cards[i] > controller.hand.length)
+                {
+                    //will have it fire error code eventually
+                    return;
+                }
+                console.log(obj.cards[i]);
+                shuffleCards.push(controller.hand[obj.cards[i]].cardGuid);
+            }
+            
+            for(var i = 0;i<shuffleCards.length;i++)
+            {
+                var sc = {
+                    "runeType":"ShuffleCard",
+                    "controllerGuid":controller.guid,
+                    "cardGuid":shuffleCards[i]
+                }
+                Rune.executeRune(sc, state);
+            }
+            for(var i = 0;i<obj.cards.length;i++)
+            {
+                var index = Math.floor(Math.random() * controller.deck.length);
+                var dc = {
+                    "runeType":"DealCard",
+                    "controllerGuid":controller.guid,
+                    "cardGuid":controller.deck[index].cardGuid
+                }
+                
+                Rune.executeRune(dc, state);
+            }
+            state.playersReady++;
+            if(state.playersReady == exports.CONNCETION_NUM_NEEDED)
+            {
+                var obj = {
+                    "runeType":"StarGame"
+                }
+                Runee.executeRune(obj, state);
             }
         break;
         
@@ -177,4 +245,12 @@ function bootstrap(state) {
                 server.sendMessage(JSON.stringify(sec), state.controllers[element].socket);          
         })
     })
+}
+
+
+function resetGame() {
+    entities.entities = {};
+    sockets = [];
+    connectionNum = 0;
+    state.cards = {};
 }

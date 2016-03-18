@@ -2,6 +2,8 @@
 using UnityEngine.UI;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+
 public enum CardAvatarState
 {
     inHand,
@@ -21,6 +23,8 @@ public class CardAvatar : MonoBehaviour, entity
     protected string guid;
     protected string playerGuid;
     protected Vector3 dest;
+    protected List<Text> textOfCard;
+    protected Action action;
 
     protected Card card;
 
@@ -29,6 +33,12 @@ public class CardAvatar : MonoBehaviour, entity
     {
         cardAvatarState = CardAvatarState.inHand;
         RuneManager.Singelton.AddListener(typeof(PlayCard), OnCardPlay);
+        textOfCard = new List<Text>(GetComponentsInChildren<Text>());
+
+        for(int i = 0;i<textOfCard.Count;i++)
+        {
+            textOfCard[i].color = Color.red;
+        }
     }
 
     // Update is called once per frame
@@ -66,6 +76,14 @@ public class CardAvatar : MonoBehaviour, entity
         distCovered = (Time.time - startTime) * speed;
         fracJounery = distCovered / journeyLength;
         transform.position = Vector3.Lerp(transform.position, dest, fracJounery);
+        if(transform.position == dest)
+        {
+            if (action != null)
+            {
+                action();
+                action = null;
+            }
+        }
     }
 
     public void Setup(Card card, string guid, string playerGuid)
@@ -73,7 +91,7 @@ public class CardAvatar : MonoBehaviour, entity
         this.guid = guid;
         this.card = card;
         this.playerGuid = playerGuid;
-        nameText.GetComponent<TextMesh>().text = card.GetName();
+        nameText.GetComponent<Text>().text = card.GetName();
         if (card.GetCardType() == CardType.minion)
         {
             MinionCard mc = card as MinionCard;
@@ -94,12 +112,20 @@ public class CardAvatar : MonoBehaviour, entity
         healthText.GetComponent<Text>().text = current.ToString();
     }
 
-    public void OnMouseDown()
+    //Entry point for the mesh to tell the whole card it is being clicked
+    public void OnMouseDownOnMesh()
     {
-        if(PlayArea.Singelton.GetGameStart())
+        if (! PlayArea.Singelton.GetGameStart())
         {
             Controller ctr = EntityManager.Singelton.GetEntity(playerGuid) as Controller;
             PlayArea.Singelton.OnCardAvatarClickedForMulligan(ctr.GetCardIndexInHand(card));
+            if (textOfCard.Count < 0)
+                return;
+            Color col = textOfCard[0].color == Color.white ? Color.red : Color.white;
+            for (int i = 0; i < textOfCard.Count; i++)
+            {
+                textOfCard[i].color = col;
+            }
             return;
         }
         if (cardAvatarState == CardAvatarState.inHand)
@@ -109,7 +135,7 @@ public class CardAvatar : MonoBehaviour, entity
         }
     }
 
-    public void OnMouseUp()
+    public void OnMouseUpOnMesh()
     {
         if (cardAvatarState == CardAvatarState.inTransit)
         {
@@ -134,10 +160,18 @@ public class CardAvatar : MonoBehaviour, entity
         action();
     }
 
-    public void SetDestination(Vector3 dest)
+    public void SetDestination(Vector3 dest, Action action = null)
     {
         startTime = Time.time;
         journeyLength = Vector3.Distance(dest, transform.position);
         this.dest = dest;
+        this.action = action;
+    }
+
+
+    public void DeckIt()
+    {
+        gameObject.SetActive(false);
+        enabled = false;
     }
 }

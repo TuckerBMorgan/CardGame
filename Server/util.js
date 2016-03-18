@@ -24,6 +24,10 @@ exports.createGuid = function () {
         {
             newG.push('-');
         }
+        else 
+        {
+            newG.push(start[i]);
+        }
     }
     return newG.join('');
 }
