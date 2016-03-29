@@ -8,7 +8,10 @@ exports.executeRune = function (rune, state) {
    keys.forEach(function (elements) {
       if(file.canSee(state.controllers[elements], state))
       {
-          server.sendMessage(JSON.stringify(rune), state.controllers[elements].socket);          
+          if(state.controllers[elements].type == "PlayerController")
+          {
+                server.sendMessage(JSON.stringify(rune), state.controllers[elements].socket);         
+          } 
       } 
    })
 }

@@ -12,6 +12,7 @@ public class NewController : Rune
     public string controllerGuid { get; set; }
     public string type { get; set; }
     public string controllerName { get; set; }
+    public string hero { get; set; }
     public bool isMe { get; set; }
 
     public NewController()

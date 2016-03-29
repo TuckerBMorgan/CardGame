@@ -25,16 +25,25 @@ public class DealCard : Rune {
             return;
         }
 
+
+
         Card card = EntityManager.Singelton.GetEntity(cardGuid) as Card;
         if (card == null)
         {
-            Debug.Log("Could not find card in EntityManager, bad Guid");
-            action();
-            return;
+            //The deal card is a card into there hand
+            if (controllerGuid == PlayArea.Singelton.AwayGuid)
+            {
+                Card unknowCard = new UnknowCard();
+                unknowCard.SetCardType(2);
+                EntityManager.Singelton.AddEntity(cardGuid, unknowCard as entity);
+                player.AddCardToHand(unknowCard);
+            }
         }
-
-        player.RemoveCardFromDeck(card);
-        player.AddCardToHand(card);
+        else
+        {
+            player.RemoveCardFromDeck(card);
+            player.AddCardToHand(card);
+        }
         action();
     }
 

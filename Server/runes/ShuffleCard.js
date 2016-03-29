@@ -20,5 +20,5 @@ exports.execute = function (rune, state) {
 }
 
 exports.canSee = function (rune, controller, state) {
-    return rune.controllerGuid == controller.guid;
+    return true;
 }

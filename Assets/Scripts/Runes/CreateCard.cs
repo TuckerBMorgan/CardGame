@@ -27,6 +27,7 @@ public class CreateCard : Rune {
     public int baseHealth { get; set; }
     public int baseAttack { get; set; }
     public CardType type { get; set; }
+    public EntityType entityType { get; set; }
     public string controllerGuid { get; set; }
 
     public CreateCard()
@@ -35,6 +36,42 @@ public class CreateCard : Rune {
 
     public override void Execute(Action action)
     {
+        Card card;
+
+        //THe case of a deal card being send before a creat rune, EX.(A card in the other persons hand)
+        if(EntityManager.Singelton.GetEntity(cardGuid) != null)
+        {
+            EntityManager.Singelton.RemoveEntity(cardGuid);
+            if(type == CardType.minion)
+            {
+                card = new MinionCard();
+                MinionCard mc = card as MinionCard;
+                mc.SetName(cardName);
+                mc.SetArt(art);
+                mc.SetBaseAttack(baseAttack);
+                mc.SetBaseHealth(baseHealth);
+                mc.SetMana(cost);
+                mc.SetGuid(cardGuid);
+                mc.SetDesc(desc);
+                EntityManager.Singelton.AddEntity(cardGuid, mc);
+            }
+        }
+        else
+        {
+            if(type == CardType.minion)
+            {
+                MinionCard mc = new MinionCard();
+                mc.SetName(cardName);
+                mc.SetArt(art);
+                mc.SetBaseAttack(baseAttack);
+                mc.SetBaseHealth(baseHealth);
+                mc.SetMana(cost);
+                mc.SetGuid(cardGuid);
+                mc.SetDesc(desc);
+                EntityManager.Singelton.AddEntity(cardGuid, mc);
+            }
+        }
+        /*
         TextAsset ta = Resources.Load<TextAsset>(CARD_FILE_LOCATION + cardName);   
         if(ta.text != null)
         {
@@ -42,7 +79,6 @@ public class CreateCard : Rune {
             scr.DoString(ta.text);
             int type = int.Parse(scr.Globals[TYPE].ToString());
             Card card;
-            
             if(type == (int)CardType.minion)
             {
                 card = new MinionCard();
@@ -57,7 +93,7 @@ public class CreateCard : Rune {
                 mc.SetBaseHealth(int.Parse(scr.Globals[BASE_HEALTH].ToString()));
                 EntityManager.Singelton.AddEntity(cardGuid, card);
             }
-            else if( type == (int)CardType.test)
+            else if( type == (int)CardType.test)x
             {
                 //Need to implement
             }
@@ -66,6 +102,9 @@ public class CreateCard : Rune {
         {
             Debug.Log("The card " + cardName + " has not been found in the assets folder\n");
         }
+        */
+
+
 
         action();
     }

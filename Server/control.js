@@ -48,6 +48,11 @@ exports.routing = function (message, socket) {
             if(connectionNum == CONNCETION_NUM_NEEDED)
             {
                 sockets.push(socket);
+                
+                var fakesocket = {
+                    "remoteAddress":"00-00-00"
+                }
+                sockets.push(fakesocket);
                 state.controllers = {};
                 state.entities = {};
                 state.controllersByIP = {};
@@ -60,6 +65,8 @@ exports.routing = function (message, socket) {
             else if(connectionNum == 0)
             {
                 sockets.push(socket);
+                sockets.push(fakesocket);
+                connectionNum++;
                 connectionNum++;
             }
             else
@@ -77,13 +84,20 @@ exports.routing = function (message, socket) {
         case "ready":
         var keys = Object.keys(state.controllers);
         keys.forEach(function(element) {
+            console.log(element);
             for(var i = 0;i<30;i++) 
             {
                 var card = util.loadCard("test");
-                card.runeType = "CreateCard";
-                card.controllerGuid = element;
-                card.cardGuid = util.createGuid();
-                Rune.executeRune(card, state);
+                var useCard = {
+                    "runeType":"CreateCard",
+                }
+                var cardkeys = Object.keys(card);
+                cardkeys.forEach(function (element) {
+                    useCard[element] = card[element];
+                })
+                useCard.controllerGuid = element;
+                useCard.cardGuid = util.createGuid();
+                Rune.executeRune(useCard, state);
             }
             
             var cardKeys = Object.keys(state.controllers[element].deck);
@@ -101,7 +115,7 @@ exports.routing = function (message, socket) {
                 "runeType":"DealCard",
                 "controllerGuid":element,
                 "cardGuid":state.controllers[element].deck[index].cardGuid
-            }
+            }   
             Rune.executeRune(dc2, state);
             
             cardKeys = Object.keys(state.controllers[element].deck);
@@ -127,7 +141,6 @@ exports.routing = function (message, socket) {
           var controller = state.controllersByIP[socket.remoteAddress];
           var index = obj.index;
           
-          console.log("say wahat");
           console.log(index);
           if(index >= 0 || index < controller.hand.length - 1)
           {
@@ -186,12 +199,12 @@ exports.routing = function (message, socket) {
                 Rune.executeRune(dc, state);
             }
             state.playersReady++;
-            if(state.playersReady == exports.CONNCETION_NUM_NEEDED)
+            if(state.playersReady == CONNCETION_NUM_NEEDED)
             {
                 var obj = {
-                    "runeType":"StarGame"
+                    "runeType":"StartGame"
                 }
-                Runee.executeRune(obj, state);
+                Rune.executeRune(obj, state);
             }
         break;
         
@@ -206,9 +219,19 @@ function bootstrap(state) {
     //for each connection that we have create a controller
     state.connections.forEach(function(element, index) {
         var guid = util.createGuid();
+        console.log("---- " + guid  +" ====");
         var name = "name---";
-        var type = newController.PLAYER_CONTROLLER;
-        var obj = {
+        var type;
+        if(index == 0)
+        {
+            type = newController.PLAYER_CONTROLLER;
+        }
+        else 
+        {
+            type = newController.AI_CONTROLLER;
+            state.ai = {};
+        }
+        var obj = { 
             "guid":guid,
             "name":name,
             "controllerType":type
@@ -227,22 +250,25 @@ function bootstrap(state) {
             var innerKeys = Object.keys(state.controllers);
             //against them again
             innerKeys.forEach(function (innerElement) {
-                //create the newControllerRune
-                var contr = state.controllers[innerElement];
-                var sec = {
-                    "runeType":"NewController",
-                    "controllerGuid":innerElement,
-                    "controllerName":contr.name,
-                    "type":contr.type,
-                    "isMe":false
-                }
-                //If the one we are sending to, is the one we are creating the rune from, we tell them that, so they know who they are
-                if(contr == state.controllers[element])
-                {
-                    sec.isMe = true;    
-                }
+            //create the newControllerRune
+            var contr = state.controllers[innerElement];
+            var sec = {
+                "runeType":"NewController",
+                "controllerGuid":innerElement,
+                "controllerName":contr.name,
+                "type":contr.type,
+                "isMe":false
+            }
+            //If the one we are sending to, is the one we are creating the rune from, we tell them that, so they know who they are
+            if(contr == state.controllers[element])
+            {
+                sec.isMe = true;    
+            }
+            if(state.controllers[element].type == newController.PLAYER_CONTROLLER)
+            {
                 //and send it
                 server.sendMessage(JSON.stringify(sec), state.controllers[element].socket);          
+            }
         })
     })
 }
