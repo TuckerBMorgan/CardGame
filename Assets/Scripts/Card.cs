@@ -6,7 +6,14 @@ using MoonSharp.Interpreter;
 public enum CardType
 {
     minion,
-    test
+    test,
+    unknown
+}
+
+public enum EntityType
+{
+    minion,
+    hero
 }
 public enum CardState
 {

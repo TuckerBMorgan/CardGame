@@ -1,5 +1,5 @@
 var fs = require('fs'); 
-
+var entity = require('./entityManager');
 
 exports.createGuid = function () {
     var start = 'xxxxxxxx-xxxx-xxyx-xxxx-xxxxxxxx0xxx';
@@ -35,5 +35,6 @@ exports.createGuid = function () {
 exports.loadCard = function(fileName) {
       var contents =  fs.readFileSync("cards/" + fileName + ".json");
       var obj = JSON.parse(contents);
+      obj.entityType = entity.MINION;
       return obj;
 }

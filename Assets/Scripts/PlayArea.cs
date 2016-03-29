@@ -42,7 +42,9 @@ public class PlayArea : MonoBehaviour
     private Dictionary<string, List<CardAvatar>> playFields;
     private Dictionary<string, List<CardAvatar>> playHands;
     private string homeGuid;
+    public string HomeGuid { get { return homeGuid; } }
     private string awayGuid;
+    public string AwayGuid { get { return awayGuid; } }
     private Box box;
     private bool gameStarted;
 
@@ -61,6 +63,7 @@ public class PlayArea : MonoBehaviour
         RuneManager.Singelton.AddListener(typeof(DamageRune), DamageRuneCall);
         RuneManager.Singelton.AddListener(typeof(NewController), NewControllerRune);
         RuneManager.Singelton.AddListener(typeof(ShuffleCard), ShuffleCardRune);
+        RuneManager.Singelton.AddListener(typeof(StartGame), StarGameRune);
 
         indexes = new List<int>();
         box = new Box(4, -1.5f, -6, 6);
@@ -70,7 +73,6 @@ public class PlayArea : MonoBehaviour
     private static float epsilon = .1f;
     public void AddCardToHand(CardAvatar cardAvatar, string controllerGuid, Action action)//Will need optional paramater for origin
     {
-        
         float yPos = 0;
         if (controllerGuid == homeGuid)
         {
@@ -95,12 +97,12 @@ public class PlayArea : MonoBehaviour
             float width = 1.3f;
             float halfWidth = width + epsilon;
             float startPoint = playHands[controllerGuid].Count * halfWidth;
-
             for (int i = 0; i < playHands[controllerGuid].Count; i++)
             {
-                playHands[controllerGuid][i].GetComponent<CardAvatar>().SetDestination(new Vector3(-startPoint + (halfWidth * i), yPos, -3), action);
+                playHands[controllerGuid][i].GetComponent<CardAvatar>().SetDestination(new Vector3(-startPoint + (halfWidth * i), yPos, -3));//, action);
             }
         }
+        action();
     }
 
     public void RemoveCardFromHand(CardAvatar cardAvatar, string controllerGuid, TypeOfRemoveFromHand typeOfRemoveFromHand)
@@ -169,145 +171,6 @@ public class PlayArea : MonoBehaviour
         }
     }
 
-    public void DealRune(Rune rune, Action action)
-    {
-        DealCard dc = rune as DealCard;
-
-        Controller player = EntityManager.Singelton.GetEntity(dc.controllerGuid) as Controller;
-        if (player == null)
-        {
-            Debug.Log("Could not find controller in EntityManager, bad Guid");
-            action();
-            return;
-        }
-
-        Card card = EntityManager.Singelton.GetEntity(dc.cardGuid) as Card;
-        if (card == null)
-        {
-            Debug.Log("Could not find card in EntityManager, bad Guid");
-            action();
-            return;
-        }
-         float yPos = 0;
-        if (dc.controllerGuid == homeGuid)
-        {
-            yPos = -2.0f;
-        }
-        else if (dc.controllerGuid == awayGuid)
-        {
-            yPos = 4.0f;
-        }
-
-        GameObject go = Resources.Load<GameObject>(CARD_AVATAR_PREFAB_LOCATION);
-        go = GameObject.Instantiate(go);
-        go.transform.position = new Vector3(6, yPos, -3);
-        string useGuid = Guid.NewGuid().ToString();
-        
-        go.GetComponent<CardAvatar>().Setup(card, useGuid, player.GetGuid());
-        card.SetCardAvatar(go.GetComponent<CardAvatar>());
-        EntityManager.Singelton.AddEntity(useGuid, go.GetComponent<CardAvatar>());
-        AddCardToHand(go.GetComponent<CardAvatar>(), dc.controllerGuid, action);
-    }
-
-    public void PlayRune(Rune rune, Action action)
-    {
-        PlayCard pc = rune as PlayCard;
-
-        Controller player = EntityManager.Singelton.GetEntity(pc.controllerGuid) as Controller;
-        if (player == null)
-        {
-            Debug.Log("Could not find controller in EntityManager, bad Guid");
-            action();
-            return;
-        }
-
-        Card card = EntityManager.Singelton.GetEntity(pc.cardGuid) as Card;
-        if (card == null)
-        {
-            Debug.Log("Could not find card in EntityManager, bad Guid");
-            action();
-            return;
-        }
-        RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid(), pc.typeOfRemoveFromHand);
-        AddCardToPlayArea(card.GetCardAvatar(), player.GetGuid(), pc.originOfCard);
-        action();
-    }
-
-    public void ShuffleCardRune(Rune rune, Action action)
-    {
-        ShuffleCard sc = rune as ShuffleCard;
-        if (sc == null)
-        {
-            Debug.Log("Bad rune");
-            return;
-        }
-
-
-        Controller player = EntityManager.Singelton.GetEntity(sc.controllerGuid) as Controller;
-        if (player == null)
-        {
-            Debug.Log("Could not find controller in EntityManager, bad Guid");
-            action();
-            return;
-        }
-
-        Card card = EntityManager.Singelton.GetEntity(sc.cardGuid) as Card;
-        if (card == null)
-        {
-            Debug.Log("Could not find card in EntityManager, bad Guid");
-            action();
-            return;
-        }
-        RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid(), TypeOfRemoveFromHand.DISCARDED);
-        card.GetCardAvatar().DeckIt();
-        action();
-    }
-    
-    public void DamageRuneCall(Rune rune, Action action)
-    {
-        DamageRune dr = rune as DamageRune;
-
-        if(dr.targetType== TargetType.minion)
-        {
-            CardAvatar cardAvatar = (EntityManager.Singelton.GetEntity(dr.target) as Card).GetCardAvatar();
-            cardAvatar.ModifyHealth(dr.amount);
-        }
-        else if(dr.targetType == TargetType.player)
-        {
-            //once we have player avatars in do this
-        }
-        action();
-    }
-
-    public void NewControllerRune(Rune rune, Action action)
-    {
-        NewController nc = rune as NewController;
-
-        playFields = new Dictionary<string, List<CardAvatar>>();
-        playHands = new Dictionary<string, List<CardAvatar>>();
-        if (nc.isMe)
-        {
-            this.homeGuid = nc.controllerGuid;
-            playFields.Add(homeGuid, new List<CardAvatar>());
-            playHands.Add(homeGuid, new List<CardAvatar>());
-        }
-        else
-        {
-            this.awayGuid = nc.controllerGuid;
-            playFields.Add(awayGuid, new List<CardAvatar>());
-            playHands.Add(awayGuid, new List<CardAvatar>());
-        }
-
-        string str = "{\"type\":\"ready\"}";
-        GetComponent<Client>().SendNewMessage(str);
-        action();
-    }
-
-    public void StarGameRune(Rune rune, Action action)
-    {
-        gameStarted = true;
-        action();
-    }
 
     public bool InPlayArea(Vector3 pos)
     {
@@ -348,6 +211,185 @@ public class PlayArea : MonoBehaviour
 
     public bool GetGameStart()
     {
+        
         return gameStarted;
+    }
+
+    //Rune hooks for the play area
+    public void DealRune(Rune rune, Action action)
+    {
+
+        DealCard dc = rune as DealCard; 
+        Controller player = EntityManager.Singelton.GetEntity(dc.controllerGuid) as Controller;
+        if (player == null)
+        {
+            Debug.Log("Could not find controller in EntityManager, bad Guid");
+            action();
+            return;
+        }
+
+        Card card = EntityManager.Singelton.GetEntity(dc.cardGuid) as Card;
+        if (card == null)
+        {
+            Debug.Log("Could not find card in EntityManager, bad Guid " + dc.cardGuid);
+            action();
+            return;
+        }
+        float yPos = 0;
+        if (dc.controllerGuid == homeGuid)
+        {
+            yPos = -2.0f;
+        }
+        else if (dc.controllerGuid == awayGuid)
+        {
+            yPos = 4.0f;
+        }
+
+        GameObject go = Resources.Load<GameObject>(CARD_AVATAR_PREFAB_LOCATION);
+        go = GameObject.Instantiate(go);
+        go.transform.position = new Vector3(6, yPos, -3);
+        string useGuid = Guid.NewGuid().ToString();
+
+        if (card.GetCardType() == CardType.unknown)
+        {
+            go.GetComponent<CardAvatar>().SetupBlankCard(useGuid, player.GetGuid());
+        }
+        else
+        {
+            go.GetComponent<CardAvatar>().Setup(card, useGuid, player.GetGuid());
+        }
+        card.SetCardAvatar(go.GetComponent<CardAvatar>());
+
+        EntityManager.Singelton.AddEntity(useGuid, go.GetComponent<CardAvatar>());
+        AddCardToHand(go.GetComponent<CardAvatar>(), dc.controllerGuid, action);
+    }
+
+    public void PlayRune(Rune rune, Action action)
+    {
+        PlayCard pc = rune as PlayCard;
+
+        Controller player = EntityManager.Singelton.GetEntity(pc.controllerGuid) as Controller;
+        if (player == null)
+        {
+            Debug.Log("Could not find controller in EntityManager, bad Guid");
+            action();
+            return;
+        }
+
+        Card card = EntityManager.Singelton.GetEntity(pc.cardGuid) as Card;
+        if (card == null)
+        {
+            Debug.Log("Could not find card in EntityManager, bad Guid");
+            action();
+            return;
+        }
+        RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid(), pc.typeOfRemoveFromHand);
+        AddCardToPlayArea(card.GetCardAvatar(), player.GetGuid(), pc.originOfCard);
+        action();
+        action = null;
+    }
+
+    public void ShuffleCardRune(Rune rune, Action action)
+    {
+        ShuffleCard sc = rune as ShuffleCard;
+        if (sc == null)
+        {
+            Debug.Log("Bad rune");
+            return;
+        }
+
+
+        Controller player = EntityManager.Singelton.GetEntity(sc.controllerGuid) as Controller;
+        if (player == null)
+        {
+            Debug.Log("Could not find controller in EntityManager, bad Guid");
+            action();
+            return;
+        }
+
+        Card card = EntityManager.Singelton.GetEntity(sc.cardGuid) as Card;
+        if (card == null)
+        {
+            Debug.Log("Could not find card in EntityManager, bad Guid");
+            action();
+            return;
+        }
+        RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid(), TypeOfRemoveFromHand.DISCARDED);
+        card.GetCardAvatar().DeckIt();
+        action();
+    }
+
+    public void DamageRuneCall(Rune rune, Action action)
+    {
+        DamageRune dr = rune as DamageRune;
+
+        if (dr.targetType == TargetType.minion)
+        {
+            CardAvatar cardAvatar = (EntityManager.Singelton.GetEntity(dr.target) as Card).GetCardAvatar();
+            cardAvatar.ModifyHealth(dr.amount);
+        }
+        else if (dr.targetType == TargetType.player)
+        {
+            //once we have player avatars in do this
+        }
+        action();
+        action = null;
+    }
+
+    public void NewControllerRune(Rune rune, Action action)
+    {
+        NewController nc = rune as NewController;
+
+        if (playHands == null)
+        {
+            playFields = new Dictionary<string, List<CardAvatar>>();
+            playHands = new Dictionary<string, List<CardAvatar>>();
+        }
+        if (nc.isMe)
+        {
+            this.homeGuid = nc.controllerGuid;
+            playFields.Add(homeGuid, new List<CardAvatar>());
+            playHands.Add(homeGuid, new List<CardAvatar>());
+            Debug.Log(homeGuid);
+
+        }
+        else
+        {
+            this.awayGuid = nc.controllerGuid;
+            playFields.Add(awayGuid, new List<CardAvatar>());
+            playHands.Add(awayGuid, new List<CardAvatar>());
+        }
+        if(awayGuid != null && homeGuid != null)
+        {
+            string str = "{\"type\":\"ready\"}";
+            GetComponent<Client>().SendNewMessage(str);
+        }
+
+        action();
+        action = null;
+    }
+
+    public void StarGameRune(Rune rune, Action action)
+    {
+        gameStarted = true;
+
+        Debug.Log("SSDS");
+        float yPos = -2.0f;
+
+        if (playHands.ContainsKey(homeGuid))
+        {
+            float width = 1.3f;
+            float halfWidth = width + epsilon;
+            float startPoint = playHands[homeGuid].Count * halfWidth;
+
+            for (int i = 0; i < playHands[homeGuid].Count; i++)
+            {
+                playHands[homeGuid][i].GetComponent<CardAvatar>().SetDestination(new Vector3(-startPoint + (halfWidth * i), yPos, -3));//, action);
+            }
+        }
+
+
+        action();
+        action = null;
     }
 }

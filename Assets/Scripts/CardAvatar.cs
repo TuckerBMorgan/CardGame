@@ -17,8 +17,15 @@ public class CardAvatar : MonoBehaviour, entity
     public GameObject nameText;
     public GameObject healthText;
     public GameObject attackText;
+    public GameObject costText;
     public CardAvatarState cardAvatarState;
-    
+
+    //Used for moving the card aroubd the field
+    private float speed = 1.0f;
+    private float startTime;
+    private float journeyLength;
+    private float distCovered;
+    private float fracJounery;
 
     protected string guid;
     protected string playerGuid;
@@ -58,19 +65,6 @@ public class CardAvatar : MonoBehaviour, entity
         }
     }
 
-    public void SetCard(Card card)
-    {
-        if (this.card == null)
-        {
-            this.card = card;
-        }
-    }
-
-    private float speed  = 1.0f;
-    private float startTime;
-    private float journeyLength;
-    private float distCovered;
-    private float fracJounery;
     private void PositionLerp()
     {
         distCovered = (Time.time - startTime) * speed;
@@ -80,6 +74,7 @@ public class CardAvatar : MonoBehaviour, entity
         {
             if (action != null)
             {
+                Debug.Log("end", gameObject);
                 action();
                 action = null;
             }
@@ -92,6 +87,7 @@ public class CardAvatar : MonoBehaviour, entity
         this.card = card;
         this.playerGuid = playerGuid;
         nameText.GetComponent<Text>().text = card.GetName();
+        costText.GetComponent<Text>().text = card.GetMana().ToString();
         if (card.GetCardType() == CardType.minion)
         {
             MinionCard mc = card as MinionCard;
@@ -100,18 +96,18 @@ public class CardAvatar : MonoBehaviour, entity
         }
     }
 
-    public string GetGuid()
+    public void SetupBlankCard(string guid, string playerGuid)
     {
-        return guid;
+        this.guid = guid;
+        card = null;
+        this.playerGuid = playerGuid;
+        nameText.GetComponent<Text>().text = "";
+        healthText.GetComponent<Text>().text = "";
+        attackText.GetComponent<Text>().text = "";
+        costText.GetComponent<Text>().text = "";
     }
 
-    public void ModifyHealth(int amount)
-    {
-        int current = int.Parse(healthText.GetComponent<Text>().text);
-        current = current + amount;
-        healthText.GetComponent<Text>().text = current.ToString();
-    }
-
+  
     //Entry point for the mesh to tell the whole card it is being clicked
     public void OnMouseDownOnMesh()
     {
@@ -171,7 +167,31 @@ public class CardAvatar : MonoBehaviour, entity
 
     public void DeckIt()
     {
+
+        RuneManager.Singelton.RemoveListener(typeof(PlayCard), OnCardPlay);
         gameObject.SetActive(false);
         enabled = false;
     }
+
+
+    public void SetCard(Card card)
+    {
+        if (this.card == null)
+        {
+            this.card = card;
+        }
+    }
+
+    public string GetGuid()
+    {
+        return guid;
+    }
+
+    public void ModifyHealth(int amount)
+    {
+        int current = int.Parse(healthText.GetComponent<Text>().text);
+        current = current + amount;
+        healthText.GetComponent<Text>().text = current.ToString();
+    }
+
 }

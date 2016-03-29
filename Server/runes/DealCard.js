@@ -14,18 +14,20 @@ exports.execute = function (rune, state) {
     var index = 0;
     for(var i = 0;i < deck.length;i++)
     {
-        if(deck[i].cardGuid ==  rune.cardGuid)
+        if(deck[i].cardGuid ==  rune.cardGuid) 
         {
             index = i;
             card = deck[i];
             break;
         }
     }
-    
-    server.sendMessage(JSON.stringify(card) ,socket);
     state.controllers[rune.controllerGuid].hand.push(state.controllers[rune.controllerGuid].deck.splice(index, 1)[0]);
+    if(state.controllers[rune.controllerGuid].type == "PlayerController")
+    {
+        server.sendMessage(JSON.stringify(card) ,socket);
+    }
 }
 
 exports.canSee = function (rune, controller, state) {
-    return rune.controllerGuid == controller.guid;
+    return true;
 }

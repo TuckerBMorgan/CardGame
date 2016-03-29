@@ -12,7 +12,7 @@ public interface damageable
 {
     void ModifyHealth(int amount);
     void SetHealth(int health);
-    int GetHealth();
+    int GetHealth(); 
 }
 
 public class EntityManager : MonoBehaviour {
@@ -51,6 +51,11 @@ public class EntityManager : MonoBehaviour {
         }
 
         entities.Add(guid, entityNew);
+    }
+
+    public void RemoveEntity(string guid)
+    {
+        entities.Remove(guid);
     }
 	
 }
