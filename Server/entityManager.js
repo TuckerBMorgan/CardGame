@@ -5,7 +5,7 @@ var sortableEntites = [];
 exports.MINION = 0;
 exports.HERO = 1;   
 
-exports.addEntity = function (entity, entityGuid,entityCateogry) {
+exports.addEntity = function (entity, entityGuid,entityCategory) {
     exports.entities[entityGuid] = entity;
     sortableEntites.push(entity);    
 }
@@ -21,10 +21,10 @@ exports.getEntity = function (entityGuid) {
     return entities[entityGuid];
 }
 
-exports.returnAllOfType = function (entityCateogry) {
+exports.returnAllOfType = function (entityCategory) {
     var returnables = [];
     sortableEntites.forEach(function (element) {
-        if(element.entityType == entityCateogry)
+        if(element.entityType == entityCategory)
         {
             returnables.push(element);
         }
@@ -32,12 +32,16 @@ exports.returnAllOfType = function (entityCateogry) {
     return returnables;
 }
 
-exports.returnAllOfSeveralTypes = function (entityCateogry) {
+exports.returnAllOfSeveralTypes = function (entityCategory) {
     var returnables = [];
     sortableEntites.forEach(function (element) {
-        if(entityCateogry.contains(element.entityType)){
+        if(entityCategory.contains(element.entityType)){
             returnables.push(element);
         }
     })
     return returnables;
+}
+
+exports.returnAll = function(){
+    return sortableEntites;
 }

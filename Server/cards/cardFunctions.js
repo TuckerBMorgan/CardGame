@@ -5,3 +5,10 @@ exports.basicCanPlay = function (card, controller, state) {
     }
     return false;
 }
+
+exports.basicCanAttack = function(card, target, controller, state){
+    if(card.baseAttack > 0)
+    {
+        return true;
+    }
+}

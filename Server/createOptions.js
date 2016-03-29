@@ -9,7 +9,6 @@ exports.createOptions = function (controller, state) {
     };
     options.push(endTurn);
     
-   var 
     
     
     var hand = state.controllers[controller].hand;
@@ -25,7 +24,31 @@ exports.createOptions = function (controller, state) {
             {
                  //is the battle cry has target types, add options for targets, so we dont have to back up state is the person backs up on playing
             }
+            options.push(option);
         }
+    })
+    
+    var inPlay = state.controllers[controller].inPlay;
+    var legalTargets = entities.returnAll();
+    var hasTaunt = false;
+    legalTargets.some(function(element){
+        if(element.tags.contains("Taunt"))
+        {
+            hasTaunt = true;
+            return true;
+        }
+        return false;
+    });
+    
+    if(hasTaunt)
+    {
+        legalTargets.forEach(function(element){
+            
+        })
+    }
+    
+    inPlay.forEach(function(element){
+        
     })
     
     
