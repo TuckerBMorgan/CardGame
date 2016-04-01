@@ -4,6 +4,8 @@ var util = require('./util')
 var Rune = require('./RuneVM')
 var error = require('./errorMessages')
 var entities = require('./entityManager')
+var options = require('./createOptions')
+var controllerRune = require('./runes/NewController')
 var state = {
     "controllers":{},//by guid look up of all controllers
     "entities":{},
@@ -82,9 +84,33 @@ exports.routing = function (message, socket) {
         // "type":"ready"    
         //}
         case "ready":
-        var keys = Object.keys(state.controllers);
-        keys.forEach(function(element) {
-            console.log(element);
+        state.playersReady++;
+        if(state.playersReady == 2)
+        {
+            var keys = Object.keys(state.controllers);
+            //random who will go first
+            var goFirst = Math.floor((Math.random() * 100)) % 2;
+                
+            var first = state.controllers[keys[goFirst]];
+            var second = state.controllers[keys[1 - goFirst]];
+            
+            
+            for(var i = 0;i<30;i++) 
+            {
+                var card = util.loadCard("test");
+                var useCard = {
+                    "runeType":"CreateCard",
+                }
+                var cardkeys = Object.keys(card);
+                //copy the keys from the card we just yanked, we want to make sure that CreateCard is the first key in the object
+                cardkeys.forEach(function (element) {
+                    useCard[element] = card[element];
+                })
+                useCard.controllerGuid = first.guid;
+                useCard.cardGuid = util.createGuid();
+                Rune.executeRune(useCard, state);
+            }
+            
             for(var i = 0;i<30;i++) 
             {
                 var card = util.loadCard("test");
@@ -95,117 +121,57 @@ exports.routing = function (message, socket) {
                 cardkeys.forEach(function (element) {
                     useCard[element] = card[element];
                 })
-                useCard.controllerGuid = element;
+                useCard.controllerGuid = second.guid;
                 useCard.cardGuid = util.createGuid();
                 Rune.executeRune(useCard, state);
             }
-            
-            var cardKeys = Object.keys(state.controllers[element].deck);
-            var index = Math.floor(Math.random() * cardKeys.length);
-            var dc = {
-                "runeType":"DealCard",
-                "controllerGuid":element,
-                "cardGuid":state.controllers[element].deck[index].cardGuid
+            //The player going first gets three cards
+            var firstHand = [];
+            for(var i = 0;i<3;i++)
+            {
+                firstHand.push(util.dealCard(first.deck));
             }
-            Rune.executeRune(dc, state);
             
-            cardKeys = Object.keys(state.controllers[element].deck);
-            index = Math.floor(Math.random() * cardKeys.length);
-            var dc2 = {
-                "runeType":"DealCard",
-                "controllerGuid":element,
-                "cardGuid":state.controllers[element].deck[index].cardGuid
-            }   
-            Rune.executeRune(dc2, state);
-            
-            cardKeys = Object.keys(state.controllers[element].deck);
-            index = Math.floor(Math.random() * cardKeys.length);
-            var dc3 = {
-                "runeType":"DealCard",
-                "controllerGuid":element,
-                "cardGuid":state.controllers[element].deck[index].cardGuid
+            //The player going second gets four cards        
+            var secondHand = [];
+            for(var i = 0;i<4;i++)
+            {
+            secondHand.push(util.dealCard(second.deck));
             }
-            Rune.executeRune(dc3, state);
             
-            return;
-        })
-        
-        
+            for(var i = 0;i<firstHand.length;i++)
+            {
+                var dealCardRune = {
+                    "runeType":"DealCard",
+                    "controllerGuid":first.guid,
+                    "cardGuid":firstHand[i]
+                }
+                Rune.executeRune(dealCardRune, state);
+            }
+            
+            for(var i = 0;i<secondHand.length;i++)
+            {
+                var dealCardRune = {
+                    "runeType":"DealCard",
+                    "controllerType":second.guid,
+                    "cardGuid":secondHand
+                }
+                Rune.executeRune(dealCardRune, state);
+            }
+            first.state = controllerRune.MULLIGAN;
+            second.state = controllerRune.MULLIGAN;
+            var op1 = options.createOptions(first, state);
+            var op2 = options.createOptions(second, state);
+            
+        }
         break;
-        //valid play card message
+        //valid option message
         //{
-        // "type":"playCard",   
+        // "type":"option",   
         // "index":n//indexed at 0
         //}
-        case "playCard":
-          var controller = state.controllersByIP[socket.remoteAddress];
-          var index = obj.index;
-          
-          console.log(index);
-          if(index >= 0 || index < controller.hand.length - 1)
-          {
-              var playCard = {
-                  "runeType":"PlayCard",
-                  "controllerGuid":controller.guid,
-                  "cardGuid":controller.hand[index].cardGuid,
-                  "originOfCard":0
-              }
-              Rune.executeRune(playCard, state);
-          }
-          else
-          {
-              //bad message, not sure what responce should be
-            //  error.card
-          }
-        break;
-        //valid mulligan rune
-        //{
-        // "type":"mulligan",
-        // "cards":[n number of indexes]  
-        //}
-        case "mulligan":
-            var controller = state.controllersByIP[socket.remoteAddress];
-            var shuffleCards = [];
-            for(var i = 0;i<obj.cards.length;i++)
-            {
-                //any bad index and we bail
-                if(obj.cards[i] < 0 || obj.cards[i] > controller.hand.length)
-                {
-                    //will have it fire error code eventually
-                    return;
-                }
-                console.log(obj.cards[i]);
-                shuffleCards.push(controller.hand[obj.cards[i]].cardGuid);
-            }
-            
-            for(var i = 0;i<shuffleCards.length;i++)
-            {
-                var sc = {
-                    "runeType":"ShuffleCard",
-                    "controllerGuid":controller.guid,
-                    "cardGuid":shuffleCards[i]
-                }
-                Rune.executeRune(sc, state);
-            }
-            for(var i = 0;i<obj.cards.length;i++)
-            {
-                var index = Math.floor(Math.random() * controller.deck.length);
-                var dc = {
-                    "runeType":"DealCard",
-                    "controllerGuid":controller.guid,
-                    "cardGuid":controller.deck[index].cardGuid
-                }
-                
-                Rune.executeRune(dc, state);
-            }
-            state.playersReady++;
-            if(state.playersReady == CONNCETION_NUM_NEEDED)
-            {
-                var obj = {
-                    "runeType":"StartGame"
-                }
-                Rune.executeRune(obj, state);
-            }
+        case "option":
+        //
         break;
         
         default:
@@ -219,7 +185,6 @@ function bootstrap(state) {
     //for each connection that we have create a controller
     state.connections.forEach(function(element, index) {
         var guid = util.createGuid();
-        console.log("---- " + guid  +" ====");
         var name = "name---";
         var type;
         if(index == 0)

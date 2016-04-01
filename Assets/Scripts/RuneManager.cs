@@ -48,30 +48,39 @@ public class RuneManager : MonoBehaviour
         Debug.Log(runeAsString);
         JSONObject jsonObject = new JSONObject(runeAsString);
         string typeOfRune = jsonObject[RUNE_TYPE].str;
-        var type = Type.GetType(typeOfRune);
-        var runeObj = Activator.CreateInstance(type);
-        for (int i = 0; i < jsonObject.keys.Count; i++)
+        if (typeOfRune != "optionRune")
         {
-            var property = type.GetProperty(jsonObject.keys[i]);
-            if (jsonObject.keys[i] == "runeType")
-                continue;
-            switch (jsonObject[jsonObject.keys[i]].type)
+
+
+            var type = Type.GetType(typeOfRune);
+            var runeObj = Activator.CreateInstance(type);
+            for (int i = 0; i < jsonObject.keys.Count; i++)
             {
-                case JSONObject.Type.STRING:
-                    property.SetValue(runeObj, jsonObject[jsonObject.keys[i]].str, null);
-                    break;
-                case JSONObject.Type.NUMBER:
-                    property.SetValue(runeObj, (int)jsonObject[jsonObject.keys[i]].i, null);
-                    break;
-                case JSONObject.Type.BOOL:
-                    property.SetValue(runeObj, jsonObject[jsonObject.keys[i]].b, null);
-                    break;
-                default:
-                    Debug.Log("I have not done that type");
-                    break;
+                var property = type.GetProperty(jsonObject.keys[i]);
+                if (jsonObject.keys[i] == "runeType")
+                    continue;
+                switch (jsonObject[jsonObject.keys[i]].type)
+                {
+                    case JSONObject.Type.STRING:
+                        property.SetValue(runeObj, jsonObject[jsonObject.keys[i]].str, null);
+                        break;
+                    case JSONObject.Type.NUMBER:
+                        property.SetValue(runeObj, (int)jsonObject[jsonObject.keys[i]].i, null);
+                        break;
+                    case JSONObject.Type.BOOL:
+                        property.SetValue(runeObj, jsonObject[jsonObject.keys[i]].b, null);
+                        break;
+                    default:
+                        Debug.Log("I have not done that type");
+                        break;
+                }
             }
+            Singelton.ExecuteRune((Rune)runeObj);
         }
-        Singelton.ExecuteRune((Rune)runeObj);
+        else
+        {
+
+        }
     }
 
     public void PlaceMessageInQueue(string message)

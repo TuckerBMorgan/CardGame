@@ -137,11 +137,28 @@ public class CardAvatar : MonoBehaviour, entity
         {
             if (PlayArea.Singelton.InPlayArea(transform.position))
             {
+
+                //Can play check
+
+                if(OptionsManager.Singleton.options[card.GetGuid()] != null)
+                {
+                    var Options = OptionsManager.Singleton.options[card.GetGuid()];
+                    foreach(Option op in Options)
+                    {
+                        if(op.GetType() == typeof(PlayCardOption))
+                        {
+
+                        }
+                    }
+                }
+
+                /*
                 Controller ctr = EntityManager.Singelton.GetEntity(playerGuid) as Controller;
 
                 string playCard = "{\"type\":\"playCard\",\n " +
                                     "\"index\":" + ctr.GetCardIndexInHand(card) + "}";
                 Client.Singelton.SendNewMessage(playCard);
+                 * */
             }
         }
     }

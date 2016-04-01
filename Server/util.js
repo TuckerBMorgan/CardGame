@@ -38,3 +38,8 @@ exports.loadCard = function(fileName) {
       obj.entityType = entity.MINION;
       return obj;
 }
+
+exports.dealCard = function (deck) {
+        var index = Math.floor(Math.random() * deck.length);
+        return deck[index].cardGuid;
+}

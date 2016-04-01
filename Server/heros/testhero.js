@@ -1,8 +1,9 @@
 var entity = require('../entityManager')
+var heroUtil = require("../heroUtil");
 
 exports.hero = {
     "name":"test",
-    "health":30,
+    "health":heroUtil.BASE_HERO_HEALTH,
     "mana": 0,
     "type":1,
     "power":{

@@ -4,7 +4,13 @@ var heroUtil = require("../heroUtil");
 
 exports.PLAYER_CONTROLLER = "PlayerController"
 exports.AI_CONTROLLER = "AiController"
-exports.FULL_PLAYER_HEALTH = 30
+
+//States the controller(ie: player) can be in
+exports.MULLIGAN = "Mulligan";
+exports.WAITING_FOR_START = "WaitingForStart";
+exports.WAITING_FOR_TURN = "WaitingForTurn";
+exports.IN_TURN  = "IN_TURN";
+
 //{
 //  "runeType":"NewController"
 //  "name":"name"
@@ -23,11 +29,11 @@ exports.execute = function(rune, state)
                 "deck":[],
                 "hand":[],
                 "inPlay":[],
-                "health":exports.FULL_PLAYER_HEALTH,
                 "guid":rune['guid'],
                 "hero":heroUtil.loadHero(rune["hero"]),
                 "mana":0,
-                "team":teamCount
+                "team":teamCount,
+                "state":exports.WAITING_FOR_START
             }
         teamCount++;
         entity.entities[rune.guid] = state.controllers[rune.guid];
