@@ -79,7 +79,7 @@ public class RuneManager : MonoBehaviour
         }
         else
         {
-
+            OptionsManager.Singleton.StartToProcessOptions(jsonObject);
         }
     }
 

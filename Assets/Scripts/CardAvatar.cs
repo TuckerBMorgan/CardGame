@@ -111,7 +111,7 @@ public class CardAvatar : MonoBehaviour, entity
     //Entry point for the mesh to tell the whole card it is being clicked
     public void OnMouseDownOnMesh()
     {
-        if (! PlayArea.Singelton.GetGameStart())
+        if (!PlayArea.Singelton.GetGameStart())
         {
             Controller ctr = EntityManager.Singelton.GetEntity(playerGuid) as Controller;
             PlayArea.Singelton.OnCardAvatarClickedForMulligan(ctr.GetCardIndexInHand(card));
@@ -122,6 +122,7 @@ public class CardAvatar : MonoBehaviour, entity
             {
                 textOfCard[i].color = col;
             }
+
             return;
         }
         if (cardAvatarState == CardAvatarState.inHand)
@@ -147,7 +148,8 @@ public class CardAvatar : MonoBehaviour, entity
                     {
                         if(op.GetType() == typeof(PlayCardOption))
                         {
-
+                            OptionsManager.Singleton.PickUpOption(op);
+                            break;
                         }
                     }
                 }

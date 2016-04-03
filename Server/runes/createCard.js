@@ -8,7 +8,7 @@ var entity = require('../entityManager')
 //}
 exports.execute = function (rune, state) {       
    state.controllers[rune.controllerGuid].deck.push(rune);
-   entity.entities[rune.cardGuid] = rune;  
+   entity.addEntity(rune, rune.cardGuid);  
 }
 
 exports.canSee = function (rune, controller, state) {

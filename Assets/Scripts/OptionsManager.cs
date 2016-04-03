@@ -26,13 +26,17 @@ public class OptionsManager : MonoBehaviour {
 
     public void StartToProcessOptions(JSONObject jsonObject)
     {
+        int count = 0;
         foreach(JSONObject j in jsonObject["options"].list)
         {
+            
             switch(j["option"].str)
             {
                 case MULLIGAN:
                     Mulligan m = new Mulligan();
+                    m.n = count;
                     m.cardGuid = j["cardGuid"].str;
+                    count++;
                     if(!options.ContainsKey(m.cardGuid))
                     {
                         options.Add(m.cardGuid, new List<Option>());
@@ -42,6 +46,8 @@ public class OptionsManager : MonoBehaviour {
                     break;
                 case NO_MULLIGAN:
                     NoMulligan nm = new NoMulligan();
+                    nm.n = count;
+                    count++;
                     if(!options.ContainsKey(noMulliganKey))
                     {
                         options.Add(noMulliganKey, new List<Option>());
@@ -50,16 +56,19 @@ public class OptionsManager : MonoBehaviour {
                     break;
                 case END_TURN:
                     EndTurn et = new EndTurn();
+                    et.n = count;
+                    count++;
                     if(!options.ContainsKey(endTurnKey))
                     {
                         options.Add(endTurnKey, new List<Option>());
                     }
-
                     options[endTurnKey].Add(et);
                     break;
                 case PLAY_CARD:
                     PlayCardOption pc = new PlayCardOption();
+                    pc.n = count;
                     pc.cardGuid = j["cardGuid"].str;
+                    count++;
                     if(!options.ContainsKey(pc.cardGuid))
                     {
                         options.Add(pc.cardGuid, new List<Option>());
@@ -68,9 +77,10 @@ public class OptionsManager : MonoBehaviour {
                     break;
                 case ATTACK:
                     Attack a = new Attack();
+                    a.n = count;
                     a.cardGuid = j["cardGuid"].str;
                     a.defenderGuid = j["defendedGuid"].str;
-
+                    count++;
                     if(!options.ContainsKey(a.cardGuid))
                     {
                         options.Add(a.cardGuid, new List<Option>());
@@ -88,14 +98,22 @@ public class OptionsManager : MonoBehaviour {
     }
 
     public void PickUpOption(Option op)
-    { 
+    {
+        string str = "{\"type\":\"option\",";
+        str += "\"index\":" + op.n + "}";
+        Client.Singelton.SendNewMessage(str);
+        FlushOptions();
+    }
 
+    public void FlushOptions()
+    {
+        options.Clear();
     }
 }
 
 public class Option
 {
-
+    public int n;
 }
 
 public class NoMulligan : Option

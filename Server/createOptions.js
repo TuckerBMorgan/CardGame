@@ -10,18 +10,16 @@ exports.createOptions = function (controller, state) {
     //They are unable to play them
     if(controller.state == Controller.MULLIGAN)
     {
+        
+        //Still not sure if this the best way of doing things
         var noMulligan = {
             "option":"noMulligan"
         }
         options.push(noMulligan);
-        for(var i = 0;i<controller.hand;i++)
-        {
-            var mulliganCard = {
-                "option":"mulligan",
-                "cardGuid":controller.hand[i]
-            }
-            options.push(mulliganCard);
+        var mulligan = {
+            "option":"mulligan"
         }
+        options.push(mulligan);
         return options;
     }
     

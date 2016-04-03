@@ -5,13 +5,13 @@ var sortableEntites = [];
 exports.MINION = 0;
 exports.HERO = 1;   
 
-exports.addEntity = function (entity, entityGuid,entityCategory) {
-    exports.entities[entityGuid] = entity;
+exports.addEntity = function (entity, entityGuid) {
+    entities[entityGuid] = entity;
     sortableEntites.push(entity);    
 }
 
 exports.removeEntity = function (entity, entityGuid) {
-    exports.entities[entityGuid] = null;
+    entities[entityGuid] = null;
     var index = sortableEntites.indexOf(entity);
     sortableEntites.splice(index, 1);
 }

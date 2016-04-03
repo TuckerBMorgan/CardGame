@@ -4,6 +4,12 @@ exports.calculateMove = function(state) {
            
 }
 
+
+
+exports.evaluateMulligan = function (hand, state) {
+    var shouldMul = [];
+}
+
 exports.processRune = function (rune, state) {
     
 }

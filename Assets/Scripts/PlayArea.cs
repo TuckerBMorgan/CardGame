@@ -194,7 +194,7 @@ public class PlayArea : MonoBehaviour
     public void OnMulliganButtonClick()
     {
         string str = "{\"type\":\"mulligan\",\n";
-        str += "\"cards\":[";
+        str += "\"index\":[";
         for(int i = 0;i<indexes.Count;i++)
         {
             if(i != 0)
@@ -207,6 +207,7 @@ public class PlayArea : MonoBehaviour
         str += "]}";
 
         Client.Singelton.SendNewMessage(str);
+        OptionsManager.Singleton.FlushOptions();
     }
 
     public bool GetGameStart()

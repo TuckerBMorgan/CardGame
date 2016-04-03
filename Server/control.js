@@ -63,6 +63,7 @@ exports.routing = function (message, socket) {
                     state.connections.push(element.remoteAddress);
                 })
                 bootstrap(state);
+                state.playersReady++;
             }
             else if(connectionNum == 0)
             {
@@ -93,7 +94,10 @@ exports.routing = function (message, socket) {
                 
             var first = state.controllers[keys[goFirst]];
             var second = state.controllers[keys[1 - goFirst]];
-            
+            state["turnOrder"] = [];
+            state["OnTurnPlayer"] = 0;
+            state.turnOrder[0] = first;
+            state.turnOrder[1] = second;
             
             for(var i = 0;i<30;i++) 
             {
@@ -153,8 +157,8 @@ exports.routing = function (message, socket) {
             {
                 var dealCardRune = {
                     "runeType":"DealCard",
-                    "controllerType":second.guid,
-                    "cardGuid":secondHand
+                    "controllerGuid":second.guid,
+                    "cardGuid":secondHand[i]
                 }
                 Rune.executeRune(dealCardRune, state);
             }
@@ -163,8 +167,69 @@ exports.routing = function (message, socket) {
             var op1 = options.createOptions(first, state);
             var op2 = options.createOptions(second, state);
             
+            var opack1 = {
+                "runeType":"optionRune",
+                "options":op1
+            }
+            
+            var opack2 = {
+                "runeType":"optionRune",
+                "options":op2
+            }
+            
+            server.sendMessage(JSON.stringify(opack1), first.socket);
+           // server.sendMessage(JSON.stringify(opack2), second.socket);
         }
         break;
+        
+        case "mulligan":
+        //This is a special case since we have to deal with the fact that mulligan is a multi choice state change 
+        var index = obj["index"];
+        var controller = state.controllersByIP[socket.remoteAddress];
+        
+        for(var i = 0;i<index.length;i++)
+        {
+            var Shuffle = {
+                "runeType":"ShuffleCard",
+                "controllerGuid":controller.guid,
+                "cardGuid":controller.hand[index[i]].cardGuid
+            }
+            Rune.executeRune(Shuffle, state);
+            for(var k = 0;k<index.length;k++)
+            {
+                index[k] -= 1;
+            }
+        }
+        
+        for(var i = 0;i<index.length;i++)
+        {
+            var deal = {
+                "runeType":"DealCard",
+                "controllerGuid":controller.guid,
+                "cardGuid":util.dealCard(controller.deck)
+            }
+            Rune.executeRune(deal, state);
+        }
+        controller.state = controllerRune.WAITING_FOR_START;
+        
+        //This is dumb next to fix
+        var controllerKeys = Object.keys(state.controllers);
+        var count = 0;
+        controllerKeys.forEach(function (element) {
+            if(element.state == controllerRune.WAITING_FOR_START)
+            {
+                count++;
+            }    
+        })
+        if(count == 2)
+        {
+            var startGame = {
+               "runeType":"StarGame"
+            }
+            Rune.executeRune(startGame, state);
+        }
+        break;
+        
         //valid option message
         //{
         // "type":"option",   
@@ -199,7 +264,8 @@ function bootstrap(state) {
         var obj = { 
             "guid":guid,
             "name":name,
-            "controllerType":type
+            "controllerType":type,
+            "hero":"testhero"
         }
         newController.execute(obj, state)
         state.controllersByIP[element] = state.controllers[guid];

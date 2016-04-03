@@ -33,8 +33,8 @@ exports.createGuid = function () {
 }
 
 exports.loadCard = function(fileName) {
-      var contents =  fs.readFileSync("cards/" + fileName + ".json");
-      var obj = JSON.parse(contents);
+      var contents =  require("./cards/" + fileName);
+      var obj = JSON.parse(JSON.stringify(contents.card));
       obj.entityType = entity.MINION;
       return obj;
 }

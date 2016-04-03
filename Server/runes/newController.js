@@ -36,7 +36,7 @@ exports.execute = function(rune, state)
                 "state":exports.WAITING_FOR_START
             }
         teamCount++;
-        entity.entities[rune.guid] = state.controllers[rune.guid];
+        entity.addEntity(state.controllers[rune.guid], rune.guid);
     }
     else
     {
