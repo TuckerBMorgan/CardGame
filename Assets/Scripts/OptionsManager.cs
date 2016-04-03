@@ -33,9 +33,11 @@ public class OptionsManager : MonoBehaviour {
             switch(j["option"].str)
             {
                 case MULLIGAN:
+                    //WHY DID I DO THIS
+                    /*
                     Mulligan m = new Mulligan();
                     m.n = count;
-                    m.cardGuid = j["cardGuid"].str;
+                 //   m.cardGuid = j["cardGuid"].str;
                     count++;
                     if(!options.ContainsKey(m.cardGuid))
                     {
@@ -43,6 +45,7 @@ public class OptionsManager : MonoBehaviour {
                     }
 
                     options[m.cardGuid].Add(m);
+                     * */
                     break;
                 case NO_MULLIGAN:
                     NoMulligan nm = new NoMulligan();

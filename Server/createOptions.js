@@ -36,6 +36,10 @@ exports.createOptions = function (controller, state) {
         {
             them = state.controllers[element];
         }
+        else
+        {
+            me = state.controllers[element];
+        }
     })
     
     
@@ -43,7 +47,7 @@ exports.createOptions = function (controller, state) {
     //Can I play any of the cards in my hand in the current board state
     var hand = state.controllers[controller].hand;
     hand.forEach(function (element) {
-        var cardFile = require('./cards/' + element.name);
+        var cardFile = require('./cards/' + element.cardName);
         if(cardFile.canPlay(element, controller, state))
         {
             var option = {

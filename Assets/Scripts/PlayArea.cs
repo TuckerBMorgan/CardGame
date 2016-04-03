@@ -374,7 +374,6 @@ public class PlayArea : MonoBehaviour
     {
         gameStarted = true;
 
-        Debug.Log("SSDS");
         float yPos = -2.0f;
 
         if (playHands.ContainsKey(homeGuid))

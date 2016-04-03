@@ -6,6 +6,8 @@ var error = require('./errorMessages')
 var entities = require('./entityManager')
 var options = require('./createOptions')
 var controllerRune = require('./runes/NewController')
+var AI = require('./aicontroller')
+
 var state = {
     "controllers":{},//by guid look up of all controllers
     "entities":{},
@@ -133,14 +135,29 @@ exports.routing = function (message, socket) {
             var firstHand = [];
             for(var i = 0;i<3;i++)
             {
-                firstHand.push(util.dealCard(first.deck));
+                //Insure that we are being dealt unqiue cards
+                //Else while we are creating the hand we could get two or
+                //more of the same cards and so error out
+                var newGuid = util.dealCard(first.deck);
+                if(firstHand.indexOf(newGuid) != -1)
+                {
+                    i--;
+                    continue;
+                }
+                firstHand.push(newGuid);
             }
             
             //The player going second gets four cards        
             var secondHand = [];
             for(var i = 0;i<4;i++)
             {
-            secondHand.push(util.dealCard(second.deck));
+                var newGuid = util.dealCard(second.deck);
+                if(secondHand.indexOf(newGuid) != -1)
+                {
+                    i--;
+                    continue;
+                }
+                secondHand.push(newGuid);
             }
             
             for(var i = 0;i<firstHand.length;i++)
@@ -177,8 +194,17 @@ exports.routing = function (message, socket) {
                 "options":op2
             }
             
-            server.sendMessage(JSON.stringify(opack1), first.socket);
-           // server.sendMessage(JSON.stringify(opack2), second.socket);
+            if(first.type != controllerRune.AI_CONTROLLER)
+            {
+                server.sendMessage(JSON.stringify(opack1), first.socket);
+                AI.evaluateMulligan(second, state);
+            }
+            else
+            {
+                server.sendMessage(JSON.stringify(opack2), second.socket);
+                AI.evaluateMulligan(first, state);
+            }
+            // server.sendMessage(JSON.stringify(opack2), second.socket);
         }
         break;
         
@@ -216,15 +242,17 @@ exports.routing = function (message, socket) {
         var controllerKeys = Object.keys(state.controllers);
         var count = 0;
         controllerKeys.forEach(function (element) {
-            if(element.state == controllerRune.WAITING_FOR_START)
+            if(state.controllers[element].state === controllerRune.WAITING_FOR_START)
             {
                 count++;
             }    
         })
+        
+        console.log("The count is " + count);
         if(count == 2)
         {
             var startGame = {
-               "runeType":"StarGame"
+               "runeType":"StartGame"
             }
             Rune.executeRune(startGame, state);
         }

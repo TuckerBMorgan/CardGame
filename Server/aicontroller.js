@@ -1,3 +1,4 @@
+var control = require('./control')
 exports.calculateMove = function(state) {
     
     
@@ -6,8 +7,24 @@ exports.calculateMove = function(state) {
 
 
 
-exports.evaluateMulligan = function (hand, state) {
+exports.evaluateMulligan = function (controller, state) {
     var shouldMul = [];
+    controller.hand.forEach(function (element, index) {
+      if(element.cost > 3){
+          shouldMul.push[index];
+        }  
+    })
+    var mul = {
+        "type":"mulligan",
+        "index":shouldMul
+    }
+    var socket = {
+        "remoteAddress":"00-00-00"
+    }
+    
+    //a full hack to get this to work, need a much better system 
+    control.routing(JSON.stringify(mul), socket);
+    
 }
 
 exports.processRune = function (rune, state) {

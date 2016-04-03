@@ -11,7 +11,7 @@ exports.execute = function (rune, state) {
     var rotateTurn = {
         "runeType":"RotateTurn"
     }
-    Rune.executeRune(rune, state);
+    Rune.executeRune(rotateTurn, state);
 }
 
 exports.canSee = function (rune, controller, state) {
