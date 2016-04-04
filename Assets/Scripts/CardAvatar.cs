@@ -140,7 +140,11 @@ public class CardAvatar : MonoBehaviour, entity
             {
 
                 //Can play check
-
+                Debug.Log(card.GetGuid());
+                foreach(KeyValuePair<string, List<Option>> kvp in OptionsManager.Singleton.options)
+                {
+                    Debug.Log(kvp.Key);
+                }
                 if(OptionsManager.Singleton.options[card.GetGuid()] != null)
                 {
                     var Options = OptionsManager.Singleton.options[card.GetGuid()];

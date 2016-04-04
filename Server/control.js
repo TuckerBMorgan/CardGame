@@ -265,6 +265,33 @@ exports.routing = function (message, socket) {
         //}
         case "option":
         //
+        var controller = state.controllersByIP[sockets.remoteAddress];
+        
+        //They gave us a good number
+        if(obj.index >= 0 && obj.index < controller.options.length)
+        {
+            var useOption = controller.options[obj.index];
+            switch(useOption["option"])
+            {
+                case "attack":
+                
+                break;
+                
+                case "play":
+                    var dealCard = {
+                        "runeType":"DealCard",
+                        "cardGuid":controller.options[obj.index].cardGuid,
+                        "controllerGuid":controller.guid
+                    }
+                    Rune.executeRune(dealCard, state);
+                    
+                break;
+                
+                default:
+                break;
+            }
+        }
+        
         break;
         
         default:

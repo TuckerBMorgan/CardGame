@@ -11,6 +11,7 @@ exports.execute = function (rune, state) {
     var rotateTurn = {
         "runeType":"RotateTurn"
     }
+    
     Rune.executeRune(rotateTurn, state);
 }
 

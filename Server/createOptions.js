@@ -31,6 +31,7 @@ exports.createOptions = function (controller, state) {
     
     var keys = Object.keys(state.controllers);
     var them;
+    var me;
     keys.forEach(function (element) {
         if(element != controller)
         {
