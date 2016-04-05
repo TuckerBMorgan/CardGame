@@ -19,7 +19,7 @@ var server = net.createServer(function(socket) {
 
 exports.sendMessage = function(message, socket)
 {
-    console.log(message);
+  //  console.log(message);
     socket.write(message + "\n\n");
 }
 

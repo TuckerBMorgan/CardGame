@@ -1,6 +1,7 @@
 var server = require('./server');
 
 exports.executeRune = function (rune, state) {
+    console.log(JSON.stringify(rune));
     var file = require("./runes/" + rune.runeType);
     file.execute(rune, state);
     

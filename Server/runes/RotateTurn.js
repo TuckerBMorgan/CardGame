@@ -2,16 +2,31 @@ var options = require('../createOptions');
 var controllerRune = require('./NewController');
 var server = require('../server');
 var Rune = require('../RuneVM');
+var ai = require("../aicontroller");
+var control = require('../control');
 
 exports.execute = function (rune, state) {
     var length = state.OnTurnPlayer;
-    state.turnOrder[length].state = controllerRune.WAITING_FOR_TURN;
     var nextIndex = (state.OnTurnPlayer + 1) % state.turnOrder.length;
+    
+    //Handle the first RotateTurnRun becaus of setting OnTurnPlayer to -1
+    if(length == -1)
+    {
+        length = 1;
+    }
+    state.turnOrder[length].state = controllerRune.WAITING_FOR_TURN;
+    var setBaseMana = {
+        "runeType":"SetBaseMana",
+        "controllerGuid":state.turnOrder[nextIndex].guid,
+        "baseMana":state.turnOrder[nextIndex].baseMana + 1
+    }
+    
+    Rune.executeRune(setBaseMana, state);
     
     var setMana = {
         "runeType":"SetMana",
         "controllerGuid":state.turnOrder[nextIndex].guid,
-        "mana":state.turnOrder[nextIndex].mana + 1
+        "mana":state.turnOrder[nextIndex].baseMana
     }
     
     Rune.executeRune(setMana, state);
@@ -21,8 +36,6 @@ exports.execute = function (rune, state) {
     state.turnOrder[nextIndex].options = characterOptions;
     state.turnOrder[nextIndex].state = controllerRune.IN_TURN;
     
-    
-    
     var optionsPack = {
         "runeType":"optionRune",
         "options":characterOptions
@@ -30,6 +43,11 @@ exports.execute = function (rune, state) {
     if(state.turnOrder[nextIndex].type == "PlayerController")
     {
         server.sendMessage(JSON.stringify(optionsPack), state.turnOrder[nextIndex].socket);
+    }
+    else
+    {
+       var index =  ai.calculateMove(state.turnOrder[nextIndex], characterOptions, state);
+       control.executeOptions(index, state.turnOrder[nextIndex], state);
     }
 }
 

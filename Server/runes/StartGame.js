@@ -8,6 +8,7 @@ var Rune = require('../RuneVm')
 //}
 
 exports.execute = function (rune, state) {
+    state.OnTurnPlayer = -1;
     var rotateTurn = {
         "runeType":"RotateTurn"
     }

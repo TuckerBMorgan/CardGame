@@ -10,8 +10,8 @@ public class OptionsManager : MonoBehaviour {
     public const string MULLIGAN = "mulligan";
     public const string NO_MULLIGAN = "noMulligan";
     public const string END_TURN = "endTurn";
-    public const string PLAY_CARD = "playCard";
-    public const string ATTACK = "attack";
+    public const string PLAY_CARD = "PlayCard";
+    public const string ATTACK = "Attack";
     public string endTurnKey = "endTurn";
     public string noMulliganKey = "noMulliganKey";
 

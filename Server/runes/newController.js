@@ -19,8 +19,7 @@ exports.IN_TURN  = "IN_TURN";
 //}
 var teamCount = 0;
 exports.execute = function(rune, state)
-{
-    
+{   
     if(state.controllers[rune['guid']] == null)
     {
             state.controllers[rune.guid] = {
@@ -32,6 +31,7 @@ exports.execute = function(rune, state)
                 "guid":rune['guid'],
                 "hero":heroUtil.loadHero(rune["hero"]),
                 "mana":0,
+                "baseMana":0,
                 "team":teamCount,
                 "state":exports.WAITING_FOR_START
             }

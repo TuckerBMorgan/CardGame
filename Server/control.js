@@ -94,8 +94,8 @@ exports.routing = function (message, socket) {
             //random who will go first
             var goFirst = Math.floor((Math.random() * 100)) % 2;
                 
-            var first = state.controllers[keys[goFirst]];
-            var second = state.controllers[keys[1 - goFirst]];
+            var first = state.controllers[keys[0]];
+            var second = state.controllers[keys[1]];
             state["turnOrder"] = [];
             state["OnTurnPlayer"] = 0;
             state.turnOrder[0] = first;
@@ -181,8 +181,8 @@ exports.routing = function (message, socket) {
             }
             first.state = controllerRune.MULLIGAN;
             second.state = controllerRune.MULLIGAN;
-            var op1 = options.createOptions(first, state);
-            var op2 = options.createOptions(second, state);
+            var op1 = options.createOptions(first.guid, state);
+            var op2 = options.createOptions(second.guid, state);
             
             var opack1 = {
                 "runeType":"optionRune",
@@ -210,24 +210,44 @@ exports.routing = function (message, socket) {
         
         case "mulligan":
         //This is a special case since we have to deal with the fact that mulligan is a multi choice state change 
-        var index = obj["index"];
-        var controller = state.controllersByIP[socket.remoteAddress];
+            var index = obj["index"];
+            var controller = state.controllersByIP[socket.remoteAddress];
+            exports.executeMulligan(index, controller, state);
+        break;
         
-        for(var i = 0;i<index.length;i++)
+        //valid option message
+        //{
+        // "type":"option",   
+        // "index":n//indexed at 0
+        //}
+        case "option":
+            var controller = state.controllersByIP[socket.remoteAddress];
+            exports.executeOptions(obj.index, controller, state);
+        break;
+        
+        default:
+            break;
+    }
+}
+
+exports.executeMulligan = function (indices, controller, state) 
+{
+    
+        for(var i = 0;i<indices.length;i++)
         {
             var Shuffle = {
                 "runeType":"ShuffleCard",
                 "controllerGuid":controller.guid,
-                "cardGuid":controller.hand[index[i]].cardGuid
+                "cardGuid":controller.hand[indices[i]].cardGuid
             }
             Rune.executeRune(Shuffle, state);
-            for(var k = 0;k<index.length;k++)
+            for(var k = 0;k<indices.length;k++)
             {
-                index[k] -= 1;
+                indicesx[k] -= 1;
             }
         }
         
-        for(var i = 0;i<index.length;i++)
+        for(var i = 0;i<indices.length;i++)
         {
             var deal = {
                 "runeType":"DealCard",
@@ -248,7 +268,6 @@ exports.routing = function (message, socket) {
             }    
         })
         
-        console.log("The count is " + count);
         if(count == 2)
         {
             var startGame = {
@@ -256,31 +275,24 @@ exports.routing = function (message, socket) {
             }
             Rune.executeRune(startGame, state);
         }
-        break;
-        
-        //valid option message
-        //{
-        // "type":"option",   
-        // "index":n//indexed at 0
-        //}
-        case "option":
-        //
-        var controller = state.controllersByIP[sockets.remoteAddress];
-        
-        //They gave us a good number
-        if(obj.index >= 0 && obj.index < controller.options.length)
+}
+
+exports.executeOptions = function (index, controller, state) {
+     //They gave us a good number
+        if(index >= 0 && index < controller.options.length)
         {
-            var useOption = controller.options[obj.index];
+            var useOption = controller.options[index];
+            console.log(useOption["option"])
             switch(useOption["option"])
             {
                 case "attack":
                 
                 break;
                 
-                case "play":
+                case "playCard":
                     var dealCard = {
-                        "runeType":"DealCard",
-                        "cardGuid":controller.options[obj.index].cardGuid,
+                        "runeType":"PlayCard",
+                        "cardGuid":controller.options[index].cardGuid,
                         "controllerGuid":controller.guid
                     }
                     Rune.executeRune(dealCard, state);
@@ -291,12 +303,6 @@ exports.routing = function (message, socket) {
                 break;
             }
         }
-        
-        break;
-        
-        default:
-            break;
-    }
 }
 
 function bootstrap(state) {

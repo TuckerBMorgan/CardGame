@@ -14,6 +14,8 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
     protected List<Card> inPlay;
     protected int health;
     protected string controllerName;
+    protected int mana;
+    protected int baseMana;
 
     public void Setup()
     {
@@ -133,6 +135,25 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
         return health;
     }
 
+    public int GetMana()
+    {
+        return mana;
+    }
+    public void SetMana(int mana)
+    {
+        this.mana = mana;
+    }
+
+    public int GetBaseMana()
+    {
+        return baseMana;
+    }
+
+    public void SetBaseMana(int baseMana)
+    {
+        this.baseMana = baseMana;
+    }
+
     public void SetControllerName(string controllerName)
     {
         this.controllerName = controllerName;
@@ -147,5 +168,6 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
     {
         return hand.IndexOf(card);
     }
+
 
 }

@@ -2,13 +2,16 @@ var entities = require('./entityManager');
 var tags = require('./cards/cardTags');
 var Controller = require('./runes/NewController');
 
+exports.PLAY_CARD_TYPE = "PlayCard";
+exports.ATTACK_TYPE = "Attack";
+
 exports.createOptions = function (controller, state) {
     //The list we return that is all possible options a player can take in the current board state
     var options = [];
     
     //In this case we need to let the client know that all they can do with these cards is mulligan then
     //They are unable to play them
-    if(controller.state == Controller.MULLIGAN)
+    if(state.controllers[controller] == Controller.MULLIGAN)
     {
         
         //Still not sure if this the best way of doing things
@@ -44,7 +47,6 @@ exports.createOptions = function (controller, state) {
     })
     
     
-    
     //Can I play any of the cards in my hand in the current board state
     var hand = state.controllers[controller].hand;
     hand.forEach(function (element) {
@@ -52,7 +54,7 @@ exports.createOptions = function (controller, state) {
         if(cardFile.canPlay(element, controller, state))
         {
             var option = {
-                "option":"playCard",
+                "option":exports.PLAY_CARD_TYPE,
                 "cardGuid":element.cardGuid
             }
             if(element.tags.indexOf[tags.BATTLE_CRY] != -1)
@@ -93,7 +95,7 @@ exports.createOptions = function (controller, state) {
     mineInPlay.forEach(function (element) {
         useList.forEach(function (innerElement) {
             var attackOtions = {
-                "option":"attack",
+                "option":exports.ATTACK_TYPE,
                 "attackGuid":element.cardGuid,
                 "defendedGuid":innerElement
             }

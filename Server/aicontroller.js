@@ -1,8 +1,46 @@
 var control = require('./control')
-exports.calculateMove = function(state) {
+var entity = require('./entityManager');
+var optionsTypes = require('./createOptions')
+
+exports.calculateMove = function(controller, options, state) {
     
+    //the ai wants to play cards first, so get all playCard options
+    var playCard = options.filter(function (element) {
+         return (element["option"] == optionsTypes.PLAY_CARD_TYPE);
+    })
     
-           
+    var mana = controller.mana;
+    
+    var cards = [];
+    playCard.forEach(function(element){
+        cards.push(entity.getEntity(element.cardGuid));
+    })
+    
+    var canPlay = cards.filter(function (element) {
+       return element.cost <= mana;
+    })
+    
+    var playOrder = canPlay.sort(function (a, b) {
+        var playCostA = a.baseHealth + a.baseAttack;
+        if(a.cost > 0)
+        {
+            playCostA/=a.cost;
+        }
+        var playCostB = b.baseHealth + b.baseAttack;
+        if(b.cost > 0)
+        {
+            playCostB /= b.cost;
+        }
+        if(playCostA > playCostB)
+            return 1;
+        if(playCostB < playCostA)
+            return -1;
+         return 0;
+    })
+    
+    var playOption = playOrder[0];
+    
+    return options.indexOf(playOption);
 }
 
 
@@ -14,17 +52,7 @@ exports.evaluateMulligan = function (controller, state) {
           shouldMul.push[index];
         }  
     })
-    var mul = {
-        "type":"mulligan",
-        "index":shouldMul
-    }
-    var socket = {
-        "remoteAddress":"00-00-00"
-    }
-    
-    //a full hack to get this to work, need a much better system 
-    control.routing(JSON.stringify(mul), socket);
-    
+    control.executeMulligan(shouldMul, controller, state);
 }
 
 exports.processRune = function (rune, state) {

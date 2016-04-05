@@ -138,14 +138,7 @@ public class CardAvatar : MonoBehaviour, entity
         {
             if (PlayArea.Singelton.InPlayArea(transform.position))
             {
-
-                //Can play check
-                Debug.Log(card.GetGuid());
-                foreach(KeyValuePair<string, List<Option>> kvp in OptionsManager.Singleton.options)
-                {
-                    Debug.Log(kvp.Key);
-                }
-                if(OptionsManager.Singleton.options[card.GetGuid()] != null)
+                if(OptionsManager.Singleton.options.ContainsKey(card.GetGuid()))
                 {
                     var Options = OptionsManager.Singleton.options[card.GetGuid()];
                     foreach(Option op in Options)
@@ -157,21 +150,27 @@ public class CardAvatar : MonoBehaviour, entity
                         }
                     }
                 }
-
-                /*
-                Controller ctr = EntityManager.Singelton.GetEntity(playerGuid) as Controller;
-
-                string playCard = "{\"type\":\"playCard\",\n " +
-                                    "\"index\":" + ctr.GetCardIndexInHand(card) + "}";
-                Client.Singelton.SendNewMessage(playCard);
-                 * */
+                else
+                {
+                    cardAvatarState = CardAvatarState.inHand;
+                }
+            }
+            else
+            {
+                cardAvatarState = CardAvatarState.inHand;
             }
         }
+
+
+        cardAvatarState = CardAvatarState.inHand;
     }
 
     public void OnCardPlay(Rune rune, System.Action action)
     {
         PlayCard pc = rune as PlayCard;
+        if (card == null)
+            return;
+
         if(pc.cardGuid == card.GetGuid())
         {
             cardAvatarState = CardAvatarState.inPlay;
