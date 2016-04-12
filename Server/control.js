@@ -7,6 +7,8 @@ var entities = require('./entityManager')
 var options = require('./createOptions')
 var controllerRune = require('./runes/NewController')
 var AI = require('./aicontroller')
+var updateState = require('./updateState');
+
 
 var state = {
     "controllers":{},//by guid look up of all controllers
@@ -303,6 +305,8 @@ exports.executeOptions = function (index, controller, state) {
                 break;
             }
         }
+        
+        updateState.updateState(state);
 }
 
 function bootstrap(state) {
