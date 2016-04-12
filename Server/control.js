@@ -245,7 +245,7 @@ exports.executeMulligan = function (indices, controller, state)
             Rune.executeRune(Shuffle, state);
             for(var k = 0;k<indices.length;k++)
             {
-                indicesx[k] -= 1;
+                indices[k] -= 1;
             }
         }
         
@@ -287,11 +287,11 @@ exports.executeOptions = function (index, controller, state) {
             console.log(useOption["option"])
             switch(useOption["option"])
             {
-                case "attack":
+                case options.ATTACK_TYPE:
                 
                 break;
                 
-                case "playCard":
+                case options.PLAY_CARD_TYPE:
                     var dealCard = {
                         "runeType":"PlayCard",
                         "cardGuid":controller.options[index].cardGuid,
@@ -300,6 +300,14 @@ exports.executeOptions = function (index, controller, state) {
                     Rune.executeRune(dealCard, state);
                     
                 break;
+                
+                case options.END_TURN:
+                    var rotateTurn = {
+                        "runeType":"RotateTurn",
+                        "previousGuid":state.turnOrder[state.OnTurnPlayer].guid
+                    }
+                    Rune.executeRune(rotateTurn, state);
+                    break;
                 
                 default:
                 break;
@@ -310,8 +318,6 @@ exports.executeOptions = function (index, controller, state) {
 }
 
 function bootstrap(state) {
-    
-    
     //for each connection that we have create a controller
     state.connections.forEach(function(element, index) {
         var guid = util.createGuid();
@@ -368,7 +374,6 @@ function bootstrap(state) {
         })
     })
 }
-
 
 function resetGame() {
     entities.entities = {};

@@ -4,6 +4,7 @@ var Controller = require('./runes/NewController');
 
 exports.PLAY_CARD_TYPE = "PlayCard";
 exports.ATTACK_TYPE = "Attack";
+exports.END_TURN = "EndTurn";
 
 exports.createOptions = function (controller, state) {
     //The list we return that is all possible options a player can take in the current board state
@@ -28,7 +29,7 @@ exports.createOptions = function (controller, state) {
     
     //You can always end your turn
     var endTurn = {
-        "option":"endTurn"
+        "option":exports.END_TURN
     };
     options.push(endTurn);
     

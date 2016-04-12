@@ -40,7 +40,7 @@ exports.calculateMove = function(controller, options, state) {
     
     var playOption = playOrder[0];
     
-    return options.indexOf(playOption);
+    return 0;
 }
 
 

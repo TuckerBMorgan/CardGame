@@ -5,6 +5,7 @@ var ECONNRESETCODE = "ECONNRESET";
 
 var server = net.createServer(function(socket) {
     socket.on('data', function(data) {
+        console.log("-----");
         control.routing(data, socket);
     })
     socket.on('error', function (exec) {
@@ -13,15 +14,16 @@ var server = net.createServer(function(socket) {
         {
             delete require.cache[control];
             control.connectionLost();
-        }
+        }   
     })
 })
 
 exports.sendMessage = function(message, socket)
 {
-  //  console.log(message);
+ //   console.log(message);
     socket.write(message + "\n\n");
 }
 
 server.listen(4884, '127.0.0.1');
 
+    

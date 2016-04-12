@@ -9,10 +9,10 @@ public class OptionsManager : MonoBehaviour {
 
     public const string MULLIGAN = "mulligan";
     public const string NO_MULLIGAN = "noMulligan";
-    public const string END_TURN = "endTurn";
+    public const string END_TURN = "EndTurn";
     public const string PLAY_CARD = "PlayCard";
     public const string ATTACK = "Attack";
-    public string endTurnKey = "endTurn";
+    public string endTurnKey = "EndTurn";
     public string noMulliganKey = "noMulliganKey";
 
     public Dictionary<string, List<Option>> options;
@@ -61,11 +61,11 @@ public class OptionsManager : MonoBehaviour {
                     EndTurn et = new EndTurn();
                     et.n = count;
                     count++;
-                    if(!options.ContainsKey(endTurnKey))
+                    if(!options.ContainsKey(END_TURN))
                     {
-                        options.Add(endTurnKey, new List<Option>());
+                        options.Add(END_TURN, new List<Option>());
                     }
-                    options[endTurnKey].Add(et);
+                    options[END_TURN].Add(et);
                     break;
                 case PLAY_CARD:
                     PlayCardOption pc = new PlayCardOption();
@@ -103,7 +103,8 @@ public class OptionsManager : MonoBehaviour {
     public void PickUpOption(Option op)
     {
         string str = "{\"type\":\"option\",";
-        str += "\"index\":" + op.n + "}";
+        str += "\"index\":" + op.n + ",";
+        str += "\"timeStamp\":" + DateTime.Now.Second.ToString() + "}";
         Client.Singelton.SendNewMessage(str);
         FlushOptions();
     }

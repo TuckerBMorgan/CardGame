@@ -1,4 +1,5 @@
 var entity = require('../entityManager')
+
 //{
 //  "runeType":"ShuffleCard",
 //  "controllerGuid":"xxxxxxxx-xxxx-xxyx-xxxx-xxxxxxxx0xxx",

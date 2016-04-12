@@ -9,10 +9,10 @@ exports.execute = function (rune, state) {
     var length = state.OnTurnPlayer;
     var nextIndex = (state.OnTurnPlayer + 1) % state.turnOrder.length;
     
-    //Handle the first RotateTurnRun becaus of setting OnTurnPlayer to -1
+    //Handle the first RotateTurnRun because of setting OnTurnPlayer to -1
     if(length == -1)
     {
-        length = 1;
+        length = 0;
     }
     state.turnOrder[length].state = controllerRune.WAITING_FOR_TURN;
     var setBaseMana = {
@@ -47,6 +47,7 @@ exports.execute = function (rune, state) {
     else
     {
        var index =  ai.calculateMove(state.turnOrder[nextIndex], characterOptions, state);
+       console.log(index);
        control.executeOptions(index, state.turnOrder[nextIndex], state);
     }
 }

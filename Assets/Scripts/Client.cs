@@ -111,9 +111,10 @@ public class Writer
             {
                 byte[] array = Encoding.ASCII.GetBytes(message);
                 stream.Write(array, 0, array.Length);
-                message = null;
+                message = null; 
                 if (messages.Count > 0)
                 {
+
                     message = (string)messages.Dequeue();
                 }
             }
@@ -122,6 +123,7 @@ public class Writer
 
     public void SendMessage(string message)
     {
+
         if(messages.Count > 0)
         {
             messages.Enqueue(message);

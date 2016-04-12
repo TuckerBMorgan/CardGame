@@ -351,7 +351,6 @@ public class PlayArea : MonoBehaviour
             this.homeGuid = nc.controllerGuid;
             playFields.Add(homeGuid, new List<CardAvatar>());
             playHands.Add(homeGuid, new List<CardAvatar>());
-            Debug.Log(homeGuid);
 
         }
         else
