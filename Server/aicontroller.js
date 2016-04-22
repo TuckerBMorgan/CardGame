@@ -10,7 +10,10 @@ exports.calculateMove = function(controller, options, state) {
     })
     
     var mana = controller.mana;
-    
+    if(controller.mana == 0)
+    {
+        return 0;
+    }
     var cards = [];
     playCard.forEach(function(element){
         cards.push(entity.getEntity(element.cardGuid));
@@ -18,7 +21,7 @@ exports.calculateMove = function(controller, options, state) {
     
     var canPlay = cards.filter(function (element) {
        return element.cost <= mana;
-    })
+    })  
     
     var playOrder = canPlay.sort(function (a, b) {
         var playCostA = a.baseHealth + a.baseAttack;
@@ -40,7 +43,7 @@ exports.calculateMove = function(controller, options, state) {
     
     var playOption = playOrder[0];
     
-    return 0;
+    return 1;
 }
 
 

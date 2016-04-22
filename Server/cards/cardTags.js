@@ -1,4 +1,7 @@
 exports.TAUNT  = "Taunt";
 exports.STEALTH = "Stealth";
-exports.DIVINE_SHIELD = "Divine Shield";
-exports.BATTLE_CRY = "Battle Cry";
+exports.DIVINE_SHIELD = "DivineShield";
+exports.BATTLE_CRY = "BattleCry";
+exports.WINDFURY = "WindFury";
+exports.CHARGE = "Charge";
+exports.SUMMONING_SICKNESS = "SummoningSickness";

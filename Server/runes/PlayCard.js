@@ -1,5 +1,8 @@
 var entity = require('../entityManager')
 var Rune = require('../RuneVM')
+var server = require('../server');
+var cont = require('./NewController');
+var tags = require('../cards/cardTags');
 
 //layout of playCardRune
 //{
@@ -9,16 +12,32 @@ var Rune = require('../RuneVM')
 //}
 exports.execute = function (rune, state) {
     console.log(rune.controllerGuid);
-     var controller = entity.getEntity(rune.controllerGuid);
-     var index = controller.hand.indexOf(card);
-     var card = entity.getEntity(rune.cardGuid);
-     controller.hand.splice(index, 1);
-     controller.inPlay.push(card);
+    var controller = entity.getEntity(rune.controllerGuid);
+    var index = controller.hand.indexOf(card);
+    var card = entity.getEntity(rune.cardGuid);
+    controller.hand.splice(index, 1);
+    controller.inPlay.push(card);
+     
+     card.tags.push(tags.SUMMONING_SICKNESS);
+     
      var setMana = {
       "runeType":"SetMana",
       "controllerGuid":rune.controllerGuid,
       "mana":controller.mana - card.cost
      }
+     
+     
+     var keys = Object.keys(state.controllers);
+     keys.forEach(function (element) {
+         if(!(rune.cardGuid in state.controllers[element].seenCards))
+         {
+             if(state.controllers[element].type == cont.PLAYER_CONTROLLER)
+             {
+                server.sendMessage(JSON.stringify(card), state.controllers[element].socket);
+             }
+         }
+     })
+     
      Rune.executeRune(setMana, state);
 }
 

@@ -64,6 +64,8 @@ public class PlayArea : MonoBehaviour
         RuneManager.Singelton.AddListener(typeof(NewController), NewControllerRune);
         RuneManager.Singelton.AddListener(typeof(ShuffleCard), ShuffleCardRune);
         RuneManager.Singelton.AddListener(typeof(StartGame), StarGameRune);
+        RuneManager.Singelton.AddListener(typeof(Attack), AttackRune);
+   ///     RuneManager.Singelton.AddListener(typeof(ModifyHealth), ModifyHealthRune);
 
         indexes = new List<int>();
         box = new Box(4, -1.5f, -6, 6);
@@ -391,4 +393,21 @@ public class PlayArea : MonoBehaviour
         action();
         action = null;
     }
+
+    public void AttackRune(Rune rune, Action action)
+    {
+        //Will be filled in later
+        action();
+    }
+    /*
+    public void ModifyHealthRune(Rune rune, Action action)
+    {
+        ModifyHealth mh = rune as ModifyHealth;
+        var dmg = EntityManager.Singelton.GetEntity(mh.target) as damageable;
+
+
+        action();
+    
+     * }
+     */
 }

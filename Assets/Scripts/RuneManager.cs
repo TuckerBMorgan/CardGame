@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 
+
 public class RuneManager : MonoBehaviour
 {
 
@@ -27,6 +28,7 @@ public class RuneManager : MonoBehaviour
 
     void Awake()
     {
+
         Singelton = this;
         runeEvents = new Dictionary<Type, List<Action<Rune, Action>>>();
         gameRunes = new List<Rune>();

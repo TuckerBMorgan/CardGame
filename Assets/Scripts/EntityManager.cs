@@ -12,7 +12,8 @@ public interface damageable
 {
     void ModifyHealth(int amount);
     void SetHealth(int health);
-    int GetHealth(); 
+    int GetHealth();
+    
 }
 
 public class EntityManager : MonoBehaviour {
@@ -31,7 +32,6 @@ public class EntityManager : MonoBehaviour {
     {
         if(entities.ContainsKey(guid))
         {
-            
             return entities[guid];
         }
         return null;

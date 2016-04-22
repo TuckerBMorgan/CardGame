@@ -12,8 +12,11 @@ public class OptionsManager : MonoBehaviour {
     public const string END_TURN = "EndTurn";
     public const string PLAY_CARD = "PlayCard";
     public const string ATTACK = "Attack";
+    public const string HERO_POWER = "HERO_POWER";
+
     public string endTurnKey = "EndTurn";
     public string noMulliganKey = "noMulliganKey";
+   
 
     public Dictionary<string, List<Option>> options;
 
@@ -46,7 +49,7 @@ public class OptionsManager : MonoBehaviour {
 
                     options[m.cardGuid].Add(m);
                      * */
-                    break;
+                    break;  
                 case NO_MULLIGAN:
                     NoMulligan nm = new NoMulligan();
                     nm.n = count;
@@ -79,10 +82,10 @@ public class OptionsManager : MonoBehaviour {
                     options[pc.cardGuid].Add(pc);
                     break;
                 case ATTACK:
-                    Attack a = new Attack();
+                    AttackOption a = new AttackOption();
                     a.n = count;
-                    a.cardGuid = j["cardGuid"].str;
-                    a.defenderGuid = j["defendedGuid"].str;
+                    a.cardGuid = j["attackGuid"].str;
+                    a.defenderGuid = j["defenderGuid"].str;
                     count++;
                     if(!options.ContainsKey(a.cardGuid))
                     {
@@ -90,6 +93,9 @@ public class OptionsManager : MonoBehaviour {
                     }
 
                     options[a.cardGuid].Add(a);
+                    break;
+
+                case HERO_POWER:
                     break;
                 default:
                     
@@ -107,6 +113,20 @@ public class OptionsManager : MonoBehaviour {
         str += "\"timeStamp\":" + DateTime.Now.Second.ToString() + "}";
         Client.Singelton.SendNewMessage(str);
         FlushOptions();
+    }
+
+    public bool HasOption(string guid, string key)
+    {
+        if (!options.ContainsKey(key))
+            return false;
+
+        List<Option> li = options[key];
+        for (int i = 0; i < li.Count;i++ )
+        {
+             
+        }
+
+            return false;
     }
 
     public void FlushOptions()
@@ -142,8 +162,17 @@ public class PlayCardOption : Option
     public string cardGuid;
 }
 
-public class Attack : Option
+public class AttackOption : Option
 {
     public string cardGuid;
     public string defenderGuid;
+}
+
+public class HeroPower : Option
+{
+    
+    //This will be a special value (likely -1) if the ability does not have a target
+    //Hero powers are a odd mix so this is at the moment the best solution I can think of
+    public string targetGuid;
+    
 }

@@ -66,6 +66,8 @@ exports.createOptions = function (controller, state) {
         }
     })
     
+    
+        
     //Can I attack any of the guys on there board, with the guys on my board
     var thereInPlay = them.inPlay;
     var mineInPlay = me.inPlay;
@@ -87,7 +89,7 @@ exports.createOptions = function (controller, state) {
     {
         useList = tauntList;
     }
-    //just use regular list to build targetsk
+    //just use regular list to build targets
     else
     {
         useList = otherList;
@@ -95,16 +97,17 @@ exports.createOptions = function (controller, state) {
     
     mineInPlay.forEach(function (element) {
         useList.forEach(function (innerElement) {
-            var attackOtions = {
-                "option":exports.ATTACK_TYPE,
-                "attackGuid":element.cardGuid,
-                "defendedGuid":innerElement
+            var file = require("./cards/" + element.id);
+            if(file.canAttack(element.cardGuid, innerElement, controller, state))
+            {
+                var attackOtions = {
+                    "option":exports.ATTACK_TYPE,
+                    "attackGuid":element.cardGuid,
+                    "defenderGuid":innerElement
+                }
+                options.push(attackOtions);
             }
-            options.push(attackOtions);
         })
     })
-    
-    
-        
     return options;
 }

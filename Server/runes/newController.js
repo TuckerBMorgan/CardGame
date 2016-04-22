@@ -33,7 +33,8 @@ exports.execute = function(rune, state)
                 "mana":0,
                 "baseMana":0,
                 "team":teamCount,
-                "state":exports.WAITING_FOR_START
+                "state":exports.WAITING_FOR_START,
+                "seenCards":{}
             }
         teamCount++;
         entity.addEntity(state.controllers[rune.guid], rune.guid);

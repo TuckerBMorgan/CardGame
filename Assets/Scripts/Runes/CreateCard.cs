@@ -29,6 +29,7 @@ public class CreateCard : Rune {
     public CardType type { get; set; }
     public EntityType entityType { get; set; }
     public string controllerGuid { get; set; }
+    public string id { get; set; }
 
     public CreateCard()
     {
@@ -41,6 +42,8 @@ public class CreateCard : Rune {
         //THe case of a deal card being send before a creat rune, EX.(A card in the other persons hand)
         if(EntityManager.Singelton.GetEntity(cardGuid) != null)
         {
+            CardAvatar ca = (EntityManager.Singelton.GetEntity(cardGuid) as Card).GetCardAvatar();
+            
             EntityManager.Singelton.RemoveEntity(cardGuid);
             if(type == CardType.minion)
             {
@@ -53,7 +56,9 @@ public class CreateCard : Rune {
                 mc.SetMana(cost);
                 mc.SetGuid(cardGuid);
                 mc.SetDesc(desc);
+                mc.SetCardAvatar(ca);   
                 EntityManager.Singelton.AddEntity(cardGuid, mc);
+                ca.Setup(card, cardGuid, controllerGuid);
             }
         }
         else
@@ -71,41 +76,6 @@ public class CreateCard : Rune {
                 EntityManager.Singelton.AddEntity(cardGuid, mc);
             }
         }
-        /*
-        TextAsset ta = Resources.Load<TextAsset>(CARD_FILE_LOCATION + cardName);   
-        if(ta.text != null)
-        {
-            Script scr = new Script();
-            scr.DoString(ta.text);
-            int type = int.Parse(scr.Globals[TYPE].ToString());
-            Card card;
-            if(type == (int)CardType.minion)
-            {
-                card = new MinionCard();
-                card.SetMana(int.Parse(scr.Globals[COST].ToString()));
-                card.SetName(scr.Globals[NAME].ToString());
-                card.SetGuid(cardGuid);
-                card.SetCardFile(scr);
-                card.SetDesc(scr.Globals[DESC].ToString());
-                card.SetArt(scr.Globals[ART].ToString());
-                MinionCard mc = card as MinionCard;
-                mc.SetBaseAttack(int.Parse(scr.Globals[BASE_ATTACK].ToString()));
-                mc.SetBaseHealth(int.Parse(scr.Globals[BASE_HEALTH].ToString()));
-                EntityManager.Singelton.AddEntity(cardGuid, card);
-            }
-            else if( type == (int)CardType.test)x
-            {
-                //Need to implement
-            }
-        }
-        else
-        {
-            Debug.Log("The card " + cardName + " has not been found in the assets folder\n");
-        }
-        */
-
-
-
         action();
     }
 

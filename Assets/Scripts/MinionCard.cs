@@ -37,6 +37,7 @@ public class MinionCard : Card, damageable {
     public void ModifyHealth(int amount)
     {
         useHealth += amount;
+        cardAvatar.ModifyHealth(amount);
     }
 
     public int GetHealth()
@@ -44,7 +45,7 @@ public class MinionCard : Card, damageable {
         return useHealth;
     }
 
-    public void SetHealth(int health)
+    public void SetHealth(int health)   
     {
         useHealth = health;
     }

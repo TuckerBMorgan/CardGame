@@ -31,7 +31,7 @@ public class EndTurnButtonController : MonoBehaviour {
     public void StartGameRune(Rune rune, System.Action action)
     {
         GetComponent<Image>().enabled = true;
-        text.SetActive(true);
+        text.SetActive(true);   
         action();
     }
 

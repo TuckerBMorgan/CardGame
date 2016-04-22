@@ -25,9 +25,9 @@ public class DamageRune : Rune
 
     public override void Execute(Action action)
     {
-        damageable dmg = EntityManager.Singelton.GetEntity(target) as damageable;
+  //      damageable dmg = EntityManager.Singelton.GetEntity(target) as damageable;
 
-        dmg.ModifyHealth(amount);
+    //    dmg.ModifyHealth(amount);
 
         action();
     }

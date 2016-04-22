@@ -22,7 +22,7 @@ public enum CardState
     inPlay,
     inGraveyard
 }
-public abstract class Card : entity  {
+public abstract class Card : entity {
 
     protected string name;
     protected string desc;
@@ -34,15 +34,26 @@ public abstract class Card : entity  {
     protected Script cardFile;
     protected CardType cardType;
     protected CardState cardState;
-    
+    protected string id;
 
     public void SetName(string name)
     {
         this.name = name;
     }
+
     public string GetName()
     {
         return name;
+    }
+
+    public void SetId(string id)
+    {
+        this.id = id;
+    }
+
+    public string GetId()
+    {
+        return id;
     }
 
     public void SetCardFile(Script cardFile)
@@ -125,7 +136,6 @@ public abstract class Card : entity  {
     {
         return cardState;
     }
-    
 
     //On Pulled from the deck
     public abstract void OnPull();

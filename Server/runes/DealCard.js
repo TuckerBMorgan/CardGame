@@ -22,10 +22,13 @@ exports.execute = function (rune, state) {
         }
     }
     state.controllers[rune.controllerGuid].hand.push(state.controllers[rune.controllerGuid].deck.splice(index, 1)[0]);
+    state.controllers[rune.controllerGuid].seenCards[card.cardGuid] = true;
+    
     if(state.controllers[rune.controllerGuid].type == "PlayerController")
     {
-        server.sendMessage(JSON.stringify(card) ,socket);
+        server.sendMessage(JSON.stringify(card), socket);
     }
+    
 }
 
 exports.canSee = function (rune, controller, state) {

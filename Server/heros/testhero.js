@@ -5,12 +5,13 @@ exports.hero = {
     "name":"test",
     "health":heroUtil.BASE_HERO_HEALTH,
     "mana": 0,
-    "type":1,
+    "type":entity.HERO,
     "power":{
         "targetType":entity.HERO,
         "cost":2    
-    }
-    
+    },
+    //A short note about IDS, THEY CANNOT CHANGE unless all files that use it change as a well, they are the only way to go from an instance of a entity to the file that they use
+    "id":"testhero"
 }
 
 exports.attackPower = 2;

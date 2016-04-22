@@ -107,7 +107,7 @@ public class CardAvatar : MonoBehaviour, entity
         costText.GetComponent<Text>().text = "";
     }
 
-  
+    //and this
     //Entry point for the mesh to tell the whole card it is being clicked
     public void OnMouseDownOnMesh()
     {
@@ -130,14 +130,20 @@ public class CardAvatar : MonoBehaviour, entity
             cardAvatarState = CardAvatarState.inTransit;
             transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1);
         }
-    }
+        else if(cardAvatarState == CardAvatarState.inPlay)
+        {
 
+        }
+
+    }
+    //This has to be better
     public void OnMouseUpOnMesh()
     {
         if (cardAvatarState == CardAvatarState.inTransit)
         {
             if (PlayArea.Singelton.InPlayArea(transform.position))
             {
+                
                 if(OptionsManager.Singleton.options.ContainsKey(card.GetGuid()))
                 {
                     var Options = OptionsManager.Singleton.options[card.GetGuid()];
@@ -160,7 +166,14 @@ public class CardAvatar : MonoBehaviour, entity
                 cardAvatarState = CardAvatarState.inHand;
             }
         }
+        if(cardAvatarState == CardAvatarState.inPlay)
+        {
+            if(OptionsManager.Singleton.options.ContainsKey(card.GetGuid()))
+            {
 
+            }
+            return;
+        }
 
         cardAvatarState = CardAvatarState.inHand;
     }
@@ -169,7 +182,10 @@ public class CardAvatar : MonoBehaviour, entity
     {
         PlayCard pc = rune as PlayCard;
         if (card == null)
+        {
+            action();
             return;
+        }
 
         if(pc.cardGuid == card.GetGuid())
         {
@@ -213,7 +229,7 @@ public class CardAvatar : MonoBehaviour, entity
     {
         int current = int.Parse(healthText.GetComponent<Text>().text);
         current = current + amount;
-        healthText.GetComponent<Text>().text = current.ToString();
+        healthText.GetComponent<Text>().text = current.ToString() + " ";
     }
 
 }

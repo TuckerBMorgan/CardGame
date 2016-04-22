@@ -5,7 +5,6 @@ var ECONNRESETCODE = "ECONNRESET";
 
 var server = net.createServer(function(socket) {
     socket.on('data', function(data) {
-        console.log("-----");
         control.routing(data, socket);
     })
     socket.on('error', function (exec) {
@@ -20,7 +19,6 @@ var server = net.createServer(function(socket) {
 
 exports.sendMessage = function(message, socket)
 {
- //   console.log(message);
     socket.write(message + "\n\n");
 }
 

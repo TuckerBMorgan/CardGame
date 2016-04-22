@@ -10,13 +10,15 @@ var AI = require('./aicontroller')
 var updateState = require('./updateState');
 
 
+
 var state = {
     "controllers":{},//by guid look up of all controllers
     "entities":{},
     "connections":[],
     "controllersByIP":{},
     "cards":{},
-    "playersReady":0
+    "playersReady":0,
+    "attackedThisTurn":[]
 }
 
 var CONNCETION_NUM_NEEDED = 1;
@@ -267,7 +269,7 @@ exports.executeMulligan = function (indices, controller, state)
             if(state.controllers[element].state === controllerRune.WAITING_FOR_START)
             {
                 count++;
-            }    
+            }
         })
         
         if(count == 2)
@@ -276,6 +278,25 @@ exports.executeMulligan = function (indices, controller, state)
                "runeType":"StartGame"
             }
             Rune.executeRune(startGame, state);
+            
+            var characterOptions = options.createOptions(state.turnOrder[state.OnTurnPlayer].guid, state);
+            state.turnOrder[state.OnTurnPlayer].options = characterOptions;
+            state.turnOrder[state.OnTurnPlayer].state = controllerRune.IN_TURN;
+            
+            var optionsPack = {
+                "runeType":"optionRune",
+                "options":characterOptions
+            }
+            
+            if(state.turnOrder[state.OnTurnPlayer].type == "PlayerController")
+            {
+                server.sendMessage(JSON.stringify(optionsPack), state.turnOrder[state.OnTurnPlayer].socket);
+            }
+            else
+            {
+                var index =  AI.calculateMove(state.turnOrder[state.OnTurnPlayer], characterOptions, state);
+                exports.executeOptions(index, state.turnOrder[state.OnTurnPlayer], state);
+            }
         }
 }
 
@@ -288,7 +309,12 @@ exports.executeOptions = function (index, controller, state) {
             switch(useOption["option"])
             {
                 case options.ATTACK_TYPE:
-                
+                var entity = entities.getEntity(useOption["attackGuid"]);
+                if(entity.type === entities.MINION)
+                {
+                    var cardFile = require("./cards/" + entity.id);
+                    cardFile.attack(useOption["attackGuid"], useOption["defenderGuid"], controller, state);
+                }
                 break;
                 
                 case options.PLAY_CARD_TYPE:
@@ -311,6 +337,26 @@ exports.executeOptions = function (index, controller, state) {
                 
                 default:
                 break;
+            }
+            console.log(state.OnTurnPlayer);
+            var characterOptions = options.createOptions(state.turnOrder[state.OnTurnPlayer].guid, state);
+            state.turnOrder[state.OnTurnPlayer].options = characterOptions;
+            state.turnOrder[state.OnTurnPlayer].state = controllerRune.IN_TURN;
+            
+            var optionsPack = {
+                "runeType":"optionRune",
+                "options":characterOptions
+            }
+            console.log("Character Options " + JSON.stringify(characterOptions));
+            if(state.turnOrder[state.OnTurnPlayer].type == "PlayerController")
+            {
+                server.sendMessage(JSON.stringify(optionsPack), state.turnOrder[state.OnTurnPlayer].socket);
+            }
+            else
+            {
+                var index =  AI.calculateMove(state.turnOrder[state.OnTurnPlayer], characterOptions, state);
+                console.log(index);
+                exports.executeOptions(index, state.turnOrder[state.OnTurnPlayer], state);
             }
         }
         
