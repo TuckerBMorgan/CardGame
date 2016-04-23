@@ -7,6 +7,12 @@ using System.Collections.Generic;
 public abstract class Controller : MonoBehaviour, entity, damageable {
 
     public static int STARTING_HEALTH = 30;
+    
+    public enum ControllerState
+    {
+        waiting,
+        targeting
+    }
 
     protected string guid;
     protected List<Card> deck;
@@ -16,6 +22,8 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
     protected string controllerName;
     protected int mana;
     protected int baseMana;
+
+    ControllerState controllerState;
 
     public void Setup()
     {
@@ -169,5 +177,20 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
         return hand.IndexOf(card);
     }
 
+    public bool IsIsHand(Card card)
+    {
+        return hand.Contains(card);
+    }
 
+    protected string targetingEntity;
+    public void EntityWantsToTarget(string guid)
+    {
+        if (!string.IsNullOrEmpty(targetingEntity) || controllerState == ControllerState.targeting)
+            return;
+
+        controllerState = ControllerState.targeting;
+
+        //dont like any of this
+
+    }
 }

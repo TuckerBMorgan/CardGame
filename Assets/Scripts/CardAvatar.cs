@@ -9,7 +9,8 @@ public enum CardAvatarState
     inHand,
     inPlay,
     inGraveyad,
-    inTransit
+    inTransit,
+    waitingForTarget
 }
 public class CardAvatar : MonoBehaviour, entity
 {
@@ -29,6 +30,7 @@ public class CardAvatar : MonoBehaviour, entity
 
     protected string guid;
     protected string playerGuid;
+    protected string controllerGuid;
     protected Vector3 dest;
     protected List<Text> textOfCard;
     protected Action action;
@@ -111,6 +113,10 @@ public class CardAvatar : MonoBehaviour, entity
     //Entry point for the mesh to tell the whole card it is being clicked
     public void OnMouseDownOnMesh()
     {
+
+        if (controllerGuid != PlayArea.Singelton.HomeGuid)
+            return;
+
         if (!PlayArea.Singelton.GetGameStart())
         {
             Controller ctr = EntityManager.Singelton.GetEntity(playerGuid) as Controller;
@@ -125,20 +131,40 @@ public class CardAvatar : MonoBehaviour, entity
 
             return;
         }
-        if (cardAvatarState == CardAvatarState.inHand)
-        {
+        else if (cardAvatarState == CardAvatarState.inHand)
+        {   
             cardAvatarState = CardAvatarState.inTransit;
             transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1);
         }
         else if(cardAvatarState == CardAvatarState.inPlay)
         {
-
+            if (OptionsManager.Singleton.options.ContainsKey(card.GetGuid()))
+            {
+                var options = OptionsManager.Singleton.options[card.GetGuid()];
+                foreach (Option op in options)
+                {
+                    if (op.GetType() == typeof(AttackOption))
+                    {
+                        //need to end up in target mode
+                        cardAvatarState = CardAvatarState.waitingForTarget;
+                    }
+                }
+            }
         }
 
     }
+
+    public void OnTargetPicked(string targetGuid)
+    {
+        
+    }
+
     //This has to be better
     public void OnMouseUpOnMesh()
     {
+        if (controllerGuid != PlayArea.Singelton.HomeGuid)
+            return;
+
         if (cardAvatarState == CardAvatarState.inTransit)
         {
             if (PlayArea.Singelton.InPlayArea(transform.position))
@@ -168,12 +194,11 @@ public class CardAvatar : MonoBehaviour, entity
         }
         if(cardAvatarState == CardAvatarState.inPlay)
         {
-            if(OptionsManager.Singleton.options.ContainsKey(card.GetGuid()))
-            {
-
-            }
+            
             return;
         }
+        if (cardAvatarState == CardAvatarState.waitingForTarget)
+            return;
 
         cardAvatarState = CardAvatarState.inHand;
     }
@@ -232,4 +257,13 @@ public class CardAvatar : MonoBehaviour, entity
         healthText.GetComponent<Text>().text = current.ToString() + " ";
     }
 
+    public void SetControllerGuid(string controllerGuid)
+    {
+        this.controllerGuid = controllerGuid;
+    }
+
+    public string GetControllerGuid()
+    {
+        return controllerGuid;
+    }
 }

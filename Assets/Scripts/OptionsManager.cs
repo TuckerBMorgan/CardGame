@@ -173,6 +173,7 @@ public class HeroPower : Option
     
     //This will be a special value (likely -1) if the ability does not have a target
     //Hero powers are a odd mix so this is at the moment the best solution I can think of
+    // to deal with the different types like auto targets--hunter, paladin, and single target-mage, or self target like warlock
     public string targetGuid;
     
 }

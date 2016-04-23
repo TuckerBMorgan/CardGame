@@ -262,6 +262,7 @@ public class PlayArea : MonoBehaviour
             go.GetComponent<CardAvatar>().Setup(card, useGuid, player.GetGuid());
         }
         card.SetCardAvatar(go.GetComponent<CardAvatar>());
+        go.GetComponent<CardAvatar>().SetControllerGuid(dc.controllerGuid);
 
         EntityManager.Singelton.AddEntity(useGuid, go.GetComponent<CardAvatar>());
         AddCardToHand(go.GetComponent<CardAvatar>(), dc.controllerGuid, action);

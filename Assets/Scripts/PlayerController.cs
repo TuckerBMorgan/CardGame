@@ -14,6 +14,11 @@ public class PlayerController : Controller {
         
     }
 
+    public void CardClickedOn(CardAvatar cardAvatar)
+    {
+       
+    }
+
     public override void DrawInspector()
     {
         base.DrawInspector();
