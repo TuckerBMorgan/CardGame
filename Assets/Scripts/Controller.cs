@@ -22,8 +22,7 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
     protected string controllerName;
     protected int mana;
     protected int baseMana;
-
-    ControllerState controllerState;
+    protected ControllerState controllerState;
 
     public void Setup()
     {
@@ -182,6 +181,56 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
         return hand.Contains(card);
     }
 
+    public void OnCardAvatarClicked(CardAvatar cardAvatar)
+    {
+        switch(cardAvatar.cardAvatarState)
+        {
+            case CardAvatarState.inGraveyad:
+                Debug.Log("STOP BREAKING THE GAME ASSHOLE");
+                break;
+            case CardAvatarState.inHand:
+                if(cardAvatar.GetControllerGuid() == guid)
+                {
+                    cardAvatar.cardAvatarState = CardAvatarState.inTransit;
+                    cardAvatar.transform.position += new Vector3(0, 0, -1);
+                }
+                break;
+            case CardAvatarState.inPlay:
+                if (controllerState == ControllerState.waiting)
+                {
+                    if (OptionsManager.Singleton.options.ContainsKey(cardAvatar.GetCard().GetGuid()))
+                    {
+                        var options = OptionsManager.Singleton.options[cardAvatar.GetCard().GetGuid()];
+                        foreach (Option op in options)
+                        {
+                            if (op.GetType() == typeof(AttackOption))
+                            {
+                                cardAvatar.cardAvatarState = CardAvatarState.waitingForTarget;
+                                EntityWantsToTarget(cardAvatar.GetCard().GetGuid());
+                            }
+                        }
+                    }
+                }
+                //a target has been picked, now all we have to do is validate it and act
+                else
+                {
+
+                }
+
+                break;
+
+            case CardAvatarState.inTransit:
+
+                //this should not happen
+                return;
+                
+            case CardAvatarState.waitingForTarget:
+
+                break;
+
+        }
+    }
+
     protected string targetingEntity;
     public void EntityWantsToTarget(string guid)
     {
@@ -191,6 +240,22 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
         controllerState = ControllerState.targeting;
 
         //dont like any of this
+    }
+
+    public ControllerState GetControllerState()
+    {
+        return controllerState;
+    }
+
+    public void TargetReport(string Targetguid)
+    {
+        if (controllerState != ControllerState.targeting)
+            return;
+
+
+
 
     }
+
+
 }

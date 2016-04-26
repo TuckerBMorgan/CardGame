@@ -113,8 +113,10 @@ public class CardAvatar : MonoBehaviour, entity
     //Entry point for the mesh to tell the whole card it is being clicked
     public void OnMouseDownOnMesh()
     {
+        
 
         if (controllerGuid != PlayArea.Singelton.HomeGuid)
+
             return;
 
         if (!PlayArea.Singelton.GetGameStart())
@@ -147,6 +149,8 @@ public class CardAvatar : MonoBehaviour, entity
                     {
                         //need to end up in target mode
                         cardAvatarState = CardAvatarState.waitingForTarget;
+                        var controller = EntityManager.Singelton.GetEntity(PlayArea.Singelton.HomeGuid) as Controller;
+                        controller.EntityWantsToTarget(card.GetGuid());
                     }
                 }
             }
@@ -243,6 +247,11 @@ public class CardAvatar : MonoBehaviour, entity
         {
             this.card = card;
         }
+    }
+
+    public Card GetCard()
+    {
+        return card;
     }
 
     public string GetGuid()
