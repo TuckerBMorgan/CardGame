@@ -113,12 +113,8 @@ public class CardAvatar : MonoBehaviour, entity
     //Entry point for the mesh to tell the whole card it is being clicked
     public void OnMouseDownOnMesh()
     {
+
         
-
-        if (controllerGuid != PlayArea.Singelton.HomeGuid)
-
-            return;
-
         if (!PlayArea.Singelton.GetGameStart())
         {
             Controller ctr = EntityManager.Singelton.GetEntity(playerGuid) as Controller;
@@ -133,6 +129,13 @@ public class CardAvatar : MonoBehaviour, entity
 
             return;
         }
+        var getcontroller = EntityManager.Singelton.GetEntity(PlayArea.Singelton.HomeGuid) as Controller;
+        getcontroller.OnCardAvatarClicked(this);
+
+        return;
+
+        
+        /*
         else if (cardAvatarState == CardAvatarState.inHand)
         {   
             cardAvatarState = CardAvatarState.inTransit;
@@ -145,16 +148,17 @@ public class CardAvatar : MonoBehaviour, entity
                 var options = OptionsManager.Singleton.options[card.GetGuid()];
                 foreach (Option op in options)
                 {
+
                     if (op.GetType() == typeof(AttackOption))
                     {
-                        //need to end up in target mode
-                        cardAvatarState = CardAvatarState.waitingForTarget;
+                        //need to end up in target mod
                         var controller = EntityManager.Singelton.GetEntity(PlayArea.Singelton.HomeGuid) as Controller;
                         controller.EntityWantsToTarget(card.GetGuid());
                     }
                 }
             }
         }
+         * */
 
     }
 

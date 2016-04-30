@@ -31,7 +31,7 @@ exports.basicCanAttack = function(card, target, controller, state)
            }
            if(count >= 2)
            {
-               return false;
+              return false;
            }
         }
         else

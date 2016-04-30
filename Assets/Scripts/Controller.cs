@@ -22,7 +22,9 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
     protected string controllerName;
     protected int mana;
     protected int baseMana;
-    protected ControllerState controllerState;
+    public ControllerState controllerState;
+    protected string targetingEntity;
+    
 
     public void Setup()
     {
@@ -30,6 +32,7 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
         hand = new List<Card>();
         inPlay = new List<Card>();
         health = STARTING_HEALTH;
+        controllerState = ControllerState.waiting;
     }
 
     public abstract void StartTurn();
@@ -183,6 +186,12 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
 
     public void OnCardAvatarClicked(CardAvatar cardAvatar)
     {
+       
+        if(controllerState == ControllerState.targeting)
+        {
+            TargetReport(cardAvatar.GetCard().GetGuid());
+            return;
+        }
         switch(cardAvatar.cardAvatarState)
         {
             case CardAvatarState.inGraveyad:
@@ -205,6 +214,9 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
                         {
                             if (op.GetType() == typeof(AttackOption))
                             {
+
+                                Debug.Log("Yeah this is going)))))))))))))");
+                
                                 cardAvatar.cardAvatarState = CardAvatarState.waitingForTarget;
                                 EntityWantsToTarget(cardAvatar.GetCard().GetGuid());
                             }
@@ -214,7 +226,7 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
                 //a target has been picked, now all we have to do is validate it and act
                 else
                 {
-
+                    TargetReport(cardAvatar.GetCard().GetGuid());
                 }
 
                 break;
@@ -225,21 +237,17 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
                 return;
                 
             case CardAvatarState.waitingForTarget:
-
                 break;
 
         }
     }
 
-    protected string targetingEntity;
     public void EntityWantsToTarget(string guid)
     {
         if (!string.IsNullOrEmpty(targetingEntity) || controllerState == ControllerState.targeting)
             return;
-
         controllerState = ControllerState.targeting;
-
-        //dont like any of this
+        targetingEntity = guid;
     }
 
     public ControllerState GetControllerState()
@@ -249,12 +257,31 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
 
     public void TargetReport(string Targetguid)
     {
+        Debug.Log("Got here");
         if (controllerState != ControllerState.targeting)
             return;
 
-
-
-
+        var ent = EntityManager.Singelton.GetEntity(targetingEntity) as Card;
+       
+        //will not work spells, or hero powers that require targets--how do, pls help
+        if (OptionsManager.Singleton.options.ContainsKey(ent.GetGuid()))
+        {
+            var options = OptionsManager.Singleton.options[ent.GetGuid()];  
+            foreach (Option op in options)
+            {
+                if (op.GetType() == typeof(AttackOption))
+                {
+                    var opA = op as AttackOption;
+                    if(opA.defenderGuid == Targetguid)
+                    {
+                        OptionsManager.Singleton.PickUpOption(opA);
+                        controllerState = ControllerState.waiting;
+                        targetingEntity = null;
+                        ent.GetCardAvatar().cardAvatarState = CardAvatarState.inPlay;
+                    }
+                }
+            }
+        }
     }
 
 

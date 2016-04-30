@@ -82,6 +82,7 @@ public class OptionsManager : MonoBehaviour {
                     options[pc.cardGuid].Add(pc);
                     break;
                 case ATTACK:
+                    Debug.Log("Yeah this place");
                     AttackOption a = new AttackOption();
                     a.n = count;
                     a.cardGuid = j["attackGuid"].str;
