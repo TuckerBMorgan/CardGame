@@ -98,7 +98,7 @@ exports.createOptions = function (controller, state) {
     mineInPlay.forEach(function (element) {
         useList.forEach(function (innerElement) {
             var file = require("./cards/" + element.id);
-            if(file.canAttack(element.cardGuid, innerElement, controller, state))
+            if(file.canAttack(element, innerElement, controller, state))
             {
                 var attackOtions = {
                     "option":exports.ATTACK_TYPE,

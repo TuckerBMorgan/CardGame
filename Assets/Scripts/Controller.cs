@@ -18,6 +18,7 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
     protected List<Card> deck;
     protected List<Card> hand;
     protected List<Card> inPlay;
+    protected List<Card> graveyard;
     protected int health;
     protected string controllerName;
     protected int mana;
@@ -31,6 +32,7 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
         deck = new List<Card>();
         hand = new List<Card>();
         inPlay = new List<Card>();
+        graveyard = new List<Card>();
         health = STARTING_HEALTH;
         controllerState = ControllerState.waiting;
     }
@@ -107,6 +109,22 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
     {
         inPlay.Remove(card);
     }
+
+    public void AddCardToGraveyard(Card card)
+    {
+        graveyard.Add(card);
+    }
+
+    public Card RemoveCardFromGraveyard(Card card)
+    {
+        int index = graveyard.IndexOf(card);
+        if (index < 0)
+        {
+            return null;
+        }
+        return graveyard[index];
+    }
+
 
     public virtual void DrawInspector()
     {
@@ -214,9 +232,6 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
                         {
                             if (op.GetType() == typeof(AttackOption))
                             {
-
-                                Debug.Log("Yeah this is going)))))))))))))");
-                
                                 cardAvatar.cardAvatarState = CardAvatarState.waitingForTarget;
                                 EntityWantsToTarget(cardAvatar.GetCard().GetGuid());
                             }

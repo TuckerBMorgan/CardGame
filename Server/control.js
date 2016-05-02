@@ -313,7 +313,7 @@ exports.executeOptions = function (index, controller, state) {
                 if(entity.type === entities.MINION)
                 {
                     var cardFile = require("./cards/" + entity.id);
-                    cardFile.attack(useOption["attackGuid"], useOption["defenderGuid"], controller, state);
+                    cardFile.attack(entity, useOption["defenderGuid"], controller, state);
                 }
                 break;
                 

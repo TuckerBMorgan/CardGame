@@ -37,7 +37,7 @@ exports.execute = function (rune, state) {
              }
          }
      })
-     
+     require('../cards/' + card.id).onPlay(card, controller, state);
      Rune.executeRune(setMana, state);
 }
 

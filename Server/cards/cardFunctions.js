@@ -2,6 +2,21 @@ var entitites = require('../entityManager');
 var rune = require('../RuneVM');
 var tags = require('./cardTags');
 
+
+
+//these three are used for any card that needs to listen into events, and remove those effects, as in basicOnGraveyard
+exports.basicOnDeal = function (card, controller, state) {
+    //does nothing
+}
+
+exports.basicOnPlay = function (card, controller, state) {
+    //nothing   
+}
+
+exports.basicOnGraveyard = function (card, controller, state) {
+    //nothing
+}
+
 exports.basicCanPlay = function (card, controller, state) {  
     if(card.cost <= state.controllers[controller].mana)
     {
@@ -10,16 +25,18 @@ exports.basicCanPlay = function (card, controller, state) {
     return false;
 }
 
+exports.baseIsAlive = function (card, controller, state) {
+    return card.baseHealth > 0;
+}
+
 //Why must evertyhing BREAK EVERYTHING
 //maybe can have specials call basicCanAttackAsWell
 //but this isnt good, and I dont like it, at allllllll, this has to be better
 exports.basicCanAttack = function(card, target, controller, state)
 {
-    var ent = entitites.getEntity(card);
-    
-    if(state.attackedThisTurn.indexOf(card) != -1)
+    if(state.attackedThisTurn.indexOf(card.cardGuid) != -1)
     {
-        if(ent.tags.indexOf(tags.WINDFURY) != -1)
+        if(card.tags.indexOf(tags.WINDFURY) != -1)
         {
            var count = 0;
            for(var i = 0;i<state.attackedThisTurn;i++)
@@ -39,11 +56,11 @@ exports.basicCanAttack = function(card, target, controller, state)
             return false;
         }
     }
-    if(ent.tags.indexOf(tags.SUMMONING_SICKNESS) != -1)
+    if(card.tags.indexOf(tags.SUMMONING_SICKNESS) != -1)
     {
         return false;
     }
-    if(ent.baseAttack <= 0)
+    if(card.baseAttack <= 0)
     {
         return false;
     }
@@ -51,12 +68,10 @@ exports.basicCanAttack = function(card, target, controller, state)
 }
 
 exports.basicAttack = function (card, target, controller, state) {
-    var enCard = entitites.getEntity(card);
-    var damage = enCard.baseAttack;
     
     var attackRune = {
         "runeType":"Attack",
-        "source":card,
+        "source":card.cardGuid,
         "target":target
     }
     rune.executeRune(attackRune, state);

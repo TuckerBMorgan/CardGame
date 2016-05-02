@@ -265,6 +265,7 @@ public class CardAvatar : MonoBehaviour, entity
 
     public void ModifyHealth(int amount)
     {
+        Debug.Log("health being modified");
         int current = int.Parse(healthText.GetComponent<Text>().text);
         current = current + amount;
         healthText.GetComponent<Text>().text = current.ToString() + " ";

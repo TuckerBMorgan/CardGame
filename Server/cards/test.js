@@ -14,6 +14,12 @@ exports.card = {
   "tags":[]
 }
 
+exports.onGraveyard = cardFunctions.basicOnGraveyard;
+
+exports.onPlay = cardFunctions.basicOnPlay;
+
+exports.onDeal = cardFunctions.basicOnDeal;
+
 exports.canPlay = cardFunctions.basicCanPlay
 
 exports.attack = cardFunctions.basicAttack;
@@ -21,3 +27,5 @@ exports.attack = cardFunctions.basicAttack;
 exports.canAttack = cardFunctions.basicCanAttack;
 
 exports.takeDamage = cardFunctions.baseTakeDamage;
+
+exports.isAlive = cardFunctions.baseIsAlive;

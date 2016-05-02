@@ -329,8 +329,8 @@ public class PlayArea : MonoBehaviour
 
         if (dr.targetType == TargetType.minion)
         {
-            CardAvatar cardAvatar = (EntityManager.Singelton.GetEntity(dr.target) as Card).GetCardAvatar();
-            cardAvatar.ModifyHealth(dr.amount);
+          //Not sure why I have this, I think it might have been because of reasons  
+          
         }
         else if (dr.targetType == TargetType.player)
         {

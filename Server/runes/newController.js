@@ -28,6 +28,7 @@ exports.execute = function(rune, state)
                 "deck":[],
                 "hand":[],
                 "inPlay":[],
+                "graveyard":[],
                 "guid":rune['guid'],
                 "hero":heroUtil.loadHero(rune["hero"]),
                 "mana":0,

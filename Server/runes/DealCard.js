@@ -24,6 +24,8 @@ exports.execute = function (rune, state) {
     state.controllers[rune.controllerGuid].hand.push(state.controllers[rune.controllerGuid].deck.splice(index, 1)[0]);
     state.controllers[rune.controllerGuid].seenCards[card.cardGuid] = true;
     
+    require('../cards/' + card.id).onDeal(card, state.controllers[rune.controllerGuid], state);
+    
     if(state.controllers[rune.controllerGuid].type == "PlayerController")
     {
         server.sendMessage(JSON.stringify(card), socket);

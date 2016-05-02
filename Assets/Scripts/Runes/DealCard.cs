@@ -37,10 +37,12 @@ public class DealCard : Rune {
                 unknowCard.SetCardType(2);
                 EntityManager.Singelton.AddEntity(cardGuid, unknowCard as entity);
                 player.AddCardToHand(unknowCard);
+                unknowCard.SetCardState(CardState.inHand);
             }
         }
         else
         {
+            card.SetCardState(CardState.inHand);
             player.RemoveCardFromDeck(card);
             player.AddCardToHand(card);
         }
