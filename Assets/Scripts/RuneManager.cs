@@ -72,6 +72,8 @@ public class RuneManager : MonoBehaviour
                     case JSONObject.Type.BOOL:
                         property.SetValue(runeObj, jsonObject[jsonObject.keys[i]].b, null);
                         break;
+                    case JSONObject.Type.ARRAY:
+                        break;
                     default:
                         Debug.Log("I have not done that type");
                         break;

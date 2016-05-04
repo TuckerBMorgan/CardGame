@@ -1,14 +1,14 @@
+var entity = require('../entityManager');
+
 exports.execute = function (rune, state) {
     var controller = state.controllers[rune.controller];
+    var ent = entity.getEntity(rune.cardGuid);
     
-    controller.inPlay.some(function (element, index) {
-        if(element.cardGuid == rune.cardGuid)
-        {
-            controller.splice(index, 1);
-            return true;
-        }
-        return false;
-    })
+    var file = require('../cards/' + ent.id);
+    file.onGraveyard(ent, controller, state);
+            
+    var index = controller.inPlay.indexOf(ent);
+    controller.graveyard.push(controller.inPlay.splice(index, 1)[0]);
 }
 
 exports.canSee = function (rune, controller, state) {

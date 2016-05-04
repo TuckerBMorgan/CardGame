@@ -10,6 +10,8 @@ public class Client : MonoBehaviour {
     private Writer writer;
     private TcpClient client;
     public static Client Singelton;
+
+    public const int BUFFER_SIZE = 2000;
     
     public void Setup()
     {
@@ -54,14 +56,14 @@ public class Reader
         this.stream = stream;
         readThread = new Thread(Tick);
         readThread.Start();
-        buffer = new byte[500];
+        buffer = new byte[Client.BUFFER_SIZE];
     }
 
     public void Tick()
     {
         while (Client.THREAD_GO)
         {
-            byteSize = stream.Read(buffer, 0, 500);
+            byteSize = stream.Read(buffer, 0, Client.BUFFER_SIZE);
             if(byteSize > 0)
             {
                 string message = findMessage(buffer, byteSize);

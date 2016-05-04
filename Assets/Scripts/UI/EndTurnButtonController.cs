@@ -37,10 +37,7 @@ public class EndTurnButtonController : MonoBehaviour {
 
     public void RotateTurnRune(Rune rune, System.Action action)
     {
-        Debug.Log("I got called");
         RotateTurn rt = rune as RotateTurn;
-        Debug.Log(rt.previousGuid);
-        Debug.Log(PlayArea.Singelton.HomeGuid);
         if(rt.previousGuid == PlayArea.Singelton.HomeGuid)
         {
             text.GetComponent<Text>().text = "Waiting for turn";

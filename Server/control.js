@@ -8,7 +8,7 @@ var options = require('./createOptions')
 var controllerRune = require('./runes/NewController')
 var AI = require('./aicontroller')
 var updateState = require('./updateState');
-
+var testDecks = require('./TestDecks/testdeck')
 
 
 var state = {
@@ -44,7 +44,6 @@ exports.routing = function (message, socket) {
     {
         console.log(e + " on message " + message + "that is not a valid json object");
     }
-    console.log(obj);
     switch (obj["type"]) {
         //valid newConnection rune
         //{
@@ -86,7 +85,7 @@ exports.routing = function (message, socket) {
             
             
             break;
-        //valid read rune
+        //valid ready rune
         //{
         // "type":"ready"    
         //}
@@ -104,10 +103,11 @@ exports.routing = function (message, socket) {
             state["OnTurnPlayer"] = 0;
             state.turnOrder[0] = first;
             state.turnOrder[1] = second;
+            var useDeck = testDecks.deck;
             
-            for(var i = 0;i<30;i++) 
+            for(var i = 0;i<useDeck.length;i++) 
             {
-                var card = util.loadCard("test");
+                var card = util.loadCard(useDeck[i]);
                 var useCard = {
                     "runeType":"CreateCard",
                 }
@@ -208,7 +208,6 @@ exports.routing = function (message, socket) {
                 server.sendMessage(JSON.stringify(opack2), second.socket);
                 AI.evaluateMulligan(first, state);
             }
-            // server.sendMessage(JSON.stringify(opack2), second.socket);
         }
         break;
         
@@ -295,7 +294,9 @@ exports.executeMulligan = function (indices, controller, state)
             else
             {
                 var index =  AI.calculateMove(state.turnOrder[state.OnTurnPlayer], characterOptions, state);
-                exports.executeOptions(index, state.turnOrder[state.OnTurnPlayer], state);
+                setTimeout(function () {
+                    exports.executeOptions(index, state.turnOrder[state.OnTurnPlayer], state);
+                },1600);
             }
         }
 }
@@ -309,15 +310,16 @@ exports.executeOptions = function (index, controller, state) {
             switch(useOption["option"])
             {
                 case options.ATTACK_TYPE:
-                var entity = entities.getEntity(useOption["attackGuid"]);
-                if(entity.type === entities.MINION)
-                {
-                    var cardFile = require("./cards/" + entity.id);
-                    cardFile.attack(entity, useOption["defenderGuid"], controller, state);
-                }
+                    var entity = entities.getEntity(useOption["attackGuid"]);
+                    if(entity.type === entities.MINION)
+                    {
+                        var cardFile = require("./cards/" + entity.id);
+                        cardFile.attack(entity, useOption["defenderGuid"], controller, state);
+                    }
                 break;
                 
                 case options.PLAY_CARD_TYPE:
+                
                     var dealCard = {
                         "runeType":"PlayCard",
                         "cardGuid":controller.options[index].cardGuid,
@@ -327,27 +329,44 @@ exports.executeOptions = function (index, controller, state) {
                     
                 break;
                 
+                case options.PLAY_SPELL:
+                
+                    var playSpellRune = {
+                        "runeType":"PlaySpell",
+                        "cardGuid":controller.options[index].cardGuid,
+                        "targetGuid":controller.options[index].targetGuid,
+                        "controllerGuid":controller.guid
+                    }
+                    Rune.executeRune(playSpellRune, state);
+                
+                break;
+                
                 case options.END_TURN:
+                
                     var rotateTurn = {
                         "runeType":"RotateTurn",
                         "previousGuid":state.turnOrder[state.OnTurnPlayer].guid
                     }
                     Rune.executeRune(rotateTurn, state);
-                    break;
+                
+                break;
                 
                 default:
                 break;
             }
-            console.log(state.OnTurnPlayer);
             var characterOptions = options.createOptions(state.turnOrder[state.OnTurnPlayer].guid, state);
             state.turnOrder[state.OnTurnPlayer].options = characterOptions;
             state.turnOrder[state.OnTurnPlayer].state = controllerRune.IN_TURN;
+            
+            updateState.updateState(state); 
             
             var optionsPack = {
                 "runeType":"optionRune",
                 "options":characterOptions
             }
+            
             console.log("Character Options " + JSON.stringify(characterOptions));
+            
             if(state.turnOrder[state.OnTurnPlayer].type == "PlayerController")
             {
                 server.sendMessage(JSON.stringify(optionsPack), state.turnOrder[state.OnTurnPlayer].socket);
@@ -355,12 +374,13 @@ exports.executeOptions = function (index, controller, state) {
             else
             {
                 var index =  AI.calculateMove(state.turnOrder[state.OnTurnPlayer], characterOptions, state);
-                console.log(index);
-                exports.executeOptions(index, state.turnOrder[state.OnTurnPlayer], state);
+                
+                setTimeout(function () {
+                    exports.executeOptions(index, state.turnOrder[state.OnTurnPlayer], state);
+                },800);
             }
         }
         
-        updateState.updateState(state);
 }
 
 function bootstrap(state) {

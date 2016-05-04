@@ -145,11 +145,11 @@ public class PlayArea : MonoBehaviour
         float yPos = 0;
         if (controllerGuid == homeGuid)
         {
-            yPos = -0.5f;
+            yPos = -0.0f;
         }
         else if (controllerGuid == awayGuid)
         {
-            yPos = 1.5f;
+            yPos = 2.0f;
         }
         
         if (playFields.ContainsKey(controllerGuid))
@@ -250,7 +250,11 @@ public class PlayArea : MonoBehaviour
 
         GameObject go = Resources.Load<GameObject>(CARD_AVATAR_PREFAB_LOCATION);
         go = GameObject.Instantiate(go);
+
+
         go.transform.position = new Vector3(6, yPos, -3);
+        
+        
         string useGuid = Guid.NewGuid().ToString();
 
         if (card.GetCardType() == CardType.unknown)

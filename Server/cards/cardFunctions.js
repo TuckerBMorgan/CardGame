@@ -5,6 +5,7 @@ var tags = require('./cardTags');
 
 
 //these three are used for any card that needs to listen into events, and remove those effects, as in basicOnGraveyard
+//For many cards they will do nothing
 exports.basicOnDeal = function (card, controller, state) {
     //does nothing
 }
@@ -18,7 +19,7 @@ exports.basicOnGraveyard = function (card, controller, state) {
 }
 
 exports.basicCanPlay = function (card, controller, state) {  
-    if(card.cost <= state.controllers[controller].mana)
+    if(card.cost <= controller.mana)
     {
         return true;
     }
@@ -78,6 +79,5 @@ exports.basicAttack = function (card, target, controller, state) {
 }
 
 exports.baseTakeDamage  = function (card, amount, source, state){
-    var ent = entitites.getEntity(card);
-    ent.baseHealth -= amount;
+    card.baseHealth += amount;
 }

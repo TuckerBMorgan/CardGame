@@ -30,7 +30,6 @@ exports.execute = function (rune, state) {
     {
         server.sendMessage(JSON.stringify(card), socket);
     }
-    
 }
 
 exports.canSee = function (rune, controller, state) {

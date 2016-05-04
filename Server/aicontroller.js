@@ -9,11 +9,8 @@ exports.calculateMove = function(controller, options, state) {
          return (element["option"] == optionsTypes.PLAY_CARD_TYPE);
     })
     
-    var mana = controller.mana;
-    if(controller.mana == 0)
-    {
-        return 0;
-    }
+    
+    
     var cards = [];
     playCard.forEach(function(element){
         cards.push(entity.getEntity(element.cardGuid));
@@ -22,6 +19,12 @@ exports.calculateMove = function(controller, options, state) {
     var canPlay = cards.filter(function (element) {
        return element.cost <= mana;
     })  
+   
+    var mana = controller.mana;
+    if(controller.mana == 0)
+    {
+        return 0;
+    }
     
     var playOrder = canPlay.sort(function (a, b) {
         var playCostA = a.baseHealth + a.baseAttack;

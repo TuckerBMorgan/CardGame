@@ -21,6 +21,9 @@ public class CardAvatar : MonoBehaviour, entity
     public GameObject costText;
     public CardAvatarState cardAvatarState;
 
+    public GameObject Front;
+    public GameObject Back;
+
     //Used for moving the card aroubd the field
     private float speed = 1.0f;
     private float startTime;
@@ -85,6 +88,7 @@ public class CardAvatar : MonoBehaviour, entity
 
     public void Setup(Card card, string guid, string playerGuid)
     {
+        Front.SetActive(true);
         this.guid = guid;
         this.card = card;
         this.playerGuid = playerGuid;
@@ -100,6 +104,7 @@ public class CardAvatar : MonoBehaviour, entity
 
     public void SetupBlankCard(string guid, string playerGuid)
     {
+        Front.SetActive(false);
         this.guid = guid;
         card = null;
         this.playerGuid = playerGuid;
@@ -113,8 +118,6 @@ public class CardAvatar : MonoBehaviour, entity
     //Entry point for the mesh to tell the whole card it is being clicked
     public void OnMouseDownOnMesh()
     {
-
-        
         if (!PlayArea.Singelton.GetGameStart())
         {
             Controller ctr = EntityManager.Singelton.GetEntity(playerGuid) as Controller;
@@ -133,33 +136,6 @@ public class CardAvatar : MonoBehaviour, entity
         getcontroller.OnCardAvatarClicked(this);
 
         return;
-
-        
-        /*
-        else if (cardAvatarState == CardAvatarState.inHand)
-        {   
-            cardAvatarState = CardAvatarState.inTransit;
-            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1);
-        }
-        else if(cardAvatarState == CardAvatarState.inPlay)
-        {
-            if (OptionsManager.Singleton.options.ContainsKey(card.GetGuid()))
-            {
-                var options = OptionsManager.Singleton.options[card.GetGuid()];
-                foreach (Option op in options)
-                {
-
-                    if (op.GetType() == typeof(AttackOption))
-                    {
-                        //need to end up in target mod
-                        var controller = EntityManager.Singelton.GetEntity(PlayArea.Singelton.HomeGuid) as Controller;
-                        controller.EntityWantsToTarget(card.GetGuid());
-                    }
-                }
-            }
-        }
-         * */
-
     }
 
     public void OnTargetPicked(string targetGuid)
@@ -177,7 +153,6 @@ public class CardAvatar : MonoBehaviour, entity
         {
             if (PlayArea.Singelton.InPlayArea(transform.position))
             {
-                
                 if(OptionsManager.Singleton.options.ContainsKey(card.GetGuid()))
                 {
                     var Options = OptionsManager.Singleton.options[card.GetGuid()];
@@ -187,6 +162,16 @@ public class CardAvatar : MonoBehaviour, entity
                         {
                             OptionsManager.Singleton.PickUpOption(op);
                             break;
+                        }
+                        else if(op.GetType() == typeof(PlaySpellOption))
+                        {
+                            PlaySpellOption pso = op as PlaySpellOption;
+                            if(pso.target == "-1")
+                            {
+                                OptionsManager.Singleton.PickUpOption(op);
+                                gameObject.SetActive(false);
+                                break;
+                            }
                         }
                     }
                 }
@@ -238,7 +223,6 @@ public class CardAvatar : MonoBehaviour, entity
 
     public void DeckIt()
     {
-
         RuneManager.Singelton.RemoveListener(typeof(PlayCard), OnCardPlay);
         gameObject.SetActive(false);
         enabled = false;

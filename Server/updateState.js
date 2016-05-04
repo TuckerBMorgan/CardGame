@@ -1,4 +1,5 @@
 var entities = require('./entityManager');
+var Rune = require('./RuneVM');
 
 exports.updateState = function(state)
 {
@@ -18,18 +19,23 @@ exports.updateState = function(state)
         var inPlayMinions = state.controllers[element].inPlay;
         var deads = [];
         inPlayMinions.forEach(function (minion, index) {
-            var file = require('./cards' + minion.id);
+            var file = require('./cards/' + minion.id);
             if(!file.isAlive(minion, state.controllers[element], state))
             {
+                console.log("the health of this dead minion is " + minion.baseHealth);
                 redo = true;
-                file.onGraveyard(minion, state.controllers[element], state);
-                deads.push(index);
+                var killMin = {
+                    "runeType":"KillMinion",
+                    "controller":element,
+                    "cardGuid":minion.cardGuid
+                }
+                
+                deads.push(killMin);
             }
         })
-        var removedCount = 0;
-        deads.forEach(function (ind) {
-            state.controllers[element].graveyard.push(inPlayMinions.splice(ind - removedCount, 1)[0]);
-            removedCount++;
+        
+        deads.forEach(function (element) {
+            Rune.executeRune(element, state);
         })
     })
     

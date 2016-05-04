@@ -5,6 +5,7 @@ var Controller = require('./runes/NewController');
 exports.PLAY_CARD_TYPE = "PlayCard";
 exports.ATTACK_TYPE = "Attack";
 exports.END_TURN = "EndTurn";
+exports.PLAY_SPELL = "PlaySpell";
 
 exports.createOptions = function (controller, state) {
     //The list we return that is all possible options a player can take in the current board state
@@ -37,6 +38,7 @@ exports.createOptions = function (controller, state) {
     var them;
     var me;
     keys.forEach(function (element) {
+    
         if(element != controller)
         {
             them = state.controllers[element];
@@ -51,18 +53,29 @@ exports.createOptions = function (controller, state) {
     //Can I play any of the cards in my hand in the current board state
     var hand = state.controllers[controller].hand;
     hand.forEach(function (element) {
-        var cardFile = require('./cards/' + element.cardName);
-        if(cardFile.canPlay(element, controller, state))
+        var cardFile = require('./cards/' + element.id);
+        if(element.type == entities.MINION)
         {
-            var option = {
-                "option":exports.PLAY_CARD_TYPE,
-                "cardGuid":element.cardGuid
-            }
-            if(element.tags.indexOf[tags.BATTLE_CRY] != -1)
+            //least at the moment we have simple playcard options for minions
+            if(cardFile.canPlay(element, state.controllers[controller], state))
             {
-                 //is the battle cry has target types, add options for targets, so we dont have to back up state is the person backs up on playing
+                var option = {
+                    "option":exports.PLAY_CARD_TYPE,
+                    "cardGuid":element.cardGuid
+                }
+                options.push(option);
             }
-            options.push(option);
+        }
+        //Spells are a little more complicated becuase they have to target, or not and as such they create their own play options
+        else
+        {
+            if(cardFile.canPlay(element, state.controllers[controller], state))
+            {
+                var opsArray = require('./cards/' + element.id).generatePlayOptions(element, state.controllers[controller], state);
+                opsArray.forEach(function (element) {
+                    options.push(element);
+                })
+            }
         }
     })
     
@@ -71,8 +84,10 @@ exports.createOptions = function (controller, state) {
     //Can I attack any of the guys on there board, with the guys on my board
     var thereInPlay = them.inPlay;
     var mineInPlay = me.inPlay;
+    
     var tauntList = [];
     var otherList = [];
+    
     thereInPlay.forEach(function (element) {
         if(element.tags.indexOf(tags.TAUNT) != -1)
         {

@@ -12,6 +12,7 @@ public class OptionsManager : MonoBehaviour {
     public const string END_TURN = "EndTurn";
     public const string PLAY_CARD = "PlayCard";
     public const string ATTACK = "Attack";
+    public const string PLAY_SPELL = "PlaySpell";
     public const string HERO_POWER = "HERO_POWER";
 
     public string endTurnKey = "EndTurn";
@@ -51,42 +52,52 @@ public class OptionsManager : MonoBehaviour {
                      * */
                     break;  
                 case NO_MULLIGAN:
+
                     NoMulligan nm = new NoMulligan();
                     nm.n = count;
+
                     count++;
                     if(!options.ContainsKey(noMulliganKey))
                     {
                         options.Add(noMulliganKey, new List<Option>());
                     }
+
                     options[noMulliganKey].Add(nm);
                     break;
                 case END_TURN:
+
                     EndTurn et = new EndTurn();
                     et.n = count;
+
                     count++;
                     if(!options.ContainsKey(END_TURN))
                     {
                         options.Add(END_TURN, new List<Option>());
                     }
+
                     options[END_TURN].Add(et);
                     break;
                 case PLAY_CARD:
+
                     PlayCardOption pc = new PlayCardOption();
                     pc.n = count;
                     pc.cardGuid = j["cardGuid"].str;
+
                     count++;
                     if(!options.ContainsKey(pc.cardGuid))
                     {
                         options.Add(pc.cardGuid, new List<Option>());
                     }
+
                     options[pc.cardGuid].Add(pc);
                     break;
                 case ATTACK:
-                    Debug.Log("Yeah this place");
+
                     AttackOption a = new AttackOption();
                     a.n = count;
                     a.cardGuid = j["attackGuid"].str;
                     a.defenderGuid = j["defenderGuid"].str;
+
                     count++;
                     if(!options.ContainsKey(a.cardGuid))
                     {
@@ -97,6 +108,22 @@ public class OptionsManager : MonoBehaviour {
                     break;
 
                 case HERO_POWER:
+                    break;
+
+                case PLAY_SPELL:
+                    
+                    PlaySpellOption ps = new PlaySpellOption();
+                    ps.n = count;
+                    ps.cardGuid = j["cardGuid"].str;
+                    ps.target = j["targetGuid"].str;
+                    
+                    count++;
+                    if (!options.ContainsKey(ps.cardGuid))
+                    {
+                        options.Add(ps.cardGuid, new List<Option>());
+                    }
+                    options[ps.cardGuid].Add(ps);
+
                     break;
                 default:
                     
@@ -161,6 +188,14 @@ public class EndTurn : Option
 public class PlayCardOption : Option
 {
     public string cardGuid;
+}
+
+public class PlaySpellOption : Option
+{
+    public string cardGuid;
+    //Same as a hero power call, this can either a no target or a one target
+    //A value of negatice one means the spell handles its own targeting
+    public string target;
 }
 
 public class AttackOption : Option

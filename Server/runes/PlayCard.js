@@ -11,10 +11,11 @@ var tags = require('../cards/cardTags');
 //    "cardGuid":"xxxxxxxx-xxxx-xxyx-xxxx-xxxxxxxx0xxx"
 //}
 exports.execute = function (rune, state) {
+    
     console.log(rune.controllerGuid);
     var controller = entity.getEntity(rune.controllerGuid);
-    var index = controller.hand.indexOf(card);
     var card = entity.getEntity(rune.cardGuid);
+    var index = controller.hand.indexOf(card);
     controller.hand.splice(index, 1);
     controller.inPlay.push(card);
      

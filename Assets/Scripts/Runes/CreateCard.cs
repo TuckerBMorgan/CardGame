@@ -75,6 +75,17 @@ public class CreateCard : Rune {
                 mc.SetDesc(desc);
                 EntityManager.Singelton.AddEntity(cardGuid, mc);
             }
+            else if (type == CardType.spell)
+            {
+                SpellCard sc = new SpellCard();
+                sc.SetName(cardName);
+                sc.SetArt(art);
+                sc.SetMana(cost);
+                sc.SetDesc(desc);
+                sc.SetGuid(cardGuid);
+                sc.SetCardType((int)type);
+                EntityManager.Singelton.AddEntity(cardGuid, sc);
+            }
         }
         action();
     }

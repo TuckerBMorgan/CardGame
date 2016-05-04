@@ -33,6 +33,16 @@ exports.returnAllOfType = function (entityCategory) {
     return returnables;
 }
 
+exports.getEnemyMinions = function (controller, state) {
+    var keys = Object.keys(state.controllers);
+    keys.forEach(function (element) {
+        if(element != controller.guid)
+        {
+            return state.controllers[element].inPlay;
+        }
+    })
+}
+
 exports.returnAllOfSeveralTypes = function (entityCategory) {
     var returnables = [];
     sortableEntites.forEach(function (element) {

@@ -6,7 +6,7 @@ using MoonSharp.Interpreter;
 public enum CardType
 {
     minion,
-    test,
+    spell,
     unknown
 }
 
