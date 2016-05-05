@@ -1,7 +1,7 @@
 var cardFunctions = require('./cardFunctions')
 var ent = require('../entityManager');
 var spellConts = require('./spellConstants')
-var rune = require('../RuneVM');
+var Rune = require('../RuneVM')
 
 exports.ARCANCE_MISSLE_DAMAGE_AMOUNT = 1;
 
@@ -32,32 +32,39 @@ exports.canPlay = cardFunctions.basicCanPlay
 exports.spellText = function (rune, card, controller, state) {
     
     var enemyInPlay = ent.getEnemyMinions(controller, state);
+
+    if(enemyInPlay == null)
+        return;
+   
     var targets = [];
     
-    for(var i = 0;i<3;i++)
+    for(var i = 0;i<Math.min(3, enemyInPlay.length);i++)
     {
-       var index =  Math.floor(Math.random(0, enemyInPlay.length));
-       targets.push(enemyInPlay[index]);
-    }
-    
-    targets.forEach(function (element) {
+       var index =  Math.floor(Math.random( ) * enemyInPlay.length);
+       if(enemyInPlay[index].baseHealth <= 0)
+       {
+            i--;
+            continue;     
+       }
+       
         var dmg = {
-            "runeType":"damageRune",
+            "runeType":"DamageRune",
             "source":card.cardGuid,
             "target":element.cardGuid,
             "amount":exports.ARCANCE_MISSLE_DAMAGE_AMOUNT
         }
-        rune.executeRune(dmg, state);
-    })
+        Rune.executeRune(dmg);
+   
+    }
 }
 
 exports.generatePlayOptions = function (card, controller, state) {
     if(controller.mana >= card.cost){
         var options = [];
         var playOptions = {
-            "option":"playSpell",
+            "option":"PlaySpell",
             "cardGuid":card.cardGuid,
-            "targetGuid":spellConts.NO_TARGET
+            "targetGuid":spellConts.NO_TARGET.toString()
         }
         options.push(playOptions);
         return options;

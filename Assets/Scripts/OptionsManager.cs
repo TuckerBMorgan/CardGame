@@ -126,7 +126,7 @@ public class OptionsManager : MonoBehaviour {
 
                     break;
                 default:
-                    
+                        
                     break;
             }
         }

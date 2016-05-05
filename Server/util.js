@@ -1,7 +1,13 @@
 var fs = require('fs'); 
 var entity = require('./entityManager');
+var count = 0;
 
 exports.createGuid = function () {
+    
+    //an experiment of sorts, it cuts the size of messages down a lot
+    count++;
+    return count.toString();
+    /*
     var start = 'xxxxxxxx-xxxx-xxyx-xxxx-xxxxxxxx0xxx';
     var goodCharacters = ['0','1','2','3','4','5','6','7','8','9',
     'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
@@ -30,6 +36,7 @@ exports.createGuid = function () {
         }
     }
     return newG.join('');
+    */
 }
 
 exports.loadCard = function(fileName) {

@@ -1,15 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlaySpell : MonoBehaviour {
+public class PlaySpell : Rune {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public string cardGuid { get; set; }
+    public string targetGuid { get; set; }
+    public string controllerGuid { get; set; }
+
+    public override void Execute(System.Action action)
+    {
+        action();
+    }
+
+    public override void OnGUI()
+    {
+        
+    }
+
 }

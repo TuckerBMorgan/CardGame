@@ -158,6 +158,9 @@ public class CardAvatar : MonoBehaviour, entity
                     var Options = OptionsManager.Singleton.options[card.GetGuid()];
                     foreach(Option op in Options)
                     {
+
+                        Debug.Log("WHWY WYW");
+                         
                         if(op.GetType() == typeof(PlayCardOption))
                         {
                             OptionsManager.Singleton.PickUpOption(op);
