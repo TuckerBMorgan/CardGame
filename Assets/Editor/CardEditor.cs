@@ -7,12 +7,23 @@ using System.Collections.Generic;
 
 public class CardEditor : EditorWindow
 {
+
+    
+    public static string DEFAULT_MINION_FILE = "Server/cards/default.js";
+    
+    //This is a string that apears in default files it lets us annotate the default file without copying those annotations to each file if we do not want to
+    public static string DEFAULT_FILE_START_STRING = "DEFAULT_FILE_STARTS_NOW";
+
+    //Comments in the file so I know where it is so I can remove it when I want to, and also where to insert it so it is in the same place across files
+    public static string DEFAULT_FILE_DATA_START_FALG = "START_OF_CARD_DATA";
+    public static string DEFAULT_FILE_DATA_END_FALG = "END_OF_CARD_DATA";
+
     //must match up with the numbers in entityMangager.js would love to make them reach from the same place if I could
     public enum cardTypes
     {
-        minion = 0,
-        spell = 1,
-        hero = 2    
+        MINION = 0,
+        SPELL = 1,
+        HERO = 2    
     }
 
     //Must Match up with cardTags.js, but as with above would love for these to reach from the same source
@@ -38,7 +49,7 @@ public class CardEditor : EditorWindow
 
         public CardPrototype()
         {
-            type = cardTypes.minion;
+            type = cardTypes.MINION;
             cardName = "";
             desc = "";
             cost = 0;
@@ -51,7 +62,7 @@ public class CardEditor : EditorWindow
         {
             string str = "";
             //Cardtype
-            str += "{\n\"cardType\":" + (int)type + ",\n";
+            str += "{\n\"cardType\":ent." + type.ToString() + ",\n";
 
             //CardName
             str += "\"cardName\":\"" + cardName + "\",\n";
@@ -130,6 +141,7 @@ public class CardEditor : EditorWindow
 
     static bool waitingForId = false;
     static string useId = "";
+    static List<string> newFile;
     void OnGUI()
     {
         if(currentCard == null)
@@ -158,10 +170,10 @@ public class CardEditor : EditorWindow
                 {
                     switch(ct)
                     {
-                        case cardTypes.minion:
+                        case cardTypes.MINION:
                             currentCard = new MinionPrototype();
                             break;
-                        case cardTypes.spell:
+                        case cardTypes.SPELL:
                             //Just bad things are going to happen here
                             break;
                     }
@@ -215,7 +227,7 @@ public class CardEditor : EditorWindow
                 currentCard.tags.Add("Taunt");
             }
 
-            if(currentCard.type == cardTypes.minion)
+            if(currentCard.type == cardTypes.MINION)
             {
                 MinionPrototype mp = currentCard as MinionPrototype;
                 //baseHealth must be greaten than 0
@@ -230,6 +242,61 @@ public class CardEditor : EditorWindow
                 {
                     mp.baseAttack = holdAttack;
                 }
+            }
+        }
+    }
+
+    public void SnipOutDeafaultCardData()
+    {
+        int indexStart = -1, indexEnd  = -1;
+        for(int i = 0;i<newFile.Count;i++)
+        {
+            if (newFile[i].Contains(DEFAULT_FILE_DATA_START_FALG))
+            {
+                indexStart = i;
+            }
+            else if (newFile[i].Contains(DEFAULT_FILE_DATA_END_FALG))
+            {
+                indexEnd = i;
+            }
+        }
+
+        if(indexStart != indexEnd)
+        {
+            newFile.RemoveRange(indexStart, indexEnd - indexStart);
+        }
+    }
+
+    public void InsertCardData(string cardData)
+    {
+        string exports = "exports.data = ";
+        exports += cardData;
+        int index = 0;
+        for(int i = 0;i<newFile.Count;i++)
+        {
+            if(newFile[i].Contains(DEFAULT_FILE_DATA_START_FALG))
+            {
+                index = i;
+            }
+        }
+        newFile.Insert(index + 1, exports);
+    }
+    
+    public void CreateNewCardFile(string filename)
+    {
+        StreamReader file = new StreamReader(DEFAULT_MINION_FILE);
+        bool start_reading = false;
+        newFile = new List<string>();
+        string line;
+        while((line = file.ReadLine()) != null)
+        {
+            if(start_reading)
+            {
+                newFile.Add(line);
+            }
+            if (line.Contains(DEFAULT_FILE_START_STRING))
+            {
+                start_reading = true;
             }
         }
     }
