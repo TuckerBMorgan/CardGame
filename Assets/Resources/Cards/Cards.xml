@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<cards>
+  <test>
+    <neutral>
+      <card>
+        <id>test</id>
+        <cardName>Test</cardName>
+        <desc>this is a test</desc>
+        <cardText></cardText>
+        <art>test</art>
+      </card>
+      <card>
+        <id>testspell</id>
+        <cardName>Test Spell</cardName>
+        <desc>this is a test</desc>
+        <cardText></cardText>
+        <art>testspell</art>
+      </card>
+    </neutral>
+  </test>
+  <basic>
+    <neutral>
+      <card>
+        <id>bloodfenRaptor</id>
+        <cardName>Bloodfen Raptor</cardName>
+        <desc>\"Kill 30 raptors.\" - Hermet Nesignwary</desc>
+        <cardText></cardText>
+        <art>bloodfenRaptor</art>
+      </card>
+      <card>
+        <id>boulderfistOrge</id>
+        <cardName>Boulderfirst Ogre</cardName>
+        <desc>ME HAVE GOOD STATS FOR THE COST</desc>
+        <cardText></cardText>
+        <art>bouldarfistOgre</art>
+      </card>
+      <card>
+        <id>magaRager</id>
+        <cardName>Magma Rager</cardName>
+        <desc>He likes to think he is powerful, but pretty much anyone can solo Molton Core now.</desc>
+        <cardText></cardText>
+        <art>magamRager</art>
+      </card>
+      <card>
+        <id>murlocRaider</id>
+        <cardName>Murloc Raider</cardName>
+        <desc>Mrrraggglhlhghghlgh, mrgaaag blarrghlgaahahl mrgggg glhalhah a bghhll graggmgmg Garrosh mglhlhlh mrghlhlhl!!</desc>
+        <cardText></cardText>
+        <art>murlocRaider</art>
+      </card>
+      <card>
+        <id>noviceEngineer</id>
+        <cardName>Oasis Snapjaw</cardName>
+        <desc>\"Half of this class will not graduate...since they'll have been turned into chickens.\" -  Tinkmaster Overspark, teaching Gizmoms 101.</desc>
+        <cardText>[b]Battlecry:[/b] Draw a card</cardText>
+        <art>noiveEngineer</art>
+      </card>
+      <card>
+        <id>oasisSnapjaw</id>
+        <cardName>Oasis Snapjaw</cardName>
+        <desc>His dreams of flying and breathing fire like his idol will never be realized</desc>
+        <cardText></cardText>
+        <art>oasisSnapjaw</art>
+      </card>
+      <card>
+        <id>recklessRocketeer</id>
+        <cardName>Reckless Rocketeer</cardName>
+        <desc>One insane Rocketeer. One Rocket fill of Explosives. Infinite Fun.</desc>
+        <cardText>[b]Charge[/b]</cardText>
+        <art>recklessRocketeer</art>
+      </card>
+      <card>
+        <id>riverCrocolisk</id>
+        <cardName>River Crocolisk</cardName>
+        <desc>Edward \"Lefty\" Smith tried to make luggage out of a river crocolisk once.</desc>
+        <cardText></cardText>
+        <art>riverCrocolisk</art>
+      </card>
+      <card>
+        <id>senjinShieldMasta</id>
+        <cardName>Sen'jin ShieldMasta</cardName>
+        <desc>Sen'jin Villege is nice, if you like trolls and dust.</desc>
+        <cardText>[b]Taunt[/b]</cardText>
+        <art>senjinShieldMasta</art>
+      </card>
+      <card>
+        <id>stonetuskBoar</id>
+        <cardName>Stonetusk Boar</cardName>
+        <desc>This card is boaring.</desc>
+        <cardText>[b]Charge[/b]</cardText>
+        <art>stonetuskBoar</art>
+      </card>
+    </neutral>
+  </basic>
+</cards>

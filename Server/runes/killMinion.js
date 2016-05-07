@@ -4,7 +4,7 @@ exports.execute = function (rune, state) {
     var controller = state.controllers[rune.controller];
     var ent = entity.getEntity(rune.cardGuid);
     
-    var file = require('../cards/' + ent.id);
+    var file = require('../cards/'  + ent.set + "/" + ent.id);
     file.onGraveyard(ent, controller, state);
             
     var index = controller.inPlay.indexOf(ent);

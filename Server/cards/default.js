@@ -18,18 +18,11 @@ exports.card = {
   "cost": 1,
   "baseHealth": 1,
   "baseAttack": 1,
-    //A short note about IDS, THEY CANNOT CHANGE unless all files that use it change as a well, they are the only way to go from an instance of a entity to the file that they use
+  "set":"A SET",
   "id":"test",
   "tags":[]
 }
 //END_OF_CARD_DATA
-
-
-exports.onGraveyard = cardFunctions.basicOnGraveyard;
-
-exports.onPlay = cardFunctions.basicOnPlay;
-
-exports.onDeal = cardFunctions.basicOnDeal;
 
 exports.canPlay = cardFunctions.basicCanPlay
 

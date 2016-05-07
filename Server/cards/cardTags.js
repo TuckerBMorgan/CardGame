@@ -5,3 +5,6 @@ exports.BATTLE_CRY = "BattleCry";
 exports.WINDFURY = "WindFury";
 exports.CHARGE = "Charge";
 exports.SUMMONING_SICKNESS = "SummoningSickness";
+exports.BEAST = "Beast";
+exports.MURLOC = "Murloc";
+exports.BASIC = "Basic";

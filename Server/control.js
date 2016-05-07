@@ -123,7 +123,7 @@ exports.routing = function (message, socket) {
             
             for(var i = 0;i<30;i++) 
             {
-                var card = util.loadCard("test");
+                var card = util.loadCard(useDeck[i]);
                 var useCard = {
                     "runeType":"CreateCard",
                 }
@@ -313,7 +313,7 @@ exports.executeOptions = function (index, controller, state) {
                     var entity = entities.getEntity(useOption["attackGuid"]);
                     if(entity.type === entities.MINION)
                     {
-                        var cardFile = require("./cards/" + entity.id);
+                        var cardFile = require("./cards/" + entity.set + "/" +entity.id);
                         cardFile.attack(entity, useOption["defenderGuid"], controller, state);
                     }
                 break;

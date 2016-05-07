@@ -4,6 +4,7 @@ var server = require('../server');
 var cont = require('./NewController');
 var tags = require('../cards/cardTags');
 
+
 //layout of playCardRune
 //{
 //    "runeType":"PlayCard",
@@ -17,9 +18,17 @@ exports.execute = function (rune, state) {
     var card = entity.getEntity(rune.cardGuid);
     var index = controller.hand.indexOf(card);
     controller.hand.splice(index, 1);
+    
+    //This minion has a battle cry 
+    if(card.tags.indexOf(tags.BATTLE_CRY) != -1)
+    {
+        require('../cards/' + card.set + "/" + card.id).onBattleCry(card, controller, state);
+    }
+    
     controller.inPlay.push(card);
      
-     card.tags.push(tags.SUMMONING_SICKNESS);
+    card.tags.push(tags.SUMMONING_SICKNESS);
+     
      
      var setMana = {
       "runeType":"SetMana",
@@ -38,7 +47,7 @@ exports.execute = function (rune, state) {
              }
          }
      })
-     require('../cards/' + card.id).onPlay(card, controller, state);
+     
      Rune.executeRune(setMana, state);
 }
 

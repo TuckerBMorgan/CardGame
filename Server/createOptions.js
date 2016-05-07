@@ -53,7 +53,7 @@ exports.createOptions = function (controller, state) {
     //Can I play any of the cards in my hand in the current board state
     var hand = state.controllers[controller].hand;
     hand.forEach(function (element) {
-        var cardFile = require('./cards/' + element.id);
+        var cardFile = require('./cards/'  + element.set + "/" + element.id);
         if(element.type == entities.MINION)
         {
             //least at the moment we have simple playcard options for minions
@@ -71,7 +71,7 @@ exports.createOptions = function (controller, state) {
         {
             if(cardFile.canPlay(element, state.controllers[controller], state))
             {
-                var opsArray = require('./cards/' + element.id).generatePlayOptions(element, state.controllers[controller], state);
+                var opsArray = require('./cards/'  + element.set + "/" + element.id).generatePlayOptions(element, state.controllers[controller], state);
                 opsArray.forEach(function (element) {
                     options.push(element);
                 })
@@ -112,7 +112,7 @@ exports.createOptions = function (controller, state) {
     
     mineInPlay.forEach(function (element) {
         useList.forEach(function (innerElement) {
-            var file = require("./cards/" + element.id);
+            var file = require("./cards/" + element.set + "/" + element.id);
             if(file.canAttack(element, innerElement, controller, state))
             {
                 var attackOtions = {
