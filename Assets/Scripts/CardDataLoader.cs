@@ -12,78 +12,73 @@ public class CardDataLoader : MonoBehaviour
     public const string DESC = "desc";
     public const string CARD_TEXT = "cardText";
     public const string ART = "art";
+    public static CardDataLoader Singelton;
 
-    class CardData
+    public class CardData
     {
         public string id;
         public string cardName;
         public string desc;
         public string cardText;
         public string art;
+        public string set;
+        public string classGroup;
     }
 
-    public const string CARDS_XML = "Assets\\Resources\\Cards\\Cards.xml";
+    public const string CARDS_JSON = "Assets\\Resources\\Cards\\Cards.json";
 
     private Dictionary<string, CardData> cards;
 
     void Awake()
     {
-        cards = new Dictionary<string, CardData>();
-        LoadData();
+        Singelton = this;
+        
+        cards = LoadData();
     }
 
 
-    public void LoadData()
+    public static Dictionary<string,CardData> LoadData()
     {
-        string str = File.ReadAllText(CARDS_XML);
+        Dictionary<string, CardData> data = new Dictionary<string, CardData>();
 
-        int openTagCount = 0;
-        string currentId = "";
-        using (XmlReader reader = XmlReader.Create(new StringReader(str)))
+        string str = File.ReadAllText(CARDS_JSON);
+
+        JSONObject js = new JSONObject(str);
+        JSONObject sets = js["sets"];
+
+        foreach(string setKey in sets.keys)
         {
-            while (reader.Read())
+            foreach(string classKeys in sets[setKey].keys)
             {
-                Debug.Log(reader.Name + ":" + reader.Value);
-                continue;
-                if (reader.NodeType == XmlNodeType.Element)
+                foreach(string cardKeys in sets[setKey][classKeys].keys)
                 {
-                    if(reader.Name == ID)
-                    {
-                       
-                        currentId = reader.Value;
-                        CardData cd = new CardData();
-                        cd.id = currentId;
-                        Debug.Log(currentId);
-                        cards.Add(currentId, cd);
-                    }
-                    else if(reader.Name == CARD_NAME)
-                    {
-                        cards[currentId].cardName = reader.Value;
-                    }
-                    else if(reader.Name == DESC)
-                    {
-                        cards[currentId].desc = reader.Value;
-                    }
-                    else if(reader.Name == CARD_TEXT)
-                    {
-                        cards[currentId].cardText = reader.Value;
-                    }
-                    else if(reader.Name == ART)
-                    {
-                        cards[currentId].art = reader.Value;
-                        currentId = "";
-                    }
-                    openTagCount++;
-                }
-                else if(reader.NodeType == XmlNodeType.EndElement)
-                {
-                    openTagCount--;   
+                    JSONObject card = sets[setKey][classKeys][cardKeys];
+                    CardData cd = new CardData();
+                    cd.id = cardKeys;
+                    cd.cardName = card["cardName"].str;
+                    cd.art = card["art"].str;
+                    cd.cardText = card["cardText"].str;
+                    cd.desc = card["desc"].str;
+                    cd.set = setKey;
+                    cd.classGroup = classKeys;
+                    data.Add(cd.id, cd);
                 }
             }
-
         }
-
-
+        return data;
     }
+
+    public CardData GetCardData(string id)
+    {
+        if(cards.ContainsKey(id))
+        {
+            return cards[id];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
 
 }

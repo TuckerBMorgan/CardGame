@@ -1,17 +1,18 @@
+
 var cardFunctions = require('../cardFunctions')
 var ent = require('../../entityManager');
-var cardTags = require('../cardTags');
+var cardTags = require('../cardTags')
 
 //START_OF_CARD_DATA
 exports.card = {
   "type": ent.MINION,
-  "cost": 2,
-  "baseAttack": 2,
-  "baseHealth": 3,
+  "cost": 3,
+  "baseAttack": 1,
+  "baseHealth": 4,
   "set":cardTags.BASIC,
-  "id":"riverCrocolisk",
+  "id":"dalaranMage",
   "tags":{
-    [cardTags.BEAST]:true
+      [cardTags.SPELL_DAMAGE]:1
   }
 }
 //END_OF_CARD_DATA

@@ -1,0 +1,180 @@
+﻿{
+    "sets": {
+        "test": {
+            "neutral": {
+                  "test":{
+                      "cardName": "Test",
+                      "desc": "this is a test",
+					  "cardText":"",
+                      "art": "test"
+                  },
+                  "testspell":{
+                      "cardName": "Test Spell",
+                      "desc": "this is a test",
+					  "cardText":"",
+                      "art": "testspell"
+                  }
+            }
+        },
+      "basic": {
+          "neutral": {
+                "bloodfenRaptor":{
+                    "cardName": "Bloodfen Raptor",
+                    "desc": "\\\"Kill 30 raptors.\\\" - Hermet Nesignwary",
+					"cardText":"",
+                    "art": "bloodfenRaptor"
+                },
+                "boulderfistOgre":{
+                    "cardName": "Boulderfirst Ogre",
+                    "desc": "ME HAVE GOOD STATS FOR THE COST",
+					"cardText":"",
+                    "art": "bouldarfistOgre"
+                },
+                "magmaRager":{
+                    "cardName": "Magma Rager",
+                    "desc": "He likes to think he is powerful, but pretty much anyone can solo Molton Core now.",
+					"cardText":"",
+                    "art": "magamRager"
+                },
+                "murlocRaider":{
+                    "cardName": "Murloc Raider",
+                    "desc": "Mrrraggglhlhghghlgh, mrgaaag blarrghlgaahahl mrgggg glhalhah a bghhll graggmgmg Garrosh mglhlhlh mrghlhlhl!!",
+					"cardText":"",
+                    "art": "murlocRaider"
+                },
+                "noviceEngineer":{
+                    "cardName": "Novice Engineer",
+                    "desc": "\\\"Half of this class will not graduate...since they'll have been turned into chickens.\\\" -  Tinkmaster Overspark, teaching Gizmoms 101.",
+                    "cardText": "<b>Battlecry:</b> Draw a card",
+                    "art": "noiveEngineer"
+                },
+                "oasisSnapjaw":{
+                    "cardName": "Oasis Snapjaw",
+                    "desc": "His dreams of flying and breathing fire like his idol will never be realized",
+                    "cardText":"",
+					"art": "oasisSnapjaw"
+                },
+                "recklessRocketeer":{
+                    "cardName": "Reckless Rocketeer",
+                    "desc": "One insane Rocketeer. One Rocket fill of Explosives. Infinite Fun.",
+                    "cardText": "<b>Charge</b>",
+                    "art": "recklessRocketeer"
+                },
+                "riverCrocolisk":{
+                    "cardName": "River Crocolisk",
+                    "desc": "Edward \\\"Lefty\\\" Smith tried to make luggage out of a river crocolisk once.",
+                    "cardText":"",
+					"art": "riverCrocolisk"
+                },
+                "senjinShieldmasta":{
+                    "cardName": "Sen'jin ShieldMasta",
+                    "desc": "Sen'jin Villege is nice, if you like trolls and dust.",
+                    "cardText": "<b>Taunt</b>",
+                    "art": "senjinShieldMasta"
+                },
+                "stonetuskBoar":{
+                    "cardName": "Stonetusk Boar",
+                    "desc": "This card is boaring.",
+                    "cardText": "<b>Charge</b>",
+                    "art": "stonetuskBoar"
+                },
+				"wolfrider":{
+					"cardName":"Woldrider",
+					"desc":"Orcish raiders ride wolves because they are well adapted to harsh enviroments and because they are soft and cuddly.",
+					"cardText": "<b>Charge</b>",
+					"art":"woldrider"
+				},
+				"archmage":{
+					"cardName":"Archmage",
+					"desc":"You earn the title Archmage when you can destroy anyone who calls you in it",
+					"cardText":"<b>Spell Damage +1</b>",
+					"art":"archmage"
+				},
+				"bluegillWarrior":{
+					"cardName":"Bluegill Warrior",
+					"desc":"He just wants a hug. A sloppy... slimy... hug.",
+					"cardText":"<b>Charge</b>",
+					"art":"bluegillwWrrior"
+				},
+				"bootybayBodyguard":{
+					"cardName":"Booty bay Bodyguard",
+					"desc":"You can hire him... until someone offers him enough gold to turn on you.",
+					"cardText":"<b>Taunt</b>",
+					"art":"bootybayBodyguard"
+				},
+				"chillwindYeti":{
+					"cardName":"Chillwind Yeti",
+					"desc":"He always dreamed of coming down from the moutains and opening a yoodle shoop, but he never got the nerve.",
+					"cardText":"",
+					"art":"chillwindYeti"
+				},
+				"coreHound":{
+					"cardName":"Core Hound",
+					"desc":"You don't tame a Core Hound, You just train it to eat someone else before it eats you.",
+					"cardText":"",
+					"art":"coreHound"
+				},
+				"darkscaleHealer":{
+					"cardName":"Darkscale Healer",
+					"desc":"Healing is just something she does in her free time. It's more of a hobby really.",
+					"cardText":"<b>Battlecry:</b> Restore 2 Health to all friendly characters.",
+					"art":"darkscaleHealer"
+				},
+				"frostwolfGrunt":{
+					"cardName":"Frostwolf Grunt",
+					"desc":"Grunting is what his father did and his father before that, It's more that just a job.",
+					"cardText":"<b>Taunt</b>",
+					"art":"frostwolfGrunt"
+				},
+				"gnomishInventor":{
+					"cardName":"Gnomish Inventor",
+					"desc":"She's never quite sure what she's making, she just know's its AWESOME",
+					"cardText":"<b>Battlecry:</b> Draw a card.",
+					"art":"gnomishInventor"
+				},
+				"goldshireFootman":{
+					"cardName":"Goldshire Footman",
+					"desc":"If 1/2 minions are all that is defending Goldshire you would think it would have been overrun years ago.",
+					"cardText":"<b>Taunt</b>",
+					"art":"goldshireFootman"
+				},
+				"ironGrizzly":{
+					"cardName":"Ironfur Grizzly",
+					"desc":"Bear Carcass 1/10",
+					"cardText":"<b>Taunt</b>",
+					"art":"ironGrizzly"
+				},
+				"koboldGeomancer":{
+					"cardName":"Kobold Geomancer",
+					"desc":"In the old days, Kobolds were the finest candle merchants in the land. Then they got pushed too far...",
+					"cardText":"<b>Spell Damage+1</b>",
+					"art":"koboldGeomancer"
+				},
+				"lordOfTheArena":{
+					"cardName":"Lord of the Arena",
+					"desc":"He used to be 2100+ rated arena player, but that was years ago and nobody can get him to shut up about it.",
+					"cardText":"<b>Taunt</b>",
+					"art":"lordOfTheArena"
+				},
+				"ogreMagi":{
+					"cardName":"Ogre Magi",
+					"desc":"Training Ogres in the art of spellcasting is a guestionable decision",
+					"cardText":"<b>Spell Damage+1</b>",
+					"art":"ogreMagi"
+				},
+				"dragonlingMechanic":{
+					"cardName":"Dragonling Mechanic",
+					"desc":"She is still working on installl the rocker launcher add-on for Mr. Bity.",
+					"cardText":"<b>Battlcry:</b> Summon a 2/1 Mechanical Dragonling",
+					"art":"dragonlingMechanic"
+				},
+				"mechanicalDragonling":{
+					"cardName":"Mechanical Dragonling",
+					"desc":"",
+					"cardText":"",
+					"art":"mechanicalDragonling"
+				}
+          }
+      }
+    }
+}

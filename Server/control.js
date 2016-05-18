@@ -235,7 +235,7 @@ exports.routing = function (message, socket) {
 
 exports.executeMulligan = function (indices, controller, state) 
 {
-    
+        indices.sort();
         for(var i = 0;i<indices.length;i++)
         {
             var Shuffle = {

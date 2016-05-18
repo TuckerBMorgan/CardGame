@@ -28,6 +28,7 @@ public abstract class Card : entity {
     protected string desc;
     protected string art;
     protected int mana;
+    protected string cardText;
     protected int health; 
     protected string guid;
     protected CardAvatar cardAvatar;
@@ -135,6 +136,16 @@ public abstract class Card : entity {
     public CardState GetCardState()
     {
         return cardState;
+    }
+
+    public void SetCardText(string text)
+    {
+        this.cardText = text;
+    }
+
+    public string GetCardText()
+    {
+        return cardText;
     }
 
     //On Pulled from the deck

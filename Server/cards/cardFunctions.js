@@ -37,7 +37,7 @@ exports.basicCanAttack = function(card, target, controller, state)
 {
     if(state.attackedThisTurn.indexOf(card.cardGuid) != -1)
     {
-        if(card.tags.indexOf(tags.WINDFURY) != -1)
+        if(card.tags.hasOwnProperty(tags.WINDFURY))
         {
            var count = 0;
            for(var i = 0;i<state.attackedThisTurn;i++)
@@ -57,7 +57,7 @@ exports.basicCanAttack = function(card, target, controller, state)
             return false;
         }
     }
-    if(card.tags.indexOf(tags.SUMMONING_SICKNESS) != -1)
+    if(card.tags.hsaOwnProperty(tags.SUMMONING_SICKNESS))
     {
         return false;
     }

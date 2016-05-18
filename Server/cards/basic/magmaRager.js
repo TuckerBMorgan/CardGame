@@ -8,11 +8,11 @@ var cardTags = require('../cardTags');
 exports.card = {
   "type": ent.MINION,
   "cost": 3,
-  "baseHealth": 1,
   "baseAttack": 5,
+  "baseHealth": 1,
   "set":cardTags.BASIC,
   "id":"magmaRager",
-  "tags":[]
+  "tags":{}
 }
 //END_OF_CARD_DATA
 

@@ -62,9 +62,13 @@ public class PlayArea : MonoBehaviour
         RuneManager.Singelton.AddListener(typeof(PlayCard), PlayRune);
         RuneManager.Singelton.AddListener(typeof(DamageRune), DamageRuneCall);
         RuneManager.Singelton.AddListener(typeof(NewController), NewControllerRune);
+        
         RuneManager.Singelton.AddListener(typeof(ShuffleCard), ShuffleCardRune);
         RuneManager.Singelton.AddListener(typeof(StartGame), StarGameRune);
         RuneManager.Singelton.AddListener(typeof(Attack), AttackRune);
+        RuneManager.Singelton.AddListener(typeof(PlaySpell), PlaySpellRune);
+        RuneManager.Singelton.AddListener(typeof(SummonMinion), SummonMinionRune);
+
    ///     RuneManager.Singelton.AddListener(typeof(ModifyHealth), ModifyHealthRune);
 
         indexes = new List<int>();
@@ -218,6 +222,7 @@ public class PlayArea : MonoBehaviour
         return gameStarted;
     }
 
+
     //Rune hooks for the play area
     public void DealRune(Rune rune, Action action)
     {
@@ -293,6 +298,49 @@ public class PlayArea : MonoBehaviour
         }
         RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid(), pc.typeOfRemoveFromHand);
         AddCardToPlayArea(card.GetCardAvatar(), player.GetGuid(), pc.originOfCard);
+        action();
+        action = null;
+    }
+
+    public void SummonMinionRune(Rune rune, Action action)
+    {
+        SummonMinion sm = rune as SummonMinion;
+        Controller player = EntityManager.Singelton.GetEntity(sm.controllerGuid) as Controller;
+
+        Card card = EntityManager.Singelton.GetEntity(sm.cardGuid) as Card;
+
+        float yPos = 0;
+        if (sm.controllerGuid == homeGuid)
+        {
+            yPos = -2.0f;
+        }
+        else if (sm.controllerGuid == awayGuid)
+        {
+            yPos = 4.0f;
+        }
+
+        GameObject go = Resources.Load<GameObject>(CARD_AVATAR_PREFAB_LOCATION);
+        go = GameObject.Instantiate(go);
+
+
+        go.transform.position = new Vector3(6, yPos, -3);
+
+        string useGuid = Guid.NewGuid().ToString();
+
+        if (card.GetCardType() == CardType.unknown)
+        {
+            go.GetComponent<CardAvatar>().SetupBlankCard(useGuid, player.GetGuid());
+        }
+        else
+        {
+            go.GetComponent<CardAvatar>().Setup(card, useGuid, player.GetGuid());
+        }
+        card.SetCardAvatar(go.GetComponent<CardAvatar>());
+        go.GetComponent<CardAvatar>().SetControllerGuid(sm.controllerGuid);
+
+        EntityManager.Singelton.AddEntity(useGuid, go.GetComponent<CardAvatar>());
+        AddCardToPlayArea(card.GetCardAvatar(), player.GetGuid(), OriginOfCard.SUMMON);
+        
         action();
         action = null;
     }
@@ -402,6 +450,18 @@ public class PlayArea : MonoBehaviour
     public void AttackRune(Rune rune, Action action)
     {
         //Will be filled in later
+        action();
+    }
+
+    public void PlaySpellRune(Rune rune, Action action)
+    {
+        PlaySpell ps = rune as PlaySpell;
+
+        Card card = EntityManager.Singelton.GetEntity(ps.cardGuid) as Card;
+
+        Controller player = EntityManager.Singelton.GetEntity(ps.controllerGuid) as Controller;
+
+        RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid(), TypeOfRemoveFromHand.INTO_PLAY);
         action();
     }
     /*

@@ -7,9 +7,6 @@ exports.ARCANCE_MISSLE_DAMAGE_AMOUNT = 1;
 
 exports.card = {
   "type": ent.SPELL,
-  "cardName": "testspell",
-  "desc": "desc",
-  "art": "test",
   "cost": 1,
     //A short note about IDS, THEY CANNOT CHANGE unless all files that use it change as a well, they are the only way to go from an instance of a entity to the file that they use
   "id":"testspell",

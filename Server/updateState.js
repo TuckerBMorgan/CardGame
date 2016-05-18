@@ -15,14 +15,12 @@ exports.updateState = function(state)
     var redo = false;
     //Check for dead minions
     keys.forEach(function (element) {
-        
         var inPlayMinions = state.controllers[element].inPlay;
         var deads = [];
         inPlayMinions.forEach(function (minion, index) {
             var file = require('./cards/'+ minion.set + "/" + minion.id);
             if(!file.isAlive(minion, state.controllers[element], state))
             {
-                console.log("the health of this dead minion is " + minion.baseHealth);
                 redo = true;
                 var killMin = {
                     "runeType":"KillMinion",

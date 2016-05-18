@@ -1,24 +1,22 @@
 
 var cardFunctions = require('../cardFunctions')
 var ent = require('../../entityManager');
-var rune = require('../../RuneVM');
 var cardTags = require('../cardTags')
 
 //START_OF_CARD_DATA
 exports.card = {
   "type": ent.MINION,
-  "cost": 1,
-  "baseAttack": 1,
-  "baseHealth": 1,
+  "cost": 4,
+  "baseAttack": 2,
+  "baseHealth": 4,
   "set":cardTags.BASIC,
-  "id":"noviceEngineer",
+  "id":"gnomishInventor",
   "tags":{
       [cardTags.BATTLE_CRY]:true
   }
 }
 //END_OF_CARD_DATA
 
-//On Battle cry Novice engineer should deal the playing character a card
 exports.onBattleCry = function (card, controller, state) {
     
     var deck = controller.deck;

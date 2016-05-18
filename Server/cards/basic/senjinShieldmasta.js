@@ -6,11 +6,13 @@ var cardTags = require('../cardTags');
 exports.card = {
   "type": ent.MINION,
   "cost": 4,
-  "baseHealth": 5,
   "baseAttack": 3,
+  "baseHealth": 5,
   "set":cardTags.BASIC,
   "id":"senjinShieldmasta",
-  "tags":[cardTags.TAUNT]
+  "tags":{
+    [cardTags.TAUNT]:true
+  }
 }
 //END_OF_CARD_DATA
 

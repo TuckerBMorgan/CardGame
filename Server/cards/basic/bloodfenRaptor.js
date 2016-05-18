@@ -7,16 +7,14 @@ var cardTags = require('../cardTags');
 //START_OF_CARD_DATA
 exports.card = {
   "type": ent.MINION,
-  "cardName": "Bloodfen Raptor",
-  "desc": "\"Kill 30 raptors.\" - Hermet Nesignwary",
-  "cardText":"",
-  "art": "bloodfenRaptor",
   "cost": 2,
-  "baseHealth": 2,
   "baseAttack": 3,
+  "baseHealth": 2,
   "set":cardTags.BASIC,
   "id":"bloodfenRaptor",
-  "tags":[cardTags.BEAST]
+  "tags" : {
+    [cardTags.BEAST]:true
+  }
 }
 //END_OF_CARD_DATA
 

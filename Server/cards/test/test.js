@@ -3,9 +3,6 @@ var ent = require('../../entityManager');
 
 exports.card = {
   "type": ent.MINION,
-  "cardName": "test",
-  "desc": "desc",
-  "art": "test",
   "cost": 1,
   "baseHealth": 1,
   "baseAttack": 1,

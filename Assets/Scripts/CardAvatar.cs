@@ -19,7 +19,9 @@ public class CardAvatar : MonoBehaviour, entity
     public GameObject healthText;
     public GameObject attackText;
     public GameObject costText;
+    public GameObject cardText;
     public CardAvatarState cardAvatarState;
+
 
     public GameObject Front;
     public GameObject Back;
@@ -46,11 +48,36 @@ public class CardAvatar : MonoBehaviour, entity
         cardAvatarState = CardAvatarState.inHand;
         RuneManager.Singelton.AddListener(typeof(PlayCard), OnCardPlay);
         textOfCard = new List<Text>(GetComponentsInChildren<Text>());
+        
+    }
 
-        for(int i = 0;i<textOfCard.Count;i++)
+    public void Setup(Card card, string guid, string playerGuid)
+    {
+        Front.SetActive(true);
+        this.guid = guid;
+        this.card = card;
+        this.playerGuid = playerGuid;
+        nameText.GetComponent<Text>().text = card.GetName();
+        costText.GetComponent<Text>().text = card.GetMana().ToString();
+        cardText.GetComponent<Text>().text = card.GetCardText();
+        if (card.GetCardType() == CardType.minion)
         {
-            textOfCard[i].color = Color.red;
+            MinionCard mc = card as MinionCard;
+            healthText.GetComponent<Text>().text = mc.GetBaseHealth().ToString();
+            attackText.GetComponent<Text>().text = mc.GetBaseAttack().ToString();
         }
+    }
+
+    public void SetupBlankCard(string guid, string playerGuid)
+    {
+        Front.SetActive(false);
+        this.guid = guid;
+        card = null;
+        this.playerGuid = playerGuid;
+        nameText.GetComponent<Text>().text = "";
+        healthText.GetComponent<Text>().text = "";
+        attackText.GetComponent<Text>().text = "";
+        costText.GetComponent<Text>().text = "";
     }
 
     // Update is called once per frame
@@ -86,33 +113,7 @@ public class CardAvatar : MonoBehaviour, entity
         }
     }
 
-    public void Setup(Card card, string guid, string playerGuid)
-    {
-        Front.SetActive(true);
-        this.guid = guid;
-        this.card = card;
-        this.playerGuid = playerGuid;
-        nameText.GetComponent<Text>().text = card.GetName();
-        costText.GetComponent<Text>().text = card.GetMana().ToString();
-        if (card.GetCardType() == CardType.minion)
-        {
-            MinionCard mc = card as MinionCard;
-            healthText.GetComponent<Text>().text = mc.GetBaseAttack().ToString();
-            attackText.GetComponent<Text>().text = mc.GetBaseHealth().ToString();
-        }
-    }
-
-    public void SetupBlankCard(string guid, string playerGuid)
-    {
-        Front.SetActive(false);
-        this.guid = guid;
-        card = null;
-        this.playerGuid = playerGuid;
-        nameText.GetComponent<Text>().text = "";
-        healthText.GetComponent<Text>().text = "";
-        attackText.GetComponent<Text>().text = "";
-        costText.GetComponent<Text>().text = "";
-    }
+    
 
     //and this
     //Entry point for the mesh to tell the whole card it is being clicked
@@ -122,14 +123,7 @@ public class CardAvatar : MonoBehaviour, entity
         {
             Controller ctr = EntityManager.Singelton.GetEntity(playerGuid) as Controller;
             PlayArea.Singelton.OnCardAvatarClickedForMulligan(ctr.GetCardIndexInHand(card));
-            if (textOfCard.Count < 0)
-                return;
-            Color col = textOfCard[0].color == Color.white ? Color.red : Color.white;
-            for (int i = 0; i < textOfCard.Count; i++)
-            {
-                textOfCard[i].color = col;
-            }
-
+        //need to add in mulligna effect later
             return;
         }
         var getcontroller = EntityManager.Singelton.GetEntity(PlayArea.Singelton.HomeGuid) as Controller;
@@ -223,6 +217,11 @@ public class CardAvatar : MonoBehaviour, entity
         this.action = action;
     }
 
+    public void SetCardText(string text)
+    {
+        cardText.GetComponent<Text>().text = text;
+    }
+
 
     public void DeckIt()
     {
@@ -252,7 +251,6 @@ public class CardAvatar : MonoBehaviour, entity
 
     public void ModifyHealth(int amount)
     {
-        Debug.Log("health being modified");
         int current = int.Parse(healthText.GetComponent<Text>().text);
         current = current + amount;
         healthText.GetComponent<Text>().text = current.ToString() + " ";

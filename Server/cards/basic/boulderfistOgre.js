@@ -6,16 +6,12 @@ var cardTags = require('../cardTags')
 //START_OF_CARD_DATA
 exports.card = {
   "type": ent.MINION,
-  "cardName": "Boulderfist Orge",
-  "desc": "ME HAVE GOOD STATS FOR THE COST",
-  "cardText":"",
-  "art": "boulderfistOgre",
   "cost": 6,
-  "baseHealth": 7,
   "baseAttack": 6,
+  "baseHealth": 7,
   "set":cardTags.BASIC,
   "id":"boulderfistOgre",
-  "tags":[]
+  "tags":{}
 }
 //END_OF_CARD_DATA
 

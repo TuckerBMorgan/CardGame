@@ -8,11 +8,13 @@ var cardTags = require('../cardTags');
 exports.card = {
   "type": ent.MINION,
   "cost": 1,
-  "baseHealth": 1,
   "baseAttack": 2,
+  "baseHealth": 1,
   "set":cardTags.BASIC,
   "id":"murlocRaider",
-  "tags":[cardTags.MURLOC]
+  "tags":{
+    [cardTags.MURLOC]:true
+  }
 }
 //END_OF_CARD_DATA
 

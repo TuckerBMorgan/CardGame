@@ -6,11 +6,13 @@ var cardTags = require('../cardTags');
 exports.card = {
   "type": ent.MINION,
   "cost": 1,
-  "baseHealth": 1,
   "baseAttack": 1,
+  "baseHealth": 1,
   "set":cardTags.BASIC,
   "id":"stonetuskBoar",
-  "tags":[cardTags.BEAST]
+  "tags":{
+    [cardTags.BEAST]:true
+  }
 }
 //END_OF_CARD_DATA
 

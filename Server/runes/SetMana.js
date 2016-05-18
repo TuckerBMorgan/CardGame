@@ -1,5 +1,3 @@
-
-
 exports.execute = function(rune, state)
 {
     var controller = state.controllers[rune.controllerGuid];

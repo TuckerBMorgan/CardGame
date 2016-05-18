@@ -5,13 +5,13 @@ var cardTags = require('../cardTags');
 //START_OF_CARD_DATA
 exports.card = {
   "type": ent.MINION,
-  "cost": 2,
-  "baseAttack": 2,
-  "baseHealth": 3,
+  "cost": 7,
+  "baseAttack": 9,
+  "baseHealth": 5,
   "set":cardTags.BASIC,
-  "id":"riverCrocolisk",
+  "id":"coreHound",
   "tags":{
-    [cardTags.BEAST]:true
+      [cardTags.BEAST]:true,
   }
 }
 //END_OF_CARD_DATA

@@ -20,14 +20,14 @@ exports.execute = function (rune, state) {
     controller.hand.splice(index, 1);
     
     //This minion has a battle cry 
-    if(card.tags.indexOf(tags.BATTLE_CRY) != -1)
+    if(card.tags.hasOwnProperty(tags.BATTLE_CRY))
     {
         require('../cards/' + card.set + "/" + card.id).onBattleCry(card, controller, state);
     }
     
     controller.inPlay.push(card);
      
-    card.tags.push(tags.SUMMONING_SICKNESS);
+    card.tags[tags.SUMMONING_SICKNESS] = true;
      
      
      var setMana = {

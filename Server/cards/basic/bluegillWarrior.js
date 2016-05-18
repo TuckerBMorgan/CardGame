@@ -7,11 +7,12 @@ exports.card = {
   "type": ent.MINION,
   "cost": 2,
   "baseAttack": 2,
-  "baseHealth": 3,
+  "baseHealth": 1,
   "set":cardTags.BASIC,
-  "id":"riverCrocolisk",
+  "id":"bluegillWarrior",
   "tags":{
-    [cardTags.BEAST]:true
+      [cardTags.CHARGE]:true,
+      [cardTags.MURLOC]:true
   }
 }
 //END_OF_CARD_DATA

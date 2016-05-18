@@ -20,19 +20,15 @@ public class CreateCard : Rune {
     public static string CARD_FILE_LOCATION = "Cards/";
 
     public string cardGuid { get; set; }
-    public string cardName { get; set; }
-    public string art { get; set; }
-    public string desc { get; set; }
     public int cost { get; set; }
     public int baseHealth { get; set; }
     public int baseAttack { get; set; }
     public string set { get; set; }
-    public string cardText { get; set; }
     public CardType type { get; set; }
     public EntityType entityType { get; set; }
     public string controllerGuid { get; set; }
     public string id { get; set; }
-
+    
     public CreateCard()
     {
     }
@@ -51,13 +47,15 @@ public class CreateCard : Rune {
             {
                 card = new MinionCard();
                 MinionCard mc = card as MinionCard;
-                mc.SetName(cardName);
-                mc.SetArt(art);
+                CardDataLoader.CardData cd = CardDataLoader.Singelton.GetCardData(id);
+
+                mc.SetName(cd.cardName);
+                mc.SetArt(cd.art);
                 mc.SetBaseAttack(baseAttack);
                 mc.SetBaseHealth(baseHealth);
                 mc.SetMana(cost);
                 mc.SetGuid(cardGuid);
-                mc.SetDesc(desc);
+                mc.SetDesc(cd.desc);
                 mc.SetCardAvatar(ca);   
                 EntityManager.Singelton.AddEntity(cardGuid, mc);
                 ca.Setup(card, cardGuid, controllerGuid);
@@ -67,23 +65,28 @@ public class CreateCard : Rune {
         {
             if(type == CardType.minion)
             {
-                MinionCard mc = new MinionCard();
-                mc.SetName(cardName);
-                mc.SetArt(art);
+               
+                MinionCard mc = new MinionCard(); 
+                CardDataLoader.CardData cd = CardDataLoader.Singelton.GetCardData(id);
+                mc.SetCardText(cd.cardText);
+                mc.SetName(cd.cardName);
+                mc.SetArt(cd.art);
                 mc.SetBaseAttack(baseAttack);
                 mc.SetBaseHealth(baseHealth);
                 mc.SetMana(cost);
                 mc.SetGuid(cardGuid);
-                mc.SetDesc(desc);
+                mc.SetDesc(cd.desc);
                 EntityManager.Singelton.AddEntity(cardGuid, mc);
             }
             else if (type == CardType.spell)
             {
                 SpellCard sc = new SpellCard();
-                sc.SetName(cardName);
-                sc.SetArt(art);
+                CardDataLoader.CardData cd = CardDataLoader.Singelton.GetCardData(id);
+
+                sc.SetName(cd.cardName);
+                sc.SetArt(cd.art);
                 sc.SetMana(cost);
-                sc.SetDesc(desc);
+                sc.SetDesc(cd.desc);
                 sc.SetGuid(cardGuid);
                 sc.SetCardType((int)type);
                 EntityManager.Singelton.AddEntity(cardGuid, sc);

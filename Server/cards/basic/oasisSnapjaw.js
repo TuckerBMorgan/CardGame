@@ -1,5 +1,3 @@
-
-
 var cardFunctions = require('../cardFunctions')
 var ent = require('../../entityManager');
 var cardTags = require('../cardTags');
@@ -8,11 +6,13 @@ var cardTags = require('../cardTags');
 exports.card = {
   "type": ent.MINION,
   "cost": 4,
-  "baseHealth": 2,
-  "baseAttack": 7,
+  "baseAttack": 2,
+  "baseHealth": 7,
   "set":cardTags.BASIC,
   "id":"oasisSnapjaw",
-  "tags":[cardTags.BEAST]
+  "tags":{
+    [cardTags.BEAST]:true
+  }
 }
 //END_OF_CARD_DATA
 

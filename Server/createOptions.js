@@ -89,11 +89,11 @@ exports.createOptions = function (controller, state) {
     var otherList = [];
     
     thereInPlay.forEach(function (element) {
-        if(element.tags.indexOf(tags.TAUNT) != -1)
+        if(element.tags.hasOwnProperty(tags.TAUNT))
         {
             tauntList.push(element.cardGuid);
         }
-        else if(element.tags.indexOf(tags.STEALTH) == -1)
+        else if(element.tags.hasOwnProperty(tags.STEALTH))
         {
             otherList.push(element.cardGuid);
         }

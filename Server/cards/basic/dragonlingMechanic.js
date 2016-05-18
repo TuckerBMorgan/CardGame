@@ -1,39 +1,37 @@
-
 var cardFunctions = require('../cardFunctions')
 var ent = require('../../entityManager');
-var rune = require('../../RuneVM');
-var cardTags = require('../cardTags')
+var cardTags = require('../cardTags');
+var Rune = require('../../RuneVM');
+var util = require('../../util');
 
 //START_OF_CARD_DATA
 exports.card = {
   "type": ent.MINION,
   "cost": 1,
-  "baseAttack": 1,
-  "baseHealth": 1,
+  "baseAttack": 2,
+  "baseHealth": 4,
   "set":cardTags.BASIC,
-  "id":"noviceEngineer",
+  "id":"dragonlingMechanic",
   "tags":{
       [cardTags.BATTLE_CRY]:true
   }
 }
 //END_OF_CARD_DATA
 
+exports.MECHANIC_DRAGONLING_PATH = "basic/mechanicalDragonling";
+
 //On Battle cry Novice engineer should deal the playing character a card
 exports.onBattleCry = function (card, controller, state) {
+    var dragonGuid = util.createGuid();
     
-    var deck = controller.deck;
-    if(deck.length <= 0)
-    {
-        return null;   
-    }
-    var index = Math.floor(Math.random() * deck.length);
-    
-    var dealCard = {
-        "runeType":"DealCard",
+    var summon = {
+        "runeType":"SummonMinion",
         "controllerGuid":controller.guid,
-        "cardGuid":deck[index].cardGuid
+        "sourceCardGuid":card.cardGuid,
+        "cardGuid":dragonGuid,
+        "cardId":exports.MECHANIC_DRAGONLING_PATH
     }
-    rune.executeRune(dealCard, state);
+    Rune.executeRune(summon, state);
 }
 
 exports.canPlay = cardFunctions.basicCanPlay
