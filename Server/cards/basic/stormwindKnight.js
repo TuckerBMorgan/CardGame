@@ -7,17 +7,16 @@ var util = require('../../util');
 //START_OF_CARD_DATA
 exports.card = {
   "type": ent.MINION,
-  "cost": 1,
+  "cost": 4,
   "baseAttack": 2,
-  "baseHealth": 1,
+  "baseHealth": 5,
   "set":cardTags.BASIC,
-  "id":"murlocRaider",
+  "id":"stormwindKnight",
   "tags":{
-      [cardTags.MURLOC]:true
+      [cardTags.CHARGE]:true
   }
 }
 //END_OF_CARD_DATA
-
 
 exports.canPlay = cardFunctions.basicCanPlay
 

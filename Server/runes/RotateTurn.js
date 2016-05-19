@@ -21,9 +21,11 @@ exports.execute = function (rune, state) {
     }
     
     state.turnOrder[length].state = controllerRune.WAITING_FOR_TURN;
+    
     state.turnOrder[length].inPlay.forEach(function (element) {
-        element.tags.splice(tags.SUMMONING_SICKNESS); 
+        delete element.tags[tags.SUMMONING_SICKNESS];
     });
+    
     var newManaLevel = state.turnOrder[nextIndex].baseMana + 1;
     
     state.attackedThisTurn = [];

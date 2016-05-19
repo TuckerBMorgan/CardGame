@@ -8,16 +8,15 @@ var util = require('../../util');
 exports.card = {
   "type": ent.MINION,
   "cost": 1,
-  "baseAttack": 2,
+  "baseAttack": 1,
   "baseHealth": 1,
   "set":cardTags.BASIC,
-  "id":"murlocRaider",
+  "id":"boar",
   "tags":{
-      [cardTags.MURLOC]:true
+      [cardTags.BEAST]:true
   }
 }
 //END_OF_CARD_DATA
-
 
 exports.canPlay = cardFunctions.basicCanPlay
 

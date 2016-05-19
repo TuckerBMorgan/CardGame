@@ -159,19 +159,28 @@ public class PlayArea : MonoBehaviour
         if (playFields.ContainsKey(controllerGuid))
         {
             cardAvatar.cardAvatarState = CardAvatarState.inPlay;
+            float width = 1.3f;
+            float halfWidth = width + epsilon;
+            float startPoint = playFields[controllerGuid].Count * halfWidth;
+                    
             switch (originOfCard)
             {
                 case OriginOfCard.HAND:
                     RemoveCardFromHand(cardAvatar, controllerGuid, TypeOfRemoveFromHand.INTO_PLAY);
                     playFields[controllerGuid].Add(cardAvatar);
-                    float width = 1.3f;
-                    float halfWidth = width + epsilon;
-                    float startPoint = playFields[controllerGuid].Count * halfWidth;
                     for (int i = 0; i < playFields[controllerGuid].Count; i++)
                     {
                         playFields[controllerGuid][i].SetDestination(new Vector3(-startPoint + (halfWidth * i), yPos, -3));
                     }
 
+                     break;
+
+                case OriginOfCard.SUMMON:
+                    playFields[controllerGuid].Add(cardAvatar);
+                    for (int i = 0; i < playFields[controllerGuid].Count; i++)
+                    {
+                        playFields[controllerGuid][i].SetDestination(new Vector3(-startPoint + (halfWidth * i), yPos, -3));
+                    }
                     break;
             }
         }

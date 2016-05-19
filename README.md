@@ -1,0 +1,1 @@
+Fireplacerock is a remake of the Blizzard Digtal card game Hearthstone. It is fullly a fan project, just doing it to have some fun, and learn what I can.

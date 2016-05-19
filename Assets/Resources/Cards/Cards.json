@@ -173,6 +173,48 @@
 					"desc":"",
 					"cardText":"",
 					"art":"mechanicalDragonling"
+				},
+				"murlocTidehunter":{
+					"cardName":"Murloc Tidehunter",
+					"desc":"Death will rise, from the tides!",
+					"cardText":"<b>Battlecry:</b> Summon a 1/1 Murloc Scout",
+					"art":"murlocTidehunter"
+				},
+				"murlocScout":{
+					"cardName":"Murloc Tidehunter",
+					"desc":"",
+					"cardText":"",
+					"art":"murlocScount"
+				},
+				"razorfenHunter":{
+					"cardName":"Razorfen Hunter",
+					"desc":"Someone did mess with Tuskerr once. ONCE",
+					"cardText":"<b>Battlecry:</b> Summon a 1/1 Boar",
+					"art":"razorfenHunter"
+				},
+				"boar":{
+					"cardName":"Boar",
+					"desc":"",
+					"cardText":"",
+					"art":"boar"
+				},
+				"silverbackPatriarch":{
+					"cardName":"Silverback Patriarch",
+					"desc":"He likes to act like he's in charge, but the silverback matriarch actually runs things.",
+					"cardText":"<b>Taunt</b>",
+					"art":"silverbackPatriarch"
+				},
+				"stormwindKnight":{
+					"cardName":"Stormwind Knight",
+					"desc":"They're still embarassed about \"The Deathwind Incident\"",
+					"cardText":"<b>Charge</b>",
+					"art":"stormwindKnight"
+				},
+				"warGolem":{
+					"cardName":"War Golem",
+					"desc":"Golems are not afraid, but for some reason they still run when you cast Fear on them. Instinct, maybe? A desire to blendin?",
+					"cardText":"",
+					"art":"warGolem"
 				}
           }
       }
