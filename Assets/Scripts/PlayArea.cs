@@ -265,7 +265,11 @@ public class PlayArea : MonoBehaviour
         GameObject go = Resources.Load<GameObject>(CARD_AVATAR_PREFAB_LOCATION);
         go = GameObject.Instantiate(go);
 
-
+        go.name = card.GetName();
+        if(String.IsNullOrEmpty(card.GetName()))
+        {
+            go.name = "UnknowCard";
+        }
         go.transform.position = new Vector3(6, yPos, -3);
         
         
@@ -333,6 +337,8 @@ public class PlayArea : MonoBehaviour
 
 
         go.transform.position = new Vector3(6, yPos, -3);
+        
+        go.name = card.GetName();
 
         string useGuid = Guid.NewGuid().ToString();
 

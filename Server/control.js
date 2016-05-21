@@ -415,7 +415,7 @@ function bootstrap(state) {
    //foreach controller in the game
     keys.forEach(function(element) {
     
-            var innerKeys = Object.keys(state.controllers);
+            var innerKeys = Object.keys(state.controllers); 
             //against them again
             innerKeys.forEach(function (innerElement) {
             //create the newControllerRune
@@ -425,7 +425,8 @@ function bootstrap(state) {
                 "controllerGuid":innerElement,
                 "controllerName":contr.name,
                 "type":contr.type,
-                "isMe":false
+                "isMe":false,
+                "hero":contr.hero.id
             }
             //If the one we are sending to, is the one we are creating the rune from, we tell them that, so they know who they are
             if(contr == state.controllers[element])
