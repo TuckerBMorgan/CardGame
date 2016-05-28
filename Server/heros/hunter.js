@@ -11,7 +11,7 @@ exports.hero = {
         "cost":2    
     },
     //A short note about IDS, THEY CANNOT CHANGE unless all files that use it change as a well, they are the only way to go from an instance of a entity to the file that they use
-    "id":"testhero"
+    "id":"hunter"
 }
 
 exports.attackPower = 2;
@@ -30,13 +30,13 @@ exports.canUse = function (heroController, targetController, state) {
 exports.validatePowerTarget = function (hero, target, state) {
     if(target.type == entity.HERO)
     {
-        
+        return true;
     }
+    return false;
 }
 
 exports.usePower = function (hero, target, state) {
-//This needs to be a rune
-//    target.health -= exports.attackPower;
+    
 }
 
 exports.needMoreTargetInfo = function () {

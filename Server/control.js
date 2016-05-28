@@ -402,7 +402,7 @@ function bootstrap(state) {
             "guid":guid,
             "name":name,
             "controllerType":type,
-            "hero":"testhero"
+            "hero":"hunter"
         }
         newController.execute(obj, state)
         state.controllersByIP[element] = state.controllers[guid];
@@ -435,6 +435,7 @@ function bootstrap(state) {
             }
             if(state.controllers[element].type == newController.PLAYER_CONTROLLER)
             {
+                console.log(JSON.stringify(sec));
                 //and send it
                 server.sendMessage(JSON.stringify(sec), state.controllers[element].socket);          
             }
