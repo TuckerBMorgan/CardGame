@@ -51,13 +51,23 @@ Input:
 Output:
 '''
 def eval_board(board):
-	#get the data structure for player 1's minions
-	#get the data structure for player 2's minions
+	#get the data structure for player 1's minions and then their summed AP and HP
+	player1_minions
+	p1_minion_str = sum(player1_minions[1:].AP)
+	p1_minion_health = sum(player1_minions[1:].HP)
+	#get the data structure for player 2's minions and then their summed AP and HP
+	player2_minions
+	p2_minion_str = sum(player2_minions[1:].AP)
+	p2_minion_health = sum(player2_minions[1:].HP)
 	#get the data structure for any taunts active for player 1
+	p1_taunts
 	#get the data structure for any taunts active for player 2
+	p2_taunts
 	#get the data structure for any weapons active for player 1
+	p1_weap
 	#get the data structure for any weapons active for player 2
-	#get the ammount of mana for player 1
-	#get the ammount of mana for player 2
+	p2_weap
+	#get the likely ammount of mana for both players
+	turn
 	#Equation here
 	return 0#placeholder
