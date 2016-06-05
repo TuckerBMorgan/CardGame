@@ -29,6 +29,35 @@ def eval_monster_play_empty_board(my_hp, my_ap, resources, cost):
 	return distance/cost_to_res
 
 '''
-Determines
+Scores a possible instance of combat between an attacking minion and it's target.
+	This is put out as a tuple for later analysis.
+Input:
+	attacker: the object representing the attacking minion
+	target: the object representing the target
+Outputs: A tuple representing the difference between the attacker and
+	target outcomes
 '''
 def eval_combat(attacker, target):
+	#determines attacker survival chance
+	att_hp_to_en_ap = target.AP - attacker.HP
+	#determines enemy survival chance
+	en_hp_to_att_ap = attacker.AP - target.HP
+	return att_hp_to_en_ap, en_hp_to_att_ap
+
+'''
+Scores the board between the two players, the score provided is in terms of the
+	player who runs this algorithm.
+Input: 
+Output:
+'''
+def eval_board(board):
+	#get the data structure for player 1's minions
+	#get the data structure for player 2's minions
+	#get the data structure for any taunts active for player 1
+	#get the data structure for any taunts active for player 2
+	#get the data structure for any weapons active for player 1
+	#get the data structure for any weapons active for player 2
+	#get the ammount of mana for player 1
+	#get the ammount of mana for player 2
+	#Equation here
+	return 0#placeholder
