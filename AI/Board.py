@@ -23,6 +23,7 @@ class CARD():
 	m->minion
 	s->spell
 	w->weapon
+	h->hero
 	'''
 	def get_kind(self):
 		return self.kind
@@ -39,17 +40,19 @@ class CARD():
 	def get_COST(self):
 		return self.COST
 
-'''
-Defines minion cards and their functions
-'''
-class Minion(CARD):
+	'''
+	defines any immediate use behaviors
+	'''
+	def use_card(self):
+		return None
 
-	def __init__(self, ap, hp, pwr, cost):
-		self.kind = 'm'
-		self.AP = ap
-		self.HP = HP
-		self.EFFECT = pwr
-		self.COST = cost
+'''
+Defines behaviors and features of cards whom can be targetted
+'''
+class Targetable(CARD):
+	def __init__(self):
+		self.HP = 0
+		self.AP = 0
 
 	'''
 	returns a card's current AP
@@ -71,6 +74,20 @@ class Minion(CARD):
 		self.HP-=damage
 		return self.get_AP
 
+
+'''
+Defines minion cards and their functions
+'''
+class Minion(Targetable):
+
+	def __init__(self, ap, hp, pwr, cost):
+		self.kind = 'm'
+		self.AP = ap
+		self.HP = HP
+		self.EFFECT = pwr
+		self.COST = cost
+	
+
 '''
 defines the object and functions necessary to initialize and utilize spell cards
 '''
@@ -84,7 +101,7 @@ class Spell(CARD):
 '''
 Defines the object and functions necessary to initialize and utilize weapon cards
 '''
-class Weapon(CARD):
+class Weapon(Targetable):
 
 	def __init__(self, ap, use,effect, cost):
 		self.kind = 'w'
@@ -92,12 +109,6 @@ class Weapon(CARD):
 		self.USE = use
 		self.EFFECT = effect
 		self.COST = COST
-
-	'''
-	Returns the ammount of AP a weapon provides
-	'''
-	def get_AP(self):
-		return self.AP
 
 	'''
 	returns the number of uses on a weapon
@@ -112,4 +123,12 @@ class Weapon(CARD):
 		self.USE -=1
 		return self.get_AP()
 
+'''
+Defines functions and objects associated with heroes
+'''
+class HERO(Targetable):
+	def __init__(self, PWR):
+		self.kind = 'h'
+		self.HP = 30
+		self.EFFECT = PWR
 
