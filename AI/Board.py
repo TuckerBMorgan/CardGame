@@ -73,6 +73,15 @@ class Targetable(CARD):
 		self.HP-=damage
 		return self.get_AP
 
+	'''
+	Checks if a targettable card has HP <= 0
+		Returns True = Dead or False = not quite dead
+	'''
+	def check_if_dead(self):
+		if self.get_HP() <= 0:
+			return True
+		else:
+			return False
 
 '''
 Defines minion cards and their functions
@@ -85,6 +94,31 @@ class Minion(Targetable):
 		self.HP = HP
 		self.EFFECT = pwr
 		self.COST = cost
+		self.SLEEP = True
+		self.TURN_COUNT = 0
+
+	'''
+	Returns the number of turns a minion has been on the field
+	'''
+	def get_Turn_Count(self):
+		return self.TURN_COUNT
+
+
+	'''
+	Returns whether or not the minion is sleeping
+	'''
+	def get_Sleep(self):
+		return self.SLEEP
+
+	'''
+	Void function which defines turn transition minion behavior
+		if a minion was asleep at the beginning of the turn it is no 
+		longer in this condition
+	'''
+	def turn_plus_plus(self):
+		self.TURN_COUNT +=1
+		if self.TURN_COUNT > 0:
+			self.SLEEP = False
 	
 
 '''
@@ -107,7 +141,7 @@ class Weapon(Targetable):
 		self.AP = ap
 		self.USE = use
 		self.EFFECT = effect
-		self.COST = COST
+		self.COST = cost
 
 	'''
 	returns the number of uses on a weapon
@@ -139,6 +173,9 @@ class HERO(Targetable):
 		else:
 			return self.AP
 
+	def fight(self):
+		fi = self.Weapon.use_weapon()
+		return fi
 
 '''
 Defines the whole AI copy of the current game in play
@@ -154,6 +191,8 @@ class Board():
 		self.MANA_MAX = Mana_Max
 		self.MY_MANA_NOW = My_Mana_Now
 		self.ENEMY_MANA_NOW = Enemy_Mana_Now
+		self.MY_TARGETS = list(self.MY_HERO)
+		self.ENEMY_TARGETS = list(self.ENEMY_HERO)
 
 	'''
 	returns the enemy hero object
@@ -186,6 +225,18 @@ class Board():
 		return self.MY_HAND
 
 	'''
+	Returns all cards which can be targetted by an enemy player
+	'''
+	def get_My_Targets(self):
+		return self.MY_TARGETS
+
+	'''
+	Returns all cards which can be targetted by me
+	'''
+	def get_My_Enemy_Targets(self):
+		return self.ENEMY_TARGETS
+
+	'''
 	a void function defining what happens when a card is played from hand to field
 	'''
 	def play_card(self, Card):
@@ -202,5 +253,67 @@ class Board():
 		#use the card effect
 		Card.use_card()
 
+	'''
+	Returns an integer indicating whether or not the game has ended.
+		The lose condition is a hero's health dropping to 0
+		Returns 1 = I win; -1 = YOU win; 0 = Game in Progress
+	'''
+	def check_loss(self):
+		if self.get_My_Hero().check_if_dead() is True:
+			return -1
+		elif self.get_My_Enemy_Hero().check_if_dead() is True:
+			return 1
+		return 0
 
+	'''
+	Function defines behaviors for when two minions engage in combat 
+		with eachother
+		Minion_1 will always be the friendly player
+		Minion_2 will always be the enemy
+	'''
+	def minion_combat(self, Minion_1, Minion_2, M_1_post, M_2_post):
+		#get the amount of DMG each minion will do
+		Minion_1_DMG = Minion_1.get_AP()
+		Minion_2_DMG = Minion_2.get_AP()
 
+		#each minion takes damage
+		Minion_1.take_damage(Minion_2_DMG)
+		Minion_2.take_damage(Minion_1_DMG)
+
+		#check if anyone is dead?
+		Minion_1_alive = Minion_1.check_if_dead()
+		Minion_2_alive = Minion_2.check_if_dead()
+
+		#remove deaddies from board
+		if not Minion_1_alive :
+			self.get_My_Minions().remove(Minion_1)
+			self.get_My_Targets().remove(Minion_1)
+		if not Minion_2_alive :
+			self.get_My_Enemy_Minions().remove(Minion_2)
+			self.get_My_Enemy_Targets().remove(Minion_2)
+		return True
+
+	'''
+	Function defines behaviors for when a minion and hero engage in combat 
+		with eachother. 
+		False indicates the Hero cannot engage in combat
+	'''
+	def hero_combat(self, Hero, Minion):
+		Hero_DMG = Hero.get_AP()
+		if Hero_DMG == 0:
+			return False
+		else:
+			Minion_DMG = Minion.get_AP()
+
+			Hero.take_damage(Minion_DMG)
+			Minion.take_damage(Hero.fight())
+
+			#check if win
+			Win = self.check_loss()
+			if Win == 0 and Minion.get_kind() is 'm':
+				#if we still fighting and the enemy minion is dead remove it from the board
+				if Minion.check_if_dead():
+					self.get_My_Enemy_Minions().remove(Minion)
+					self.get_My_Enemy_Targets().remove(Minion)
+	#if we successfully went through combat return true just so we know
+	return True
