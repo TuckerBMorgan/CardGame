@@ -45,3 +45,18 @@ Board.py
 			check_loss()<-Returns 1 = I win; -1 = YOU win; 0 = Game in Progress
 			minion_combat(Minion_1,Minion_2)<-conducts combat between two minions, Minion_1 is the friendly minion, Minion_2 is the enemy minion
 			hero_combat(Hero, Minion, Hero_att<-returns true if combat worked, returns false if the Hero cannot attack
+
+
+Eval.py
+	Description: The purpose of this file is to define the evaluation function
+	used by the agent.py file in order to rank and determine the optimal play 
+	during a given turn. Multiple evaluations are used in order to generate the total board evaluation as well as maximize the best play/set of plays for a given board state. 
+
+	imports:
+		Board.py for Card evaluations
+
+	Functions:
+		eval_monster_play_empty_board(Minion, resources)<-an evaluation function for the strength of a minion based upon it's base stats HP and AP. 
+		eval_combat(attacker, target)<-returns a tuple with each term producing a score for the attacker's survivorship with the second term relating the target's survivorship
+		eval_board(board)<-scores a given board state
+		knapsack_hand(board, my_resources)<-returns the best play with a given hand and set of resources. combined evaluation functions are used to score plays with spells as well as weapons and minions. 
