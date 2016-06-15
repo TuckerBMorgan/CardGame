@@ -6,7 +6,9 @@ Language: Python
 Author: John B. Casey <caseyjohnb@gmail.com> <github.com/caseyj>
 
 Description: The purpose of this file is to define the functions used to access
-	the current board state and return data relevant to items on the board.
+	the current board state and return data relevant to items on the board. Including
+	the basic objects which comprise a card set and functions needed to use their 
+	actions.
 
 '''
 
@@ -146,7 +148,7 @@ class Weapon(Targetable):
 	'''
 	returns the number of uses on a weapon
 	'''
-	def get_USE(self):
+	def get_Use(self):
 		return self.USE
 
 	'''
@@ -271,7 +273,7 @@ class Board():
 		Minion_1 will always be the friendly player
 		Minion_2 will always be the enemy
 	'''
-	def minion_combat(self, Minion_1, Minion_2, M_1_post, M_2_post):
+	def minion_combat(self, Minion_1, Minion_2):
 		#get the amount of DMG each minion will do
 		Minion_1_DMG = Minion_1.get_AP()
 		Minion_2_DMG = Minion_2.get_AP()
@@ -298,9 +300,9 @@ class Board():
 		with eachother. 
 		False indicates the Hero cannot engage in combat
 	'''
-	def hero_combat(self, Hero, Minion):
+	def hero_combat(self, Hero, Minion, Hero_att):
 		Hero_DMG = Hero.get_AP()
-		if Hero_DMG == 0:
+		if Hero_DMG == 0 and Hero_att is True:
 			return False
 		else:
 			Minion_DMG = Minion.get_AP()
@@ -315,5 +317,5 @@ class Board():
 				if Minion.check_if_dead():
 					self.get_My_Enemy_Minions().remove(Minion)
 					self.get_My_Enemy_Targets().remove(Minion)
-	#if we successfully went through combat return true just so we know
-	return True
+		#if we successfully went through combat return true just so we know
+		return True
