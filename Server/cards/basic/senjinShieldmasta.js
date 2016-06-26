@@ -7,12 +7,17 @@ exports.card = {
   "type": ent.MINION,
   "cost": 4,
   "baseAttack": 3,
+  "currentHealth":0,
+  "totalHealth":0,
   "baseHealth": 5,
   "set":cardTags.BASIC,
   "id":"senjinShieldmasta",
   "tags":{
     [cardTags.TAUNT]:true
-  }
+  },
+  "enchantments":[
+    
+  ]
 }
 //END_OF_CARD_DATA
 

@@ -79,5 +79,5 @@ exports.basicAttack = function (card, target, controller, state) {
 }
 
 exports.baseTakeDamage  = function (card, amount, source, state){
-    card.baseHealth += amount;
+    card.currentHealth += amount;
 }

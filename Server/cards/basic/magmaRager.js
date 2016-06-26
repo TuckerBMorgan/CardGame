@@ -9,10 +9,15 @@ exports.card = {
   "type": ent.MINION,
   "cost": 3,
   "baseAttack": 5,
+  "currenthHealth":0,
+  "totalHealth":0,
   "baseHealth": 1,
   "set":cardTags.BASIC,
   "id":"magmaRager",
-  "tags":{}
+  "tags":{},
+  "enchantments":[
+    
+  ]
 }
 //END_OF_CARD_DATA
 

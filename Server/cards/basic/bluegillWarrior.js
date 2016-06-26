@@ -7,13 +7,18 @@ exports.card = {
   "type": ent.MINION,
   "cost": 2,
   "baseAttack": 2,
+  "currentHealth":0,
+  "totalHealth":0,
   "baseHealth": 1,
   "set":cardTags.BASIC,
   "id":"bluegillWarrior",
   "tags":{
       [cardTags.CHARGE]:true,
       [cardTags.MURLOC]:true
-  }
+  },
+  "enchantments":[
+    
+  ]
 }
 //END_OF_CARD_DATA
 

@@ -39,6 +39,11 @@ exports.execute = function (rune, state) {
        useCard[element] = card[element];
    })
    
+   //not totally happy with this, but just cannot think of a better way of this
+   useCard.totalHealth = useCard.baseHealth;
+   useCard.currenthealth = useCard.baseHealth;
+   useCard.team = controller.hero;
+   
    var keys = Object.keys(state.controllers);
    
    keys.forEach(function (element) {

@@ -7,12 +7,17 @@ exports.card = {
   "type": ent.MINION,
   "cost": 6,
   "baseAttack": 4,
+  "currentHealth":0,
+  "totalHealth":0,
   "baseHealth": 7,
   "set":cardTags.BASIC,
   "id":"archmage",
   "tags" : {
     [cardTags.SPELL_DAMAGE]:1
-  }
+  },
+  "enchantments":[
+    
+  ]
 }
 //END_OF_CARD_DATA
 

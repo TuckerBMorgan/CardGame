@@ -2,7 +2,10 @@ var entities = require('./entityManager');
 var Rune = require('./RuneVM');
 
 exports.updateState = function(state)
-{
+{   
+    
+    
+    
     //Check for dead heroes
     var keys = Object.keys(state.controllers);
     
@@ -12,6 +15,7 @@ exports.updateState = function(state)
             //this person dead, we dont quite end, we still check everyone else incase of a tie
         }
     })
+    
     var redo = false;
     //Check for dead minions
     keys.forEach(function (element) {
@@ -36,6 +40,21 @@ exports.updateState = function(state)
             Rune.executeRune(element, state);
         })
     })
+    
+    var previousEnchamnets = {};
+    keys.forEach(function (element) {
+        var inPlayMinions = state.controllers[element].inPlay;
+    });
+    
+    
+    //save off current enchamnets
+    //remove current enchamnets
+    //readd enchamnets
+    //check against previous list of enchamnets
+    //do removes for ones that are no longer there
+    //do adds for new ones
+    //if there are any adds of removes we must do a redo
+    
     
     //if anyone died we have to do this whole thing again, and again, again
     if(redo == true)

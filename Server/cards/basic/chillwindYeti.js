@@ -7,10 +7,15 @@ exports.card = {
   "type": ent.MINION,
   "cost": 4,
   "baseAttack": 4,
+  "currentHealth":0,
+  "totalHealth":0,
   "baseHealth": 5,
   "set":cardTags.BASIC,
   "id":"chillwindYeti",
-  "tags":{}
+  "tags":{},
+  "enchantments":[
+    
+  ]
 }
 //END_OF_CARD_DATA
 

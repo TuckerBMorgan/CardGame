@@ -18,3 +18,4 @@ exports.POISON = "Posion";
 exports.SPELL_DAMAGE = "SpellDamage";
 exports.DRAGON  = "Dragon";
 exports.MECH = "Mech";
+exports.AURA = "Aura";

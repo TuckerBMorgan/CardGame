@@ -9,10 +9,15 @@ exports.card = {
   "type": ent.MINION,
   "cost": 7,
   "baseAttack": 7,
+  "currentHealth":0,
+  "totalHealth":0,
   "baseHealth": 7,
   "set":cardTags.BASIC,
   "id":"warGolem",
-  "tags":{}
+  "tags":{},
+  "enchantments":[
+    
+  ]
 }
 //END_OF_CARD_DATA
 

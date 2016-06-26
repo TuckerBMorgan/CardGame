@@ -8,12 +8,17 @@ exports.card = {
   "type": ent.MINION,
   "cost": 3,
   "baseAttack": 3,
+  "currenthHealth":0,
+  "totalHealth":0,
   "baseHealth": 3,
   "set":cardTags.BASIC,
   "id":"ironfurGrizzly",
   "tags":{
       [cardTags.TAUNT]:true
-  }
+  },
+  "enchantments":[
+    
+  ]
 }
 //END_OF_CARD_DATA
 

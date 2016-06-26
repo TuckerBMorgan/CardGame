@@ -9,12 +9,17 @@ exports.card = {
   "type": ent.MINION,
   "cost": 2,
   "baseAttack": 3,
+  "currentHealth":0,
+  "totalHealth":0,
   "baseHealth": 2,
   "set":cardTags.BASIC,
   "id":"bloodfenRaptor",
   "tags" : {
     [cardTags.BEAST]:true
-  }
+  },
+  "enchantments":[
+    
+  ]
 }
 //END_OF_CARD_DATA
 

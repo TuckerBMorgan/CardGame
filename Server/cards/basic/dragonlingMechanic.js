@@ -9,12 +9,17 @@ exports.card = {
   "type": ent.MINION,
   "cost": 1,
   "baseAttack": 2,
+  "currenthHealth":0,
+  "totalHealth":0,
   "baseHealth": 4,
   "set":cardTags.BASIC,
   "id":"dragonlingMechanic",
   "tags":{
       [cardTags.BATTLE_CRY]:true
-  }
+  },
+  "enchantments":[
+    
+  ]
 }
 //END_OF_CARD_DATA
 

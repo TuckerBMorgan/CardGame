@@ -9,13 +9,18 @@ exports.card = {
   "type": ent.MINION,
   "cost": 3,
   "baseAttack": 1,
+  "currentHealth":0,
+  "totalHealth":0,
   "baseHealth": 4,
   "set":cardTags.BASIC,
   "id":"silverbackPatriach",
   "tags":{
       [cardTags.TAUNT]:true,
       [cardTags.BEAST]:true
-  }
+  },
+  "enchantments":[
+    
+  ]
 }
 //END_OF_CARD_DATA
 

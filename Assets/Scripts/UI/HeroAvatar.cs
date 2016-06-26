@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class HeroAvatar : MonoBehaviour {
 
@@ -87,12 +88,28 @@ public class HeroAvatar : MonoBehaviour {
 
     public void OnPortaitClicked()
     {
-
+        //need to write in targeting system and have this work with that
     }
 
     public void OnHeroPowerClicked()
     {
-
+        if(OptionsManager.Singleton.options.ContainsKey(careAboutGuid))
+        {
+             List<Option> ops = OptionsManager.Singleton.options[careAboutGuid];
+            if(ops.Count == 1)
+            {
+                HeroPower hp = ops[0] as HeroPower;
+                if(hp.targetGuid == "-1")
+                {
+                    //This means that the hero power is a no target power IE: Hunter, Paladin, Warlock, Warrior, Rougue, Shamen
+                    OptionsManager.Singleton.PickUpOption(ops[0]);
+                }
+            }
+            else
+            {
+                //this means there are target, working on that one
+            }
+        }
     }
     
 
