@@ -1,5 +1,6 @@
 var entities = require('./entityManager');
 var Rune = require('./RuneVM');
+var Tags = require("./cards/cardTags");
 
 exports.updateState = function(state)
 {   
@@ -41,19 +42,39 @@ exports.updateState = function(state)
         })
     })
     
-    var previousEnchamnets = {};
-    keys.forEach(function (element) {
-        var inPlayMinions = state.controllers[element].inPlay;
-    });
-    
-    
+    //This is done is this way     
     //save off current enchamnets
     //remove current enchamnets
-    //readd enchamnets
+    var previousEnchamnets = {};
+    var ents = entities.returnAll();
+    ents.forEach(function (element) {
+        if(element.enchaments.length > 0)
+        {
+            previousEnchamnets[element.cardGuid] = element.enchaments;
+            element.enchaments = [];
+        }
+    })
+    
+    //apply enchamnet
+    ents.forEach(function (element) {
+        if(element.tags.indexOf(Tags.AURA)){
+            
+            var file = require("./cards/" + element.set + element.id);
+            ents.forEach(function (checkEle) {
+                if(file.filterCard(element, checkEle, null, state))
+                {
+                    checkEle["enchaments"].push(element.cardGuid);
+                }
+            })
+        }
+    })
+    
+    
     //check against previous list of enchamnets
     //do removes for ones that are no longer there
     //do adds for new ones
     //if there are any adds of removes we must do a redo
+    
     
     
     //if anyone died we have to do this whole thing again, and again, again

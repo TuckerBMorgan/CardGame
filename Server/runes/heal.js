@@ -14,4 +14,4 @@ exports.executeRune = function (rune, state) {
 
 exports.canSee = function (rune, controller, state) {
     return true;
-}
+} 

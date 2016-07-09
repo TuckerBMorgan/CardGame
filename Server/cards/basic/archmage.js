@@ -2,6 +2,7 @@ var cardFunctions = require('../cardFunctions')
 var ent = require('../../entityManager');
 var cardTags = require('../cardTags');
 
+
 //START_OF_CARD_DATA
 exports.card = {
   "type": ent.MINION,
@@ -10,6 +11,7 @@ exports.card = {
   "currentHealth":0,
   "totalHealth":0,
   "baseHealth": 7,
+  "team":-1,
   "set":cardTags.BASIC,
   "id":"archmage",
   "tags" : {

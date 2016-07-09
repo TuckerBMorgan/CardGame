@@ -55,6 +55,13 @@ exports.returnAllOfSeveralTypes = function (entityCategory) {
     return returnables;
 }
 
+exports.returnAllOfSameTeam = function (team) {
+    var returnables = [];
+    sortableEntites.forEach(function (element) {
+        
+    })
+}
+
 exports.returnAll = function(){
     return sortableEntites;
 }

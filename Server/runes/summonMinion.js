@@ -42,7 +42,7 @@ exports.execute = function (rune, state) {
    //not totally happy with this, but just cannot think of a better way of this
    useCard.totalHealth = useCard.baseHealth;
    useCard.currenthealth = useCard.baseHealth;
-   useCard.team = controller.hero;
+   useCard.team = controller.team;
    
    var keys = Object.keys(state.controllers);
    

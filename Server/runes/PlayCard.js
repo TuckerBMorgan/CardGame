@@ -36,6 +36,10 @@ exports.execute = function (rune, state) {
       "mana":controller.mana - card.cost
      }
      
+     card.totalHealth = card.baseHealth;
+     card.currentHealth = card.baseHealth;
+     card.team = controller.team;
+     
      
      var keys = Object.keys(state.controllers);
      keys.forEach(function (element) {

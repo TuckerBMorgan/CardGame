@@ -33,7 +33,7 @@ exports.takeDamage = cardFunctions.baseTakeDamage;
 
 exports.isAlive = cardFunctions.baseIsAlive;
 
-exports.filterCards = function (card, otherCard, controller, state) {
+exports.filterCard = function (card, otherCard, controller, state) {
     if(card.team == otherCard.team)
     {
         return true;
