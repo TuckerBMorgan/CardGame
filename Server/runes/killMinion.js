@@ -12,6 +12,7 @@ exports.execute = function (rune, state) {
     }       
     var index = controller.inPlay.indexOf(ent);
     controller.graveyard.push(controller.inPlay.splice(index, 1)[0]);
+    ent.state = "Dead";
 }
 
 exports.canSee = function (rune, controller, state) {

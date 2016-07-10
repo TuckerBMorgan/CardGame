@@ -17,7 +17,7 @@ public class ConflictController : MonoBehaviour {
 
     public void StartConflict(string conflictFile)
     {
-   //     controllersInGame = new List<Controller>();
+		MulliganButton.singelton.gameObject.SetActive (true);
         playArea = GetComponent<PlayArea>();
         playArea.Setup();
         string str = "{\"type\":\"newConnection\"}";

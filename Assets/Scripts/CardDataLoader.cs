@@ -25,7 +25,7 @@ public class CardDataLoader : MonoBehaviour
         public string classGroup;
     }
 
-    public const string CARDS_JSON = "Assets\\Resources\\Cards\\Cards.json";
+    public const string CARDS_JSON = "Assets/Resources/Cards/Cards.json";
 
     private Dictionary<string, CardData> cards;
 

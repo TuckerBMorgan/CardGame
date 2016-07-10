@@ -39,7 +39,7 @@ exports.execute = function (rune, state) {
      card.totalHealth = card.baseHealth;
      card.currentHealth = card.baseHealth;
      card.team = controller.team;
-     
+     card.state = "InPlay";
      
      var keys = Object.keys(state.controllers);
      keys.forEach(function (element) {

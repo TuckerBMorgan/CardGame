@@ -46,7 +46,7 @@ exports.updateState = function(state)
     //save off current enchamnets
     //remove current enchamnets
     var previousEnchamnets = {};
-    var ents = entities.returnAll();
+    var ents = entities.returnAllInPlay();
     ents.forEach(function (element) {
         if(element.enchaments.length > 0)
         {
@@ -58,7 +58,6 @@ exports.updateState = function(state)
     //apply enchamnet
     ents.forEach(function (element) {
         if(element.tags.indexOf(Tags.AURA)){
-            
             var file = require("./cards/" + element.set + element.id);
             ents.forEach(function (checkEle) {
                 if(file.filterCard(element, checkEle, null, state))
@@ -69,7 +68,55 @@ exports.updateState = function(state)
         }
     })
     
-    
+    var currentEnchamnets = {};
+    ents.forEach(function (element) {
+        if(element.enchaments.length > 0)
+        {
+            currentEnchamnets[element.cardGuid] = element.enchaments;
+        }
+    })
+    var oldKeys = Object.keys(previousEnchamnets);
+    var newKeys = Object.keys(currentEnchamnets);
+    newKeys.forEach(function(element) {
+           var enchaments = previousEnchamnets[element];
+           if(enchaments != undefined)
+           {
+               var add = [];
+               var removes = [];
+               var newEnchants = currentEnchamnets[element];
+               add = newEnchants.filter(function (newElement) {
+                   if(enchaments.indexOf(newElement) == -1){
+                       return true;
+                   }
+                   return false;
+               })
+               
+               removes = enchaments.filter(function (oldElement) {
+                   if(newEnchants.indexOf(oldElement) == -1)
+                   {
+                       return true;
+                   }
+                   return false;
+               })
+
+               removes.forEach(function(cardId) {
+                   var enchanter = entities.getEntity(cardId);
+                   var card = require('./cards/' + enchanter.set + "/" + enchanter.id);
+                   card.removeAura(enchanter, entities.getEntity(element), null, state);
+               });
+
+               add.forEach(function (cardId) {
+                   var enchanter = entities.getEntity(cardId);
+                   var card = require('./cards/' + enchanter.set + "/" + enchanter.id);
+                   card.applyAura(enchanter, entities.getEntity(element), null, state);
+               })
+           }
+           else
+           {
+               //we need to add all of the enchamnets in this case
+           }
+    });
+
     //check against previous list of enchamnets
     //do removes for ones that are no longer there
     //do adds for new ones
