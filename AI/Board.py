@@ -47,6 +47,12 @@ class CARD():
 	'''
 	def use_card(self):
 		pass
+
+	'''
+	Creates and returns a deep copy of a card used in board checking operations
+	'''
+	def clone(self):
+		pass
 '''
 Defines behaviors and features of cards whom can be targetted
 '''
@@ -96,32 +102,13 @@ class Minion(Targetable):
 		self.HP = HP
 		self.EFFECT = pwr
 		self.COST = cost
-		self.SLEEP = True
-		self.TURN_COUNT = 0
 
 	'''
-	Returns the number of turns a minion has been on the field
+	Returns a deep copy of the Minion object
 	'''
-	def get_Turn_Count(self):
-		return self.TURN_COUNT
+	def clone(self):
+		return Minion(self.AP, self.HP, self.EFFECT, self.COS)
 
-
-	'''
-	Returns whether or not the minion is sleeping
-	'''
-	def get_Sleep(self):
-		return self.SLEEP
-
-	'''
-	Void function which defines turn transition minion behavior
-		if a minion was asleep at the beginning of the turn it is no 
-		longer in this condition
-	'''
-	def turn_plus_plus(self):
-		self.TURN_COUNT +=1
-		if self.TURN_COUNT > 0:
-			self.SLEEP = False
-	
 
 '''
 defines the object and functions necessary to initialize and utilize spell cards
@@ -132,6 +119,12 @@ class Spell(CARD):
 		self.kind = 's'
 		self.EFFECT = effect
 		self.COST = cost
+
+	'''
+	Returns a deep copy of the Spell object
+	'''
+	def clone(self):
+		return Spell(self.EFFECT, self.COST)
 
 '''
 Defines the object and functions necessary to initialize and utilize weapon cards
@@ -158,14 +151,20 @@ class Weapon(Targetable):
 		self.USE -=1
 		return self.get_AP()
 
+	'''
+	Returns a deep copy of a Weapon Object
+	'''
+	def clone(self):
+		return Weapon(self.AP, self.USE, self.EFFECT, self.COST)
+
 '''
 Defines functions and objects associated with heroes
 '''
 class HERO(Targetable):
 	
-	def __init__(self, PWR):
+	def __init__(self, hp, PWR):
 		self.kind = 'h'
-		self.HP = 30
+		self.HP = hp
 		self.EFFECT = PWR
 		self.Weapon = None
 
@@ -178,6 +177,14 @@ class HERO(Targetable):
 	def fight(self):
 		fi = self.Weapon.use_weapon()
 		return fi
+
+	'''
+	Returns a deep copy of a hero
+	'''
+	def clone(self):
+		nHero = self(self.HP, self.EFFECT)
+		nHero.Weapon = self.Weapon.clone()
+		return nHero
 
 '''
 Defines the whole AI copy of the current game in play
@@ -195,6 +202,7 @@ class Board():
 		self.ENEMY_MANA_NOW = Enemy_Mana_Now
 		self.MY_TARGETS = list(self.MY_HERO)
 		self.ENEMY_TARGETS = list(self.ENEMY_HERO)
+		self.ATTACKERS= list(self.MY_MINIONS, self.MY_HERO)
 
 	'''
 	returns the enemy hero object
@@ -227,6 +235,18 @@ class Board():
 		return self.MY_HAND
 
 	'''
+	returns the ammount of mana currently available to me
+	'''
+	def get_My_Mana(self):
+		return self.MY_MANA_NOW
+
+	'''
+	returns the ammount of mana currently available to my opponent
+	'''
+	def get_Enemy_Mana(self):
+		return self.ENEMY_MANA_NOW
+
+	'''
 	Returns all cards which can be targetted by an enemy player
 	'''
 	def get_My_Targets(self):
@@ -237,6 +257,21 @@ class Board():
 	'''
 	def get_My_Enemy_Targets(self):
 		return self.ENEMY_TARGETS
+
+	'''
+	Boolean which determines if my hero can be attacked(taunts active)
+	'''
+	def check_attackable_hero(self):
+		return self.get_My_Hero() in self.get_My_Targets()
+
+	'''
+	Boolean which determines if my enemy's hero can be attacked(taunts active)
+	'''
+	def check_attackable_enemy(self):
+		return self.get_My_Enemy_Hero() in self.get_My_Enemy_Targets()
+		
+	def get_My_Attackers(self):
+		return self.ATTACKERS
 
 	'''
 	a void function defining what happens when a card is played from hand to field
@@ -286,6 +321,9 @@ class Board():
 		Minion_1_alive = Minion_1.check_if_dead()
 		Minion_2_alive = Minion_2.check_if_dead()
 
+		#remove minion from list of attackers
+		self.ATTACKERS.remove(Minion_1)
+
 		#remove deaddies from board
 		if not Minion_1_alive :
 			self.get_My_Minions().remove(Minion_1)
@@ -310,6 +348,8 @@ class Board():
 			Hero.take_damage(Minion_DMG)
 			Minion.take_damage(Hero.fight())
 
+			self.ATTACKERS.remove(Hero)
+
 			#check if win
 			Win = self.check_loss()
 			if Win == 0 and Minion.get_kind() is 'm':
@@ -319,3 +359,4 @@ class Board():
 					self.get_My_Enemy_Targets().remove(Minion)
 		#if we successfully went through combat return true just so we know
 		return True
+
