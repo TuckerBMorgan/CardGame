@@ -187,6 +187,42 @@ class HERO(Targetable):
 		return nHero
 
 '''
+Defines a group of cards and operations which can interact with multiple card objects
+'''
+class Hand():
+	def __init__(self):
+		self.GROUP = list()
+
+	'''
+	Getter for the group object, returns entire group of cards
+	'''
+	def get_Group(self):
+		return self.GROUP
+
+	'''
+	Adds a card to a particular group 
+	'''
+	def add_to_Group(self, CARD):
+		self.GROUP.append(CARD)
+
+	'''
+	Removes a card from a group 
+	'''
+	def remove_from_Group(self, CARD):
+		self.GROUP.remove(CARD)
+
+	'''
+	Deep copy of a given group of cards 
+	'''
+	def clone(self):
+		new_Hand = Hand()
+		for i in self.get_Group():
+			cpy_card = i.clone()
+			new_Hand.add_to_Group(cpy_card)
+		return new_Hand
+
+
+'''
 Defines the whole AI copy of the current game in play
 '''
 class Board():
@@ -279,14 +315,14 @@ class Board():
 	def play_card(self, Card):
 		if Card.get_kind() == 'm':
 			#add the minion to the field
-			self.MY_MINIONS.append(Card)
+			self.MY_MINIONS.add_to_Group(Card)
 		elif Card.get_kind() == 's':
 			pass
 		elif Card.get_kind() == 'w':
 			#give the hero a weapon
 			self.MY_HERO.Weapon = Card
 		#remove the card from the hand
-		self.MY_HAND.remove(Card)
+		self.MY_HAND.remove_from_Group(Card)
 		#use the card effect
 		Card.use_card()
 
@@ -322,15 +358,15 @@ class Board():
 		Minion_2_alive = Minion_2.check_if_dead()
 
 		#remove minion from list of attackers
-		self.ATTACKERS.remove(Minion_1)
+		self.ATTACKERS.remove_from_Group(Minion_1)
 
 		#remove deaddies from board
 		if not Minion_1_alive :
-			self.get_My_Minions().remove(Minion_1)
-			self.get_My_Targets().remove(Minion_1)
+			self.get_My_Minions().remove_from_Group(Minion_1)
+			self.get_My_Targets().remove_from_Group(Minion_1)
 		if not Minion_2_alive :
-			self.get_My_Enemy_Minions().remove(Minion_2)
-			self.get_My_Enemy_Targets().remove(Minion_2)
+			self.get_My_Enemy_Minions().remove_from_Group(Minion_2)
+			self.get_My_Enemy_Targets().remove_from_Group(Minion_2)
 		return True
 
 	'''
@@ -348,15 +384,28 @@ class Board():
 			Hero.take_damage(Minion_DMG)
 			Minion.take_damage(Hero.fight())
 
-			self.ATTACKERS.remove(Hero)
+			self.ATTACKERS.remove_from_Group(Hero)
 
 			#check if win
 			Win = self.check_loss()
 			if Win == 0 and Minion.get_kind() is 'm':
 				#if we still fighting and the enemy minion is dead remove it from the board
 				if Minion.check_if_dead():
-					self.get_My_Enemy_Minions().remove(Minion)
-					self.get_My_Enemy_Targets().remove(Minion)
+					self.get_My_Enemy_Minions().remove_from_Group(Minion)
+					self.get_My_Enemy_Targets().remove_from_Group(Minion)
 		#if we successfully went through combat return true just so we know
 		return True
 
+	'''
+	Defines Deep Copy operations for a given board
+	'''
+	def clone_Board(self):
+		#creates a new board with basic info, board augments come soon
+		n_Board = Board(self.get_My_Enemy_Hero().clone(), self.get_My_Hero().clone(), 
+			self.get_My_Enemy_Minions().clone(), self.get_My_Minions().clone(), 
+			self.get_My_Hand().clone(), self.MANA_MAX, 
+			self.get_My_Mana(), self.get_Enemy_Mana()
+			)
+		#shit, I need some way to access the fact that board states such as attackers and targetables have changed as has other things that cannot be directly cloned
+
+		pass
