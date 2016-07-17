@@ -20,7 +20,7 @@ exports.executeRune = function (rune, state) {
 }
 
 function procesRune(rune, state) {
-    console.log(JSON.stringify(rune));
+    console.log("Executing rune: " + JSON.stringify(rune));
     
    var eventKeys = eventsListeners[rune.runeType];
    if(eventKeys != null){

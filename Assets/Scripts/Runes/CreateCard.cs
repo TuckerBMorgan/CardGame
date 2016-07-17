@@ -22,7 +22,11 @@ public class CreateCard : Rune {
     public string cardGuid { get; set; }
     public int cost { get; set; }
     public int baseHealth { get; set; }
+    public int currentHealth { get; set; }
+    public int totalHealth { get; set; }
+    public int team { get; set; }
     public int baseAttack { get; set; }
+    public string state { get; set; }
     public string set { get; set; }
     public CardType type { get; set; }
     public EntityType entityType { get; set; }

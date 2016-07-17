@@ -9,7 +9,7 @@ exports.card = {
   "type": ent.MINION,
   "cost": 3,
   "baseAttack": 5,
-  "currenthHealth":0,
+  "currentHealth":0,
   "totalHealth":0,
   "baseHealth": 1,
   "set":cardTags.BASIC,

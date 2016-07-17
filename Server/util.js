@@ -1,6 +1,6 @@
 var fs = require('fs'); 
 var entity = require('./entityManager');
-var defaultCard = require('./cards/default')
+var defaultCard = require('./cards/cardPrototype')
 var count = 0;
 
 exports.createGuid = function () {
@@ -13,7 +13,7 @@ exports.createGuid = function () {
 exports.loadCard = function(fileName) {
       var contents =  require("./cards/" + fileName);
       var obj = JSON.parse(JSON.stringify(contents.card));
-      var def = JSON.parse(JSON.stringify(defaultCard["cardPrototype"]));
+      var def = JSON.parse(JSON.stringify(defaultCard.cardPrototype));
       
       var obKeys = Object.keys(obj);
       obKeys.forEach(function (element) {

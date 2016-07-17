@@ -1,5 +1,5 @@
+
 exports.cardPrototype = {
-    "type": ent.MINION,
   "cost": -1,
   "baseAttack": -1,
   "currentHealth":-1,
