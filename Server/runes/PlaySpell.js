@@ -3,8 +3,8 @@ var Rune = require('../RuneVM');
 
 exports.execute = function (rune, state) {
     
-    var ent = entities.getEntity(rune.cardGuid);
-    var controller  = entities.getEntity(rune.controllerGuid);
+    var ent = entities.getEntity(rune.cardGuid, state);
+    var controller  = entities.getEntity(rune.controllerGuid, state);
     
     require('../cards/' + ent.set + "/" + ent.id).spellText(rune, ent, controller, state);
     

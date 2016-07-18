@@ -4,7 +4,7 @@ var Rune = require('../RuneVM')
 
 
 exports.execute = function (rune, state) {
-        var ent = entities.getEntity(rune.source);
+        var ent = entities.getEntity(rune.source, state);
         
         var damageRune = {
             "runeType":"DamageRune",
@@ -12,7 +12,7 @@ exports.execute = function (rune, state) {
             "target":rune.target,
             "amount":ent.baseAttack
         }
-        var def = entities.getEntity(rune.target);
+        var def = entities.getEntity(rune.target, state);
         
         var damageMe = {
             "runeType":"DamageRune",

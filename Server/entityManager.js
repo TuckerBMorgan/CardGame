@@ -6,25 +6,22 @@ exports.MINION = 0;
 exports.SPELL = 1;
 exports.HERO = 2;   
 
-exports.addEntity = function (entity, entityGuid) {
-    entities[entityGuid] = entity;
-    sortableEntites.push(entity);    
+exports.addEntity = function (entity, entityGuid, state) {
+    state["entities"][entityGuid] = entity;
 }
 
-exports.removeEntity = function (entity, entityGuid) {
-    entities[entityGuid] = null;
-    var index = sortableEntites.indexOf(entity);
-    sortableEntites.splice(index, 1);
+exports.removeEntity = function (entity, entityGuid, state) {
+    state["entities"][entityGuid] = null;
 }
 
 
-exports.getEntity = function (entityGuid) {
-    return entities[entityGuid];
+exports.getEntity = function (entityGuid, state) {
+    return state["entities"][entityGuid];
 }
 
-exports.returnAllOfType = function (entityCategory) {
+exports.returnAllOfType = function (entityCategory, state) {
     var returnables = [];
-    sortableEntites.forEach(function (element) {
+    state["entities"].forEach(function (element) {
         if(element.entityType == entityCategory)
         {
             returnables.push(element);
@@ -45,9 +42,9 @@ exports.getEnemyMinions = function (controller, state) {
     return returns;
 }
 
-exports.returnAllOfSeveralTypes = function (entityCategory) {
+exports.returnAllOfSeveralTypes = function (entityCategory, state) {
     var returnables = [];
-    sortableEntites.forEach(function (element) {
+    state["entities"].forEach(function (element) {
         if(entityCategory.contains(element.entityType)){
             returnables.push(element);
         }
@@ -55,15 +52,18 @@ exports.returnAllOfSeveralTypes = function (entityCategory) {
     return returnables;
 }
 
-exports.returnAll = function(){
+exports.returnAll = function(state){
     return sortableEntites;
 }
 
-exports.returnAllInPlay =  function (){
+exports.returnAllInPlay =  function (state){
     var returnables = [];
-    sortableEntites.forEach(function (element) {
-        if(element.state == "InPlay"){
-            returnables.push(element);
+
+    var keys = Object.keys(state["entities"]);
+
+    keys.forEach(function (element) {
+        if(state["entities"][element].state == "InPlay"){
+            returnables.push(state["entities"][element]);
         }
     })
     return returnables;

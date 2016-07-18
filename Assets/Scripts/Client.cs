@@ -3,6 +3,7 @@ using System.Collections;
 using System.Net.Sockets;
 using System.Threading;
 using System.Text;
+using System.Collections.Generic;
 
 public class Client : MonoBehaviour {
     public static bool THREAD_GO = true;
@@ -11,7 +12,7 @@ public class Client : MonoBehaviour {
     private TcpClient client;
     public static Client Singelton;
 
-    public const int BUFFER_SIZE = 2000;
+    public const int BUFFER_SIZE = 5000;
     
     public void Setup()
     {
@@ -59,6 +60,7 @@ public class Reader
         buffer = new byte[Client.BUFFER_SIZE];
     }
 
+	List<char> messageBuffer = new List<char>();
     public void Tick()
     {
         while (Client.THREAD_GO)
@@ -66,25 +68,63 @@ public class Reader
             byteSize = stream.Read(buffer, 0, Client.BUFFER_SIZE);
             if(byteSize > 0)
             {
-                string message = findMessage(buffer, byteSize);
-                client.ReportMessageToMainProgram(message);
+				string str = System.Text.Encoding.Default.GetString (buffer);
+				Debug.Log (str);
+				AddToBuffer(buffer, buffer.Length);
+
             }
         }
     }
 
-    public string findMessage(byte[] array, int length)
-    {
-        StringBuilder strBuild = new StringBuilder();
+	public void AddToBuffer(byte[] array, int length)
+	{
+		for (int i = 0; i < length; i++)
+		{
+			if (array[i] != '\0')
+			{
+				messageBuffer.Add ((char)array [i]);
+			}
+		}
+		LookForMessage ();
+	}
 
-        for (int i = 0; i < length; i++)
-        {
-            if (array[i] != '\0')
-            {
-                strBuild.Append((char)array[i]);
-            }
-        }
-        return strBuild.ToString();
-    }
+	public void LookForMessage()
+	{
+		bool foundMessage = false;
+		int newLineCount = 0;
+		for (int i = 0; i < messageBuffer.Count; i++) 
+		{
+			if (messageBuffer [i] == '@') 
+			{
+				newLineCount++;
+			}
+			if (newLineCount == 2) 
+			{
+				foundMessage = true;
+				StringBuilder sb = new StringBuilder ();
+
+				for (int s = 0; s < i ; s++) 
+				{
+					sb.Append (messageBuffer [s]);
+				}
+				sb.Replace ("@", "");
+				string newMessage = sb.ToString ();
+
+				if (!string.IsNullOrEmpty (newMessage) && newMessage.Length > 3) 
+				{
+					Debug.Log (newMessage);
+					client.ReportMessageToMainProgram (newMessage);
+				}
+						
+				messageBuffer.RemoveRange (0, i);
+				break;
+			}
+		}
+		if (foundMessage == true && messageBuffer.Count > 0) 
+		{
+			LookForMessage ();
+		}
+	}
 
 }
 

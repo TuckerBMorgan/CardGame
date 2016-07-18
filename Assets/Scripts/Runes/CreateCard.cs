@@ -45,7 +45,8 @@ public class CreateCard : Rune {
         if(EntityManager.Singelton.GetEntity(cardGuid) != null)
         {
             CardAvatar ca = (EntityManager.Singelton.GetEntity(cardGuid) as Card).GetCardAvatar();
-            
+			Debug.Log (cardGuid);
+			Debug.Log (ca);
             EntityManager.Singelton.RemoveEntity(cardGuid);
             if(type == CardType.minion)
             {
@@ -69,7 +70,7 @@ public class CreateCard : Rune {
         {
             if(type == CardType.minion)
             {
-               
+			//	Debug.Log ("Did we come through here");
                 MinionCard mc = new MinionCard(); 
                 CardDataLoader.CardData cd = CardDataLoader.Singelton.GetCardData(id);
                 mc.SetCardText(cd.cardText);

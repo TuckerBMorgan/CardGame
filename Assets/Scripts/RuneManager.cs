@@ -47,7 +47,7 @@ public class RuneManager : MonoBehaviour
 
     public void ParseRuneAndExecute(string runeAsString)
     {
-        Debug.Log(runeAsString);
+     //   Debug.Log(runeAsString);
         JSONObject jsonObject = new JSONObject(runeAsString);
         string typeOfRune = jsonObject[RUNE_TYPE].str;
         if (typeOfRune != "optionRune")
@@ -59,7 +59,6 @@ public class RuneManager : MonoBehaviour
             for (int i = 0; i < jsonObject.keys.Count; i++)
             {
                 var property = type.GetProperty(jsonObject.keys[i]);
-                Debug.Log(jsonObject.keys[i]);
                 if (jsonObject.keys[i] == "runeType")
                     continue;
                 switch (jsonObject[jsonObject.keys[i]].type)
@@ -76,7 +75,7 @@ public class RuneManager : MonoBehaviour
                     case JSONObject.Type.ARRAY:
                         break;
                     default:
-                        Debug.Log("I have not done that type");
+                 //       Debug.Log("I have not done that type");
                         break;
                 }
             }

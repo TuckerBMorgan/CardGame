@@ -44,7 +44,7 @@ public class HeroAvatar : MonoBehaviour {
     public void SetHero(Rune rune, System.Action action)
     {
         NewController nc = rune as NewController;
-        string str = HERO_PORTRAIT_PATH + nc.hero + "Port";
+       // string str = HERO_PORTRAIT_PATH + nc.hero + "Port";
         
         Sprite heroPort = Resources.Load<Sprite>("HeroPortraits/hunterPort");
         Sprite heroPower = Resources.Load<Sprite>(HERO_POWER_PATH + nc.hero + "Power");

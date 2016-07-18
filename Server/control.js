@@ -310,7 +310,7 @@ exports.executeOptions = function (index, controller, state) {
             switch(useOption["option"])
             {
                 case options.ATTACK_TYPE:
-                    var entity = entities.getEntity(useOption["attackGuid"]);
+                    var entity = entities.getEntity(useOption["attackGuid"], state);
                     if(entity.type === entities.MINION)
                     {
                         var cardFile = require("./cards/" + entity.set + "/" +entity.id);

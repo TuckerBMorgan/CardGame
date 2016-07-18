@@ -46,9 +46,9 @@ exports.updateState = function(state)
     //save off current enchamnets
     //remove current enchamnets
     var previousEnchamnets = {};
-    var ents = entities.returnAllInPlay();
+    var ents = entities.returnAllInPlay(state);
     ents.forEach(function (element) {
-        if(element.enchaments.length > 0)
+        if(element["enchantments"].length > 0)
         {
             previousEnchamnets[element.cardGuid] = element.enchaments;
             element.enchaments = [];
@@ -57,7 +57,7 @@ exports.updateState = function(state)
     
     //apply enchamnet
     ents.forEach(function (element) {
-        if(element.tags.indexOf(Tags.AURA)){
+        if(element.tags[Tags.AURA] != undefined){
             var file = require("./cards/" + element.set + element.id);
             ents.forEach(function (checkEle) {
                 if(file.filterCard(element, checkEle, null, state))
@@ -70,7 +70,7 @@ exports.updateState = function(state)
     
     var currentEnchamnets = {};
     ents.forEach(function (element) {
-        if(element.enchaments.length > 0)
+        if(element["enchantments"].length > 0)
         {
             currentEnchamnets[element.cardGuid] = element.enchaments;
         }
@@ -100,15 +100,15 @@ exports.updateState = function(state)
                })
 
                removes.forEach(function(cardId) {
-                   var enchanter = entities.getEntity(cardId);
+                   var enchanter = entities.getEntity(cardId, state);
                    var card = require('./cards/' + enchanter.set + "/" + enchanter.id);
-                   card.removeAura(enchanter, entities.getEntity(element), null, state);
+                   card.removeAura(enchanter, entities.getEntity(element, state), null, state);
                });
 
                add.forEach(function (cardId) {
-                   var enchanter = entities.getEntity(cardId);
+                   var enchanter = entities.getEntity(cardId, state);
                    var card = require('./cards/' + enchanter.set + "/" + enchanter.id);
-                   card.applyAura(enchanter, entities.getEntity(element), null, state);
+                   card.applyAura(enchanter, entities.getEntity(element, state), null, state);
                })
            }
            else

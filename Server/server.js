@@ -19,7 +19,8 @@ var server = net.createServer(function(socket) {
 
 exports.sendMessage = function(message, socket)
 {
-    socket.write(message + "\n\n");
+    console.log("Outgoing message + " + message);
+    socket.write(message + "@@");
 }
 
 server.listen(4884, '127.0.0.1');

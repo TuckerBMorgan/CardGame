@@ -14,8 +14,8 @@ var tags = require('../cards/cardTags');
 exports.execute = function (rune, state) {
     
     console.log(rune.controllerGuid);
-    var controller = entity.getEntity(rune.controllerGuid);
-    var card = entity.getEntity(rune.cardGuid);
+    var controller = entity.getEntity(rune.controllerGuid, state);
+    var card = entity.getEntity(rune.cardGuid, state);
     var index = controller.hand.indexOf(card);
     controller.hand.splice(index, 1);
     
