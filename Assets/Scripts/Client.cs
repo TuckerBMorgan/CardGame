@@ -12,7 +12,7 @@ public class Client : MonoBehaviour {
     private TcpClient client;
     public static Client Singelton;
 
-    public const int BUFFER_SIZE = 5000;
+    public const int BUFFER_SIZE = 10000;
     
     public void Setup()
     {
@@ -66,27 +66,34 @@ public class Reader
         while (Client.THREAD_GO)
         {
             byteSize = stream.Read(buffer, 0, Client.BUFFER_SIZE);
-            if(byteSize > 0)
+            List<byte> word = new List<byte>();
+            string l = "";
+            for (int i = 0; i < byteSize; i++)
             {
-				string str = System.Text.Encoding.Default.GetString (buffer);
-				Debug.Log (str);
-				AddToBuffer(buffer, buffer.Length);
-
+                word.Add(buffer[i]);
+                l += (char)buffer[i];
             }
+     
+            Debug.Log(" Me" + l);
+            if (byteSize > 0)
+            {
+                AddToBuffer(buffer, buffer.Length);
+            }
+            buffer = new byte[Client.BUFFER_SIZE];
         }
     }
 
-	public void AddToBuffer(byte[] array, int length)
-	{
-		for (int i = 0; i < length; i++)
-		{
-			if (array[i] != '\0')
-			{
-				messageBuffer.Add ((char)array [i]);
-			}
-		}
-		LookForMessage ();
-	}
+    public void AddToBuffer(byte[] array, int length)
+    {
+        for (int i = 0; i < length; i++)
+        {
+            if ((char)array[i] != '\0')
+            {
+                messageBuffer.Add((char)array[i]);
+            }
+        }
+        LookForMessage();
+    }
 
 	public void LookForMessage()
 	{
@@ -112,7 +119,7 @@ public class Reader
 
 				if (!string.IsNullOrEmpty (newMessage) && newMessage.Length > 3) 
 				{
-					Debug.Log (newMessage);
+					Debug.Log ("Reporting new message " + newMessage);
 					client.ReportMessageToMainProgram (newMessage);
 				}
 						
