@@ -66,15 +66,6 @@ public class Reader
         while (Client.THREAD_GO)
         {
             byteSize = stream.Read(buffer, 0, Client.BUFFER_SIZE);
-            List<byte> word = new List<byte>();
-            string l = "";
-            for (int i = 0; i < byteSize; i++)
-            {
-                word.Add(buffer[i]);
-                l += (char)buffer[i];
-            }
-     
-            Debug.Log(" Me" + l);
             if (byteSize > 0)
             {
                 AddToBuffer(buffer, buffer.Length);
@@ -119,7 +110,6 @@ public class Reader
 
 				if (!string.IsNullOrEmpty (newMessage) && newMessage.Length > 3) 
 				{
-					Debug.Log ("Reporting new message " + newMessage);
 					client.ReportMessageToMainProgram (newMessage);
 				}
 						

@@ -1,7 +1,7 @@
 var entities = require('../entityManager');
 
 
-exports.executeRune = function(rune, state) {
+exports.execute = function(rune, state) {
         var card = entities.getEntity(rune.cardGuid, state);
         var amount = rune.amount;
         card.totalHealth += amount;

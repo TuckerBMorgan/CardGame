@@ -239,7 +239,7 @@
 					"art":"murlocScount"
 				},
 				"razorfenHunter":{
-					"cardName":"Razorfen Hunter",
+					"cardName":"Razorfen Hunter", 
 					"desc":"Someone did mess with Tuskerr once. ONCE",
 					"cardText":"<b>Battlecry:</b> Summon a 1/1 Boar",
 					"art":"razorfenHunter"
@@ -262,11 +262,23 @@
 					"cardText":"<b>Charge</b>",
 					"art":"stormwindKnight"
 				},
+				"stormwindChampion":{
+					"cardName":"Stormwind Champion",
+					"desc":"When Deathwing assaulted the capital, this soldier was the only member of his squad to survive. Now he's all butter and stuff.",
+					"cardText":"Your other minions have +1/+1",
+					"art":"stormwindChampion"
+				},
 				"warGolem":{
 					"cardName":"War Golem",
 					"desc":"Golems are not afraid, but for some reason they still run when you cast Fear on them. Instinct, maybe? A desire to blendin?",
 					"cardText":"",
 					"art":"warGolem"
+				},
+				"dalaranMage":{
+					"cardName":"Dalaran Mage",
+					"desc":"You don't see a lot of Dalaran warriors.",
+					"cardText":"<b>Spell Damage +1</b>",
+					"art":"dalaranMage"
 				}
           }
       }

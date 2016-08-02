@@ -10,7 +10,7 @@ exports.execute = function (rune, state) {
     else
     {
         //I might want this to be a function like the one above, just not sure at the moment really
-        ent.currentHealth += amount;
+        ent.currentHealth += rune.amount;
     }
 }
 

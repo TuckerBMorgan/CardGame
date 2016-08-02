@@ -278,7 +278,6 @@ public class PlayArea : MonoBehaviour
 
         if (card.GetCardType() == CardType.unknown)
         {
-			Debug.Log ("unknow card of guid " + dc.cardGuid);
             go.GetComponent<CardAvatar>().SetupBlankCard(useGuid, player.GetGuid());
         }
         else

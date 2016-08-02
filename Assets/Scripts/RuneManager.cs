@@ -47,7 +47,7 @@ public class RuneManager : MonoBehaviour
 
     public void ParseRuneAndExecute(string runeAsString)
     {
-     //   Debug.Log(runeAsString);
+        Debug.Log(runeAsString);
         JSONObject jsonObject = new JSONObject(runeAsString);
         string typeOfRune = jsonObject[RUNE_TYPE].str;
         if (typeOfRune != "optionRune")

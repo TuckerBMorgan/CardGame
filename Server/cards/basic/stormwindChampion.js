@@ -6,7 +6,7 @@ var RuneVM = require('../../RuneVM');
 //START_OF_CARD_DATA
 exports.card = {
   "type": ent.MINION,
-  "cost": 7,
+  "cost": 0,
   "baseAttack": 6,
   "currentHealth":0,
   "totalHealth":0,
@@ -34,7 +34,7 @@ exports.takeDamage = cardFunctions.baseTakeDamage;
 exports.isAlive = cardFunctions.baseIsAlive;
 
 exports.filterCard = function (card, otherCard, controller, state) {
-    if(card.team == otherCard.team)
+    if(card.team == otherCard.team && card.cardGuid != otherCard.cardGuid)
     {
         return true;
     }

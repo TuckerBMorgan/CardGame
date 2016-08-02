@@ -58,11 +58,11 @@ exports.updateState = function(state)
     //apply enchamnet
     ents.forEach(function (element) {
         if(element.tags[Tags.AURA] != undefined){
-            var file = require("./cards/" + element.set + element.id);
+            var file = require("./cards/" + element.set + "/" + element.id);
             ents.forEach(function (checkEle) {
                 if(file.filterCard(element, checkEle, null, state))
                 {
-                    checkEle["enchaments"].push(element.cardGuid);
+                    checkEle["enchantments"].push(element.cardGuid);
                 }
             })
         }
@@ -72,7 +72,7 @@ exports.updateState = function(state)
     ents.forEach(function (element) {
         if(element["enchantments"].length > 0)
         {
-            currentEnchamnets[element.cardGuid] = element.enchaments;
+            currentEnchamnets[element.cardGuid] = element["enchantments"];
         }
     })
     var oldKeys = Object.keys(previousEnchamnets);
@@ -114,6 +114,12 @@ exports.updateState = function(state)
            else
            {
                //we need to add all of the enchamnets in this case
+                var adds = currentEnchamnets[element];
+                adds.forEach(function (cardId) {
+                   var enchanter = entities.getEntity(cardId, state);
+                   var card = require('./cards/' + enchanter.set + "/" + enchanter.id);
+                   card.applyAura(enchanter, entities.getEntity(element, state), null, state);     
+                })
            }
     });
 
