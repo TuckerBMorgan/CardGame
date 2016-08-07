@@ -16,6 +16,7 @@ exports.card = {
   "desc": "desc",
   "art": "test",
   "cost": 1,
+  "team":-1,
   "baseHealth": 1,
   "baseAttack": 1,
   "set":"A SET",

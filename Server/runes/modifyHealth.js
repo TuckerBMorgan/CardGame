@@ -1,16 +1,26 @@
 var entities = require('../entityManager')
+var cardTags = require('../cards/cardTags')
 
 exports.execute = function (rune, state) {
     //this will need to be a better function later on
     var ent = entities.getEntity(rune.target, state);
-    if(rune.amount < 0)
+    if(ent.type == entities.MINION)
     {
-        require('../cards/' + ent.set  + "/" + ent.id).takeDamage(ent, rune.amount, entities.getEntity(rune.source, state));
+        if(rune.amount < 0)
+        {
+            //why does this need to be a function
+            //I guess BOLF?
+            require('../cards/' + ent.set  + "/" + ent.id).takeDamage(ent, rune.amount, entities.getEntity(rune.source, state));
+        }
+        else
+        {
+            //I might want this to be a function like the one above, just not sure at the moment really
+            ent.currentHealth += rune.amount;
+        }
     }
-    else
+    else if(ent.type == entities.HERO)
     {
-        //I might want this to be a function like the one above, just not sure at the moment really
-        ent.currentHealth += rune.amount;
+        ent.hero.health += rune.amount;
     }
 }
 
