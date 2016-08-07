@@ -8,8 +8,8 @@ exports.HERO = 2;
 
 exports.addEntity = function (entity, entityGuid) {
     entities[entityGuid] = entity;
-    sortableEntites.push(entity);    
-}
+    sortableEntites.push(entity);   
+ }
 
 exports.removeEntity = function (entity, entityGuid) {
     entities[entityGuid] = null;

@@ -26,6 +26,7 @@ exports.execute = function (rune, state) {
    card.cardGuid = rune.cardGuid;  
    card.controllerGuid = controller.guid;
    
+   //adds the card to the inPlay list in the source controller
    controller.inPlay.push(card);
      
    card.tags[tags.SUMMONING_SICKNESS] = true;
@@ -34,6 +35,8 @@ exports.execute = function (rune, state) {
    var useCard = {
        "runeType":"CreateCard",
    }
+
+   //populates the useCard rune with elements of the found card
    var cardKeys = Object.keys(card);
    cardKeys.forEach(function (element) {
        useCard[element] = card[element];
