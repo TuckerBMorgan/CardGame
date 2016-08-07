@@ -37,23 +37,6 @@ exports.returnAllOfType = function (entityCategory, state) {
     return returnables;
 }
 
-exports.returnAllAliveAndOnTeam = function(team, state)
-{
-    var returnables = [];
-    state["entities"].forEach(function(element)
-    {
-        if(element.team == team)
-        {
-            if(element.state != "dead")
-            {
-                returnables.push(element);
-            }
-        }
-    })
-    return returnables;
-}
-
-
 exports.getEnemyMinions = function (controller, state) {
     var keys = Object.keys(state.controllers);
     var returns = null;
