@@ -9,8 +9,12 @@ public class HeroAvatar : MonoBehaviour {
     public const string HERO_POWER_PATH = "HeroPowers/";
 
     public Text mana;
+    public Text health;
     public Image portrait;
     public Image heroPower;
+
+    public int currentHealth;
+    public int currentTotalHealth;
 
     public int currentMana;
     public int currentTopMana;
@@ -35,6 +39,15 @@ public class HeroAvatar : MonoBehaviour {
 
     public void OnModifyHealth(Rune rune, System.Action action)
     {
+        ModifyHealth mh = rune as ModifyHealth;
+
+        if(mh.target == careAboutGuid)
+        {
+            action();
+            return;
+        }
+
+
 
 
         action();
@@ -44,7 +57,7 @@ public class HeroAvatar : MonoBehaviour {
     public void SetHero(Rune rune, System.Action action)
     {
         NewController nc = rune as NewController;
-        string str = HERO_PORTRAIT_PATH + nc.hero + "Port";
+       // string str = HERO_PORTRAIT_PATH + nc.hero + "Port";
         
         Sprite heroPort = Resources.Load<Sprite>("HeroPortraits/hunterPort");
         Sprite heroPower = Resources.Load<Sprite>(HERO_POWER_PATH + nc.hero + "Power");

@@ -38,7 +38,7 @@ exports.execute = function(rune, state)
                 "seenCards":{}
             }
         teamCount++;
-        entity.addEntity(state.controllers[rune.guid], rune.guid);
+        entity.addEntity(state.controllers[rune.guid], rune.guid, state);
     }
     else
     {

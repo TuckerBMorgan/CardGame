@@ -152,8 +152,6 @@ public class CardAvatar : MonoBehaviour, entity
                     var Options = OptionsManager.Singleton.options[card.GetGuid()];
                     foreach(Option op in Options)
                     {
-
-                        Debug.Log("WHWY WYW");
                          
                         if(op.GetType() == typeof(PlayCardOption))
                         {
@@ -247,6 +245,11 @@ public class CardAvatar : MonoBehaviour, entity
     public string GetGuid()
     {
         return guid;
+    }
+
+    public void SetHealth(int amount)
+    {
+        healthText.GetComponent<Text>().text = amount.ToString();
     }
 
     public void ModifyHealth(int amount)

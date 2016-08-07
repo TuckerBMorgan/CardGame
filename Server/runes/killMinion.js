@@ -3,7 +3,7 @@ var cardTags = require('../cards/cardTags');
 
 exports.execute = function (rune, state) {
     var controller = state.controllers[rune.controller];
-    var ent = entity.getEntity(rune.cardGuid);
+    var ent = entity.getEntity(rune.cardGuid, state);
     
     if(ent.tags.hasOwnProperty(cardTags.DEATH_RATTLE))
     {

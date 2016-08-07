@@ -265,7 +265,7 @@ public class PlayArea : MonoBehaviour
         GameObject go = Resources.Load<GameObject>(CARD_AVATAR_PREFAB_LOCATION);
         go = GameObject.Instantiate(go);
 
-        go.name = card.GetName();
+		go.name = card.GetName() + " " + dc.cardGuid;
         if(String.IsNullOrEmpty(card.GetName()))
         {
             go.name = "UnknowCard";
@@ -274,6 +274,7 @@ public class PlayArea : MonoBehaviour
         
         
         string useGuid = Guid.NewGuid().ToString();
+
 
         if (card.GetCardType() == CardType.unknown)
         {

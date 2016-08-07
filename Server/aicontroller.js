@@ -103,7 +103,7 @@ exports.calculateMove = function(controller, options, state) {
     
     var cards = [];
     playCard.forEach(function(element){
-        cards.push(entity.getEntity(element.cardGuid));
+        cards.push(entity.getEntity(element.cardGuid, state));
     })
     
     var canPlay = cards.filter(function (element) {
