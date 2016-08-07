@@ -75,7 +75,7 @@ var deep_Copy_Controller = function(controller){
     	grave.push(controller.graveyard[i]);
     }
 
-    NC.graveyard = grave
+    NC.graveyard = grave;
     NC.seenCards = card_Copy(controller.seenCards);
 
 
