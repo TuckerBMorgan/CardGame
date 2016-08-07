@@ -6,21 +6,13 @@ exports.MINION = 0;
 exports.SPELL = 1;
 exports.HERO = 2;   
 
-<<<<<<< HEAD
-exports.addEntity = function (entity, entityGuid) {
-    entities[entityGuid] = entity;
-    sortableEntites.push(entity);   
- }
-=======
 exports.addEntity = function (entity, entityGuid, state) {
     state["entities"][entityGuid] = entity;
 }
->>>>>>> 26db5921d5ee21e373ce0842c3353c8293c204df
 
 exports.removeEntity = function (entity, entityGuid, state) {
     state["entities"][entityGuid] = null;
 }
-
 
 exports.getEntity = function (entityGuid, state) {
     return state["entities"][entityGuid];
