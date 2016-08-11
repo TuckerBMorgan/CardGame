@@ -36,6 +36,16 @@ exports.execute = function (rune, state) {
     }
 }
 
+exports.CreateRune = function (controllerGuid, cardGuid) 
+{
+    var rune = {
+        "runeType":"DealCard",
+        "controllerGuid":controllerGuid,
+        "cardGuid":cardGuid
+    }
+    return rune;
+}
+
 exports.canSee = function (rune, controller, state) {
     return true;
 }

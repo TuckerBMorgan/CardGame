@@ -45,7 +45,15 @@ exports.execute = function(rune, state)
         console.log("Something is trying to create controller with the same guid as an exsiting");
     }
 }
-
+exports.CreateRune = function (guid, controllerType, hero) {
+    var rune = {
+        "runeType":"newController",
+        "guid":guid,
+        "controllerType":controllerType,
+        "hero":hero
+    }
+    return rune;
+}
 exports.canSee = function(rune,controller, state) {
     return true;
 }

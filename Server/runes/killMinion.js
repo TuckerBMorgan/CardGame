@@ -15,6 +15,15 @@ exports.execute = function (rune, state) {
     ent.state = "Dead";
 }
 
+exports.CreateRune = function (controller, cardGuid) {
+    var rune = {
+        "runeType":"killMinion",
+        "controller":controller,
+        "cardGuid":cardGuid
+    }
+    return rune;
+}
+
 exports.canSee = function (rune, controller, state) {
     return true;
 }

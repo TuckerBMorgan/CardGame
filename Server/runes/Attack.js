@@ -27,6 +27,16 @@ exports.execute = function (rune, state) {
         
 }
 
+exports.CreateRune = function (sourceGuid, targetGuid)
+{
+    var rune = {
+        "runeType":"Attack",
+        "source":sourceGuid,
+        "target":targetGuid
+    }
+    return rune;
+}
+
 exports.canSee = function (rune, controller, state) {
     return true;
 }

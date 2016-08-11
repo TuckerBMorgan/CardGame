@@ -11,6 +11,18 @@ exports.execute = function (rune, state) {
     Rune.executeRune(modifyHealth, state);
 }
 
+exports.CreateRune = function (sourceGuid, targetGuid, amount) {
+    
+    var rune = {
+        "runeType":"damageRune",
+        "source":sourceGuid,
+        "target":targetGuid,
+        "amount":amount
+    }
+    
+    return rune;
+}
+
 exports.canSee = function (rune, controller, state) {
     return true;
 }

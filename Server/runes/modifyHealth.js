@@ -24,6 +24,17 @@ exports.execute = function (rune, state) {
     }
 }
 
+exports.CreateCard = function (target, source, amount) {
+    var rune = {
+        "runeType":"modifyHealth",
+        "target":target,
+        "source":source,
+        "amount":amount
+    }
+
+    return rune;
+}
+
 exports.canSee = function (rune, controller, state) {
     return true;
 }
