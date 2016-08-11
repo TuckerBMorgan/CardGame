@@ -98,7 +98,7 @@ exports.createOptions = function (controller, state) {
             otherList.push(element.cardGuid);
         }
     })
-    var useList;
+    var useLis = [];
     //We have atleast one taunt, we are unable to attack anyone else
     if(tauntList.length > 0)
     {
@@ -108,6 +108,8 @@ exports.createOptions = function (controller, state) {
     else
     {
         useList = otherList;
+        var controller = entities.getOtherController(me, state);
+       // useList.push(controller.guid);
     }
     
     mineInPlay.forEach(function (element) {
