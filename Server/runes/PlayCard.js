@@ -4,13 +4,6 @@ var server = require('../server');
 var cont = require('./NewController');
 var tags = require('../cards/cardTags');
 
-
-//layout of playCardRune
-//{
-//    "runeType":"PlayCard",
-//    "controllerGuid":"xxxxxxxx-xxxx-xxyx-xxxx-xxxxxxxx0xxx"
-//    "cardGuid":"xxxxxxxx-xxxx-xxyx-xxxx-xxxxxxxx0xxx"
-//}
 exports.execute = function (rune, state) {
     
     console.log(rune["controllerGuid"]);
