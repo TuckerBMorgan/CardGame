@@ -102,6 +102,9 @@ public class HeroAvatar : MonoBehaviour {
     public void OnPortaitClicked()
     {
         //need to write in targeting system and have this work with that
+
+
+
     }
 
     public void OnHeroPowerClicked()

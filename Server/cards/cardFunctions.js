@@ -57,7 +57,7 @@ exports.basicCanAttack = function(card, target, controller, state)
             return false;
         }
     }
-    if(card.tags.hsaOwnProperty(tags.SUMMONING_SICKNESS))
+    if(card.tags.hasOwnProperty(tags.SUMMONING_SICKNESS))
     {
         return false;
     }

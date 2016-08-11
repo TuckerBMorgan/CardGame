@@ -213,7 +213,7 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
         switch(cardAvatar.cardAvatarState)
         {
             case CardAvatarState.inGraveyad:
-                Debug.Log("STOP BREAKING THE GAME ASSHOLE");
+
                 break;
             case CardAvatarState.inHand:
                 if(cardAvatar.GetControllerGuid() == guid)
@@ -272,16 +272,18 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
 
     public void TargetReport(string Targetguid)
     {
-        Debug.Log("Got here");
         if (controllerState != ControllerState.targeting)
             return;
 
-        var ent = EntityManager.Singelton.GetEntity(targetingEntity) as Card;
-       
+        var ent = EntityManager.Singelton.GetEntity(targetingEntity);// as Card;
+
+        if (ent == null)
+            return;
+
         //will not work spells, or hero powers that require targets--how do, pls help
-        if (OptionsManager.Singleton.options.ContainsKey(ent.GetGuid()))
+        if (OptionsManager.Singleton.options.ContainsKey(Targetguid))
         {
-            var options = OptionsManager.Singleton.options[ent.GetGuid()];  
+            var options = OptionsManager.Singleton.options[Targetguid];  
             foreach (Option op in options)
             {
                 if (op.GetType() == typeof(AttackOption))
@@ -292,7 +294,16 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
                         OptionsManager.Singleton.PickUpOption(opA);
                         controllerState = ControllerState.waiting;
                         targetingEntity = null;
-                        ent.GetCardAvatar().cardAvatarState = CardAvatarState.inPlay;
+                        if(ent.GetType() == typeof(Card))
+                        {
+                            //    ent.GetCardAvatar().cardAvatarState = CardAvatarState.inPlay;
+                            Card card = ent as Card;
+                            card.GetCardAvatar().cardAvatarState = CardAvatarState.inPlay;
+                        }
+                        else if(ent.GetType() == typeof(Hero))
+                        {
+
+                        }
                     }
                 }
             }

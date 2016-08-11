@@ -65,10 +65,10 @@ var evaluate_player_position = function(state, player){
 *
 */
 var evaluate_position = function(state){
-    var player1 = evaluate_player_position(state, /*player1*/);
-    var player2 = evaluate_player_position(state, /*player2*/);
+    //var player1 = evaluate_player_position(state, /*player1*/);
+    //var player2 = evaluate_player_position(state, /*player2*/);
 
-    return player1 - player2;
+    //return player1 - player2;
 }
 
 var knapsackMatrix = function(state){
