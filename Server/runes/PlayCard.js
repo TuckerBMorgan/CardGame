@@ -15,7 +15,7 @@ exports.execute = function (rune, state) {
     //This minion has a battle cry 
     if(card["tags"].hasOwnProperty(tags.BATTLE_CRY))
     {
-        require('../cards/' + card["set"] + "/" + card["id"]).onBattleCry(card, controller, state);
+        require('../cards/' + card["set"] + "/" + card["id"]).onBattleCry(rune.playOption, card, controller, state);
     }
     
     controller["inPlay"].push(card);
@@ -47,12 +47,13 @@ exports.execute = function (rune, state) {
      Rune.executeRune(setMana, state);
 }
 
-exports.CreateRune = function (controllerGuid, cardGuid) {
+exports.CreateRune = function (controllerGuid, cardGuid, playOption) {
    
    var rune = {
        "runeType":"PlayCard",
        "controllerGuid":controllerGuid,
-       "cardGuid":cardGuid
+       "cardGuid":cardGuid,
+       "playOption":playOption
    }
 
    return rune;

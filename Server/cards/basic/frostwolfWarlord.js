@@ -21,7 +21,7 @@ exports.card = {
   ]
 }
 //END_OF_CARD_DATA
-exports.onBattleCry = function (card, controller, state) {
+exports.onBattleCry = function (playOption, card, controller, state) {
    
    var others = ent.returnAllAliveAndOnTeam(card.team, state);
    var modHealthRune = {

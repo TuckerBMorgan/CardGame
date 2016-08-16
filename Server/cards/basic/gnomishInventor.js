@@ -22,7 +22,7 @@ exports.card = {
 }
 //END_OF_CARD_DATA
 
-exports.onBattleCry = function (card, controller, state) {
+exports.onBattleCry = function (playOption, card, controller, state) {
     
     var deck = controller.deck;
     if(deck.length <= 0)

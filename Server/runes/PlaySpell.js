@@ -1,5 +1,6 @@
 var entities = require('../entityManager');
 var Rune = require('../RuneVM');
+var SetMana = require('./SetMana');
 
 exports.execute = function (rune, state) {
     
@@ -8,13 +9,7 @@ exports.execute = function (rune, state) {
     
     require('../cards/' + ent.set + "/" + ent.id).spellText(rune, ent, controller, state);
     
-    var setMana = {
-        "runeType":"SetMana",
-        "controllerGuid":controller.guid,
-        "mana":controller.mana - ent.cost
-    }
-    
-     Rune.executeRune(setMana, state);   
+     Rune.executeRune(SetMana.CreateRune(controllerGuid.guid, controller.mana - ent.cost, state));   
     
 }
 

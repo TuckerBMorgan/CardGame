@@ -9,7 +9,7 @@ var controllerRune = require('./runes/NewController')
 var AI = require('./aicontroller')
 var updateState = require('./updateState');
 var testDecks = require('./TestDecks/testdeck')
-
+var playCard = require('./runes/playCard')
 
 var state = {
     "controllers":{},//by guid look up of all controllers
@@ -319,14 +319,7 @@ exports.executeOptions = function (index, controller, state) {
                 break;
                 
                 case options.PLAY_CARD_TYPE:
-                
-                    var dealCard = {
-                        "runeType":"PlayCard",
-                        "cardGuid":controller.options[index].cardGuid,
-                        "controllerGuid":controller.guid
-                    }
-                    Rune.executeRune(dealCard, state);
-                    
+                    Rune.executeRune(playCard.CreateRune(controller["guid"], controller["options"][index]["cardGuid"], useOption ), state);
                 break;
                 
                 case options.PLAY_SPELL:

@@ -11,6 +11,8 @@ exports.execute = function (rune, state) {
    entity.addEntity(rune, rune.cardGuid, state);  
 }
 
+//at the moment this rune intentionaly does not have a CreateRune function
+
 exports.canSee = function (rune, controller, state) {
     return false;
 }

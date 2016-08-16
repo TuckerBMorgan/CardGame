@@ -27,7 +27,7 @@ exports.card = {
 exports.DARK_SCALE_HEAL_AMOUNT = 2;
 
 //On Battle cry Novice engineer should deal the playing character a card
-exports.onBattleCry = function (card, controller, state) {
+exports.onBattleCry = function (playOption, card, controller, state) {
     
     var inPlayOthers = controller.inPlay;
     var HealRunes = [];

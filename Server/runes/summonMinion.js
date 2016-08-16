@@ -16,15 +16,15 @@ var util = require('../util');
 
 exports.execute = function (rune, state) {
     
-   var controller = entity.getEntity(rune.controllerGuid, state);
+   var controller = entity.getEntity(rune["controllerGuid"], state);
     
-   var sourceCard = entity.getEntity(rune.sourceCardGuid, state);
+   var sourceCard = entity.getEntity(rune["controllerGuid"], state);
    
    //TODO: turn these three lines into a single function call, would just make the process
    //a little more unified 
-   var card = util.loadCard(rune.cardId);
-   card.cardGuid = rune.cardGuid;  
-   card.controllerGuid = controller.guid;
+   var card = util.loadCard(rune["cardId"]);
+   card.cardGuid = rune["cardGuid"];  
+   card.controllerGuid = controller["guid"];
    
    //adds the card to the inPlay list in the source controller
    controller.inPlay.push(card);
@@ -43,15 +43,15 @@ exports.execute = function (rune, state) {
    })
    
    //not totally happy with this, but just cannot think of a better way of this
-   useCard.totalHealth = useCard.baseHealth;
-   useCard.currentHealth = useCard.baseHealth;
-   useCard.team = controller.team;
-   useCard.state = "InPlay";
+   useCard["totalHealth"] = useCard["baseHealth"];
+   useCard["currentHealth"] = useCard["baseHealth"];
+   useCard["team"] = controller["team"];
+   useCard["state"] = "InPlay";
 
    var keys = Object.keys(state.controllers);
    
    keys.forEach(function (element) {
-        if(!(rune.cardGuid in state.controllers[element].seenCards))
+        if(!(rune["cardGuid"] in state.controllers[element].seenCards))
         {
             if(state.controllers[element].type == cont.PLAYER_CONTROLLER)
             {

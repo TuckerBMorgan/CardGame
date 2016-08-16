@@ -6,6 +6,8 @@ var ai = require("../aicontroller");
 var control = require('../control');
 var tags = require('../cards/cardTags');
 var util = require('../util');
+var DealCard = require('./DealCard')
+var SetMana = require('./SetMana');
 
 exports.execute = function (rune, state) {
     var length = state.OnTurnPlayer;
@@ -37,25 +39,19 @@ exports.execute = function (rune, state) {
     }
     
     Rune.executeRune(setBaseMana, state );
-    
-    var setMana = {
-        "runeType":"SetMana",
-        "controllerGuid":state.turnOrder[nextIndex].guid,
-        "mana":newManaLevel
-    }
+   
     state.OnTurnPlayer = nextIndex;
     
-    
-    Rune.executeRune(setMana, state);
+    Rune.executeRune(SetMana.CreateRune(state["turnOrder"][nextIndex]["guid"], newManaLevel),  state);
     
     var car = util.dealCard(state.turnOrder[nextIndex].deck);
-    console.log(car);
-    var dealcard = {
-        "runeType":"DealCard",
-        "controllerGuid":state.turnOrder[nextIndex].guid,
-        "cardGuid":car
-    }
-    Rune.executeRune(dealcard, state);
+    
+    Rune.executeRune(DealCard.CreateRune(state["turnOrder"][nextIndex]["guid"], card), state);
+}
+
+exports.CreateRune = function()
+{
+    return {"runeType":"RotateTurn"};
 }
 
 exports.canSee = function (rune, controller, state) {

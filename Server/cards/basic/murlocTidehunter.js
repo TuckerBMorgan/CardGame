@@ -27,7 +27,7 @@ exports.card = {
 exports.MURLOC_SCOUT_PATH = "basic/murlocScout";
 
 //On Battle cry Novice engineer should deal the playing character a card
-exports.onBattleCry = function (card, controller, state) {
+exports.onBattleCry = function (playOption, card, controller, state) {
     var murlocGuid = util.createGuid();
     
     var summon = {

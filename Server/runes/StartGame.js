@@ -17,6 +17,14 @@ exports.execute = function (rune, state) {
     Rune.executeRune(rotateTurn, state);
 }
 
+exports.CreateRune = function()
+{
+    var rune = {
+        "runeType":"StarGame"
+    }
+    return rune;
+}
+
 exports.canSee = function (rune, controller, state) {
     return true;
 }

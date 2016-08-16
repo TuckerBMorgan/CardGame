@@ -2,20 +2,21 @@ var cardFunctions = require('../cardFunctions')
 var ent = require('../../entityManager');
 var cardTags = require('../cardTags');
 var Rune = require('../../RuneVM');
-var util = require('../../util');
+var DamageRune = require('../../runes/damageRune');
 
 //START_OF_CARD_DATA
 exports.card = {
   "type": ent.MINION,
   "cost": 1,
-  "baseAttack": 2,
+  "baseAttack": 1,
   "currentHealth":0,
   "totalHealth":0,
-  "baseHealth": 4,
+  "baseHealth": 1,
   "set":cardTags.BASIC,
-  "id":"dragonlingMechanic",
+  "id":"elvenArcher",
   "tags":{
-      [cardTags.BATTLE_CRY]:true
+      [cardTags.BATTLE_CRY]:true,
+      [cardTags.TARGET]:true
   },
   "enchantments":[
     
@@ -23,20 +24,11 @@ exports.card = {
 }
 //END_OF_CARD_DATA
 
-exports.MECHANIC_DRAGONLING_PATH = "basic/mechanicalDragonling";
+exports.ELVEN_ARCHER_DAMAGE_AMOUNT = 1;
 
 //On Battle cry Novice engineer should deal the playing character a card
 exports.onBattleCry = function (playOption, card, controller, state) {
-    var dragonGuid = util.createGuid();
-    
-    var summon = {
-        "runeType":"SummonMinion",
-        "controllerGuid":controller.guid,
-        "sourceCardGuid":card.cardGuid,
-        "cardGuid":dragonGuid,
-        "cardId":exports.MECHANIC_DRAGONLING_PATH
-    }
-    Rune.executeRune(summon, state);
+    Rune.executeRune(DamageRune.CreateRune(card["cardGuid"], playOption["target"], exports.ELVEN_ARCHER_DAMAGE_AMOUNT, state));
 }
 
 exports.canPlay = cardFunctions.basicCanPlay

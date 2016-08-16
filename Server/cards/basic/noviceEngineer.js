@@ -24,7 +24,7 @@ exports.card = {
 //END_OF_CARD_DATA
 
 //On Battle cry Novice engineer should deal the playing character a card
-exports.onBattleCry = function (card, controller, state) {
+exports.onBattleCry = function (playOption, card, controller, state) {
     
     var deck = controller.deck;
     if(deck.length <= 0)

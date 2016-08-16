@@ -257,6 +257,15 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
         }
     }
 
+    public void OnHeroPortaitClicked(HeroAvatar heroAvatar)
+    {
+        if (controllerState == ControllerState.targeting)
+        {
+            TargetReport(heroAvatar.careAboutGuid);
+            return;
+        }
+    }
+
     public void EntityWantsToTarget(string guid)
     {
         if (!string.IsNullOrEmpty(targetingEntity) || controllerState == ControllerState.targeting)
@@ -296,7 +305,6 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
                         targetingEntity = null;
                         if(ent.GetType() == typeof(Card))
                         {
-                            //    ent.GetCardAvatar().cardAvatarState = CardAvatarState.inPlay;
                             Card card = ent as Card;
                             card.GetCardAvatar().cardAvatarState = CardAvatarState.inPlay;
                         }
