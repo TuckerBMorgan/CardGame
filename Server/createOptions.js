@@ -59,11 +59,22 @@ exports.createOptions = function (controller, state) {
             //least at the moment we have simple playcard options for minions
             if(cardFile.canPlay(element, state.controllers[controller], state))
             {
-                var option = {
-                    "option":exports.PLAY_CARD_TYPE,
-                    "cardGuid":element.cardGuid
+                if(element["tags"][tags.TARGET] == undefined)
+                {
+                    
+                    var option = {
+                        "option":exports.PLAY_CARD_TYPE,
+                        "cardGuid":element.cardGuid
+                    }
+                    options.push(option);
                 }
-                options.push(option);
+                else
+                {
+                    var battleCryTargetOptions = cardFile.GenerateOPtion(element, state.controller[Controller], state);
+                    battleCryTargetOptions.forEach(function(optionElement){
+                        options.push(optionElement);
+                    })
+                }
             }
         }
         //Spells are a little more complicated becuase they have to target, or not and as such they create their own play options

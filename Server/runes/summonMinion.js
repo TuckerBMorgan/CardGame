@@ -61,6 +61,17 @@ exports.execute = function (rune, state) {
    })
 }
 
+exports.CreateRune = function(controllerGuid, cardGuid, cardId)
+{
+    var rune = {
+        "runeType":"SummonMinion",
+        "controllerGuid":controllerGuid,
+        "cardGuid":cardGuid,
+        "cardId":cardId
+    }
+    return rune;
+}
+
 exports.canSee = function (rune, controller, state) {   
     return true;
 }
