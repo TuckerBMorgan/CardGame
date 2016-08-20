@@ -130,8 +130,11 @@ public class OptionsManager : MonoBehaviour {
                     break;
             }
         }
+    }
 
-        
+    public List<Option> GetAllOptionsWithKeys(string startKey)
+    {
+        return options[startKey];
     }
 
     public void PickUpOption(Option op)
@@ -188,6 +191,7 @@ public class EndTurn : Option
 public class PlayCardOption : Option
 {
     public string cardGuid;
+    public string targetGuid;
 }
 
 public class PlaySpellOption : Option

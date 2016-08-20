@@ -152,11 +152,19 @@ public class CardAvatar : MonoBehaviour, entity
                     var Options = OptionsManager.Singleton.options[card.GetGuid()];
                     foreach(Option op in Options)
                     {
-                         
                         if(op.GetType() == typeof(PlayCardOption))
                         {
-                            OptionsManager.Singleton.PickUpOption(op);
-                            break;
+                            if ((op as PlayCardOption).targetGuid == "-1")
+                            {
+                                OptionsManager.Singleton.PickUpOption(op);
+                                break;
+                            }
+                            else
+                            {
+                                var getcontroller = EntityManager.Singelton.GetEntity(PlayArea.Singelton.HomeGuid) as Controller;
+                                getcontroller.CardLookingForTargets(OptionsManager.Singleton.GetAllOptionsWithKeys(card.GetGuid()));
+                                
+                            }
                         }
                         else if(op.GetType() == typeof(PlaySpellOption))
                         {

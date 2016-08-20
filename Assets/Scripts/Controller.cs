@@ -11,7 +11,8 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
     public enum ControllerState
     {
         waiting,
-        targeting
+        targeting,
+        movingCard
     }
 
     protected string guid;
@@ -19,6 +20,7 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
     protected List<Card> hand;
     protected List<Card> inPlay;
     protected List<Card> graveyard;
+    protected List<Option> targetOptions;
     protected int health;
     protected string controllerName;
     protected int mana;
@@ -202,6 +204,38 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
         return hand.Contains(card);
     }
 
+    public void OnDownOnHero(HeroAvatar heroAvatar)
+    {
+
+    }
+
+    public void OnUpOnHero(HeroAvatar heroAvatar)
+    {
+
+    }
+
+    public void OnDownOnCard(CardAvatar cardAvatar)
+    {
+        if (controllerState == ControllerState.waiting)
+        {
+            if (cardAvatar.cardAvatarState == CardAvatarState.inHand)
+            {
+                cardAvatar.cardAvatarState = CardAvatarState.inTransit;
+                controllerState = ControllerState.movingCard;
+            }
+
+            return;
+        }
+    
+
+
+    }
+
+    public void OnUpOnCard(CardAvatar cardAvatar)
+    {
+
+    }
+
     public void OnCardAvatarClicked(CardAvatar cardAvatar)
     {
        
@@ -259,11 +293,28 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
 
     public void OnHeroPortaitClicked(HeroAvatar heroAvatar)
     {
-        if (controllerState == ControllerState.targeting)
+
+        if(targetOptions != null)
         {
-            TargetReport(heroAvatar.careAboutGuid);
-            return;
+            for(int i = 0;i<targetOptions.Count;i++)
+            {
+                if(targetOptions[i].GetType() == typeof(PlayCardOption))
+                {
+                    PlayCardOption pco = targetOptions[i] as PlayCardOption;
+                    if(pco.targetGuid == heroAvatar.careAboutGuid)
+                    {
+                        OptionsManager.Singleton.PickUpOption(pco);
+                        targetOptions = null;
+                        return;
+                    }
+                }
+            }
         }
+    }
+
+    public void CardLookingForTargets(List<Option> targetOptions)
+    {
+        this.targetOptions = targetOptions;
     }
 
     public void EntityWantsToTarget(string guid)
@@ -288,6 +339,23 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
 
         if (ent == null)
             return;
+
+        if(targetOptions != null)
+        {
+            for(int i = 0;i<targetOptions.Count;i++)
+            {
+                if(targetOptions[i].GetType() == typeof(PlayCardOption))
+                {
+                    PlayCardOption pco = targetOptions[i] as PlayCardOption;
+                    if(pco.targetGuid == Targetguid)
+                    {
+                        OptionsManager.Singleton.PickUpOption(pco);
+                        targetOptions = null;
+                        return;
+                    }
+                }
+            }
+        }
 
         //will not work spells, or hero powers that require targets--how do, pls help
         if (OptionsManager.Singleton.options.ContainsKey(Targetguid))

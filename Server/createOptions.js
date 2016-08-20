@@ -64,7 +64,8 @@ exports.createOptions = function (controller, state) {
                     
                     var option = {
                         "option":exports.PLAY_CARD_TYPE,
-                        "cardGuid":element.cardGuid
+                        "cardGuid":element.cardGuid,
+                        "target":-1
                     }
                     options.push(option);
                 }
@@ -90,8 +91,6 @@ exports.createOptions = function (controller, state) {
         }
     })
     
-    
-        
     //Can I attack any of the guys on there board, with the guys on my board
     var thereInPlay = them.inPlay;
     var mineInPlay = me.inPlay;
