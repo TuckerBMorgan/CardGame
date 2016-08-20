@@ -3,6 +3,7 @@ var ent = require('../../entityManager');
 var cardTags = require('../cardTags');
 var Rune = require('../../RuneVM');
 var DamageRune = require('../../runes/damageRune');
+var Options = require('../../createOptions')
 
 //START_OF_CARD_DATA
 exports.card = {
@@ -29,6 +30,25 @@ exports.ELVEN_ARCHER_DAMAGE_AMOUNT = 1;
 //On Battle cry Novice engineer should deal the playing character a card
 exports.onBattleCry = function (playOption, card, controller, state) {
     Rune.executeRune(DamageRune.CreateRune(card["cardGuid"], playOption["target"], exports.ELVEN_ARCHER_DAMAGE_AMOUNT, state));
+}
+
+exports.generateOptions = function(card, controller, state)
+{
+    var options = [];
+
+    var targets = ent.returnAllAliveAndOnTeam(controller.team == 1 ? 0 : 1, state);
+    var eneCont = ent.getOtherController(controller, state);
+
+    targets.forEach(function(element){
+        var playOption = {
+            "option":Options.PLAY_CARD_TYPE,
+            "cardGuid":card.cardGuid,
+            "target":element.cardGuid
+        }
+        options.push(playOption);
+    })
+
+    return options;
 }
 
 exports.canPlay = cardFunctions.basicCanPlay
