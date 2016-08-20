@@ -1,6 +1,8 @@
 var control = require('./control')
 var entity = require('./entityManager');
 var optionsTypes = require('./createOptions')
+var playCard = require('./runes/PlayCard')
+var ai_utilities = require('./AI_Utilities')
 
 
 /*
@@ -26,15 +28,6 @@ var MINION_card_comparator = function(card_A, card_B){
             return 1;
         }
     }
-}
-
-
-
-var hand_Sort = function(rune, state){
-    hand = state.controllers[rune.controllerGuid].hand
-    Meta_Hand; //function call here to get all GUIDs from the hand and turn them into readable cards
-    //sortcall = sort_somehow(Meta_Hand); here 
-    //return sortcall;
 }
 
 
@@ -71,14 +64,24 @@ var evaluate_position = function(state){
     //return player1 - player2;
 }
 
-var knapsackMatrix = function(state){
-    //get hand
-    //get playable cards inhand
-    //if playable > 0 
-        //2D array of states [maxMana][Cards]
-        //for i in Mana
-            //for h in cards
-                //if h can be played
+var knapsackMatrix = function(state, controller){
+    //hand sorted by mana cost
+    var proto_hand = proto_hand(controller);
+    //how big my hand is
+    var hand_size = proto_hand.length; 
+    //initialize a 2D array
+    var super_array = array(controller.mana);
+    for(int i = 0; i<hand_size; i++){
+        super_array.push(array(hand_size+1));
+    }
+    //check if we have a hand even existing, if we do then we can keep going
+    if(hand_size > 0){ 
+        for (var i = 0; i<=hand_size; i++){
+            for(var h = 0; h<controller.mana in mana){
+                if(i < 1){
+                    super_array[h][i] = 0;                
+                }
+                else{
                     //deepcpy state of [i][h-1]
                     //playcard on this deepcpy
                     //record score and board
@@ -86,8 +89,10 @@ var knapsackMatrix = function(state){
                         //store this board as [i][h]
                     //else 
                         //store [i][h-1] as [i][h]
-                //else
-                    //board at [i-1][h] is stored as [i][h]
+                }
+            }
+        }
+    }
     //return the board
 }
 

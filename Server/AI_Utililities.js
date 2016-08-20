@@ -42,6 +42,15 @@ var makeHandProto = function(guid){
 	return proto;
 }
 
+/*
+*easily creates a useable "proto-hand" which will be used to determine
+*	which cards should be played on a particular turn
+*
+*Inputs:
+	controller->a controller object with hand data
+*Outputs:
+	the proto-hand sorted by mana-costim
+*/
 var protoHand = function(controller){
 	//initialize a new array
 	var hand_set = [];
@@ -50,8 +59,12 @@ var protoHand = function(controller){
 		//create a new proto-card and add it to our "hand"
 		hand_set.push(makeHandProto(controller["hand"][i]));
 	}
+	//sorts the list by mana cost
+	hand_set.sort(function(alpha, beta){return alpha["mana"] - beta["mana"]});
+	//give us back the sorted protohand
 	return hand_set;
 }
+
 
 /**
 *Creates a deep Copy of a card so we can test some stuff with it before making a big move
@@ -137,4 +150,19 @@ var deep_Copy_Controller = function(controller){
     //give us what we want
     return NC;
 
+}
+
+/**
+*Turns two large JSON objects into strings and then compares
+*
+*Inputs:
+	va->the first JSON object we wish to compare with
+	vb->the second JSON object we wish to compare with
+*Output:
+	a boolean indicating whether the objects are equivalent.
+*/
+var compare_copies(va, vb){
+	va_string = JSON.stringify(va);
+	vb_string = JSON.stringify(vb);
+	return ((va_string.localeCompare(vb_string)) == 0);
 }
