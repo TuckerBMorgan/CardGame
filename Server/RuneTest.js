@@ -215,7 +215,11 @@ var get_hand_GUIDs = function(controller){
 	An integer array of GUIDs in the field
 */
 var get_field_GUIDs = function(controller){
-	return controller.inPlay;
+	var IDs = [];
+	for(var i = 0; i<controller.inPlay; i++){
+		IDs.push(controller.inPlay[i].id);
+	}
+	return IDs;
 }
 
 
@@ -244,7 +248,6 @@ var card_Move_Test = function(){
 	return (Card_Movement_Proof(cg1b,cg1b2, cg2b, cg2b2))
 }
 
-card_Move_Test();
 
 /**
 *Boolean returns true if damage between minions has correctly been accounted for
