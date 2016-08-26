@@ -126,8 +126,6 @@ public class CardAvatar : MonoBehaviour, entity
         //need to add in mulligna effect later
             return;
         }
-        var getcontroller = EntityManager.Singelton.GetEntity(PlayArea.Singelton.HomeGuid) as Controller;
-        getcontroller.OnCardAvatarClicked(this);
 
         return;
     }
@@ -140,63 +138,7 @@ public class CardAvatar : MonoBehaviour, entity
     //This has to be better
     public void OnMouseUpOnMesh()
     {
-        if (controllerGuid != PlayArea.Singelton.HomeGuid)
-            return;
-
-        if (cardAvatarState == CardAvatarState.inTransit)
-        {
-            if (PlayArea.Singelton.InPlayArea(transform.position))
-            {
-                if(OptionsManager.Singleton.options.ContainsKey(card.GetGuid()))
-                {
-                    var Options = OptionsManager.Singleton.options[card.GetGuid()];
-                    foreach(Option op in Options)
-                    {
-                        if(op.GetType() == typeof(PlayCardOption))
-                        {
-                            if ((op as PlayCardOption).targetGuid == "-1")
-                            {
-                                OptionsManager.Singleton.PickUpOption(op);
-                                break;
-                            }
-                            else
-                            {
-                                var getcontroller = EntityManager.Singelton.GetEntity(PlayArea.Singelton.HomeGuid) as Controller;
-                                getcontroller.CardLookingForTargets(OptionsManager.Singleton.GetAllOptionsWithKeys(card.GetGuid()));
-                                
-                            }
-                        }
-                        else if(op.GetType() == typeof(PlaySpellOption))
-                        {
-                            PlaySpellOption pso = op as PlaySpellOption;
-                            if(pso.target == "-1")
-                            {
-                                OptionsManager.Singleton.PickUpOption(op);
-                                gameObject.SetActive(false);
-                                break;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    cardAvatarState = CardAvatarState.inHand;
-                }
-            }
-            else
-            {
-                cardAvatarState = CardAvatarState.inHand;
-            }
-        }
-        if(cardAvatarState == CardAvatarState.inPlay)
-        {
-            
-            return;
-        }
-        if (cardAvatarState == CardAvatarState.waitingForTarget)
-            return;
-
-        cardAvatarState = CardAvatarState.inHand;
+     
     }
 
     public void OnCardPlay(Rune rune, System.Action action)
@@ -252,7 +194,7 @@ public class CardAvatar : MonoBehaviour, entity
 
     public string GetGuid()
     {
-        return guid;
+        return card.GetGuid();
     }
 
     public void SetHealth(int amount)

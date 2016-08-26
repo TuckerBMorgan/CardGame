@@ -37,7 +37,10 @@ var makeHandProto = function(guid){
 	//load the card into local memory
 	var card = util.loadCard(guid);
 	//take the guid and cost of the card and those are the two features of the prototype
-	proto = {guid = guid, mana = card.cost};
+	proto = {
+		 [guid]:guid,
+		 [mana]:card.cost
+		};
 	//return this object
 	return proto;
 }
@@ -55,7 +58,7 @@ var protoHand = function(controller){
 	//initialize a new array
 	var hand_set = [];
 	//loop over each card in the hand
-	for(var i = 0; i <= controller["hand"]length; i++){
+	for(var i = 0; i <= controller["hand"].length; i++){
 		//create a new proto-card and add it to our "hand"
 		hand_set.push(makeHandProto(controller["hand"][i]));
 	}
@@ -161,7 +164,7 @@ var deep_Copy_Controller = function(controller){
 *Output:
 	a boolean indicating whether the objects are equivalent.
 */
-var compare_copies(va, vb){
+function compare_copies(va, vb){
 	va_string = JSON.stringify(va);
 	vb_string = JSON.stringify(vb);
 	return ((va_string.localeCompare(vb_string)) == 0);

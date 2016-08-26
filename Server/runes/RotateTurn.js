@@ -46,7 +46,7 @@ exports.execute = function (rune, state) {
     
     var car = util.dealCard(state.turnOrder[nextIndex].deck);
     
-    Rune.executeRune(DealCard.CreateRune(state["turnOrder"][nextIndex]["guid"], card), state);
+    Rune.executeRune(DealCard.CreateRune(state["turnOrder"][nextIndex]["guid"], car), state);
 }
 
 exports.CreateRune = function()

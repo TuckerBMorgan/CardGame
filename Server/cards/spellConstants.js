@@ -1,1 +1,1 @@
-exports.NO_TARGET = -1;
+exports.NO_TARGET = "-1";

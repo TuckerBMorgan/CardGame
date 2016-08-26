@@ -2,7 +2,7 @@ var control = require('./control')
 var entity = require('./entityManager');
 var optionsTypes = require('./createOptions')
 var playCard = require('./runes/PlayCard')
-var ai_utilities = require('./AI_Utilities')
+var ai_utilities = require('./AI_Utililities')
 
 
 /*
@@ -71,9 +71,12 @@ var knapsackMatrix = function(state, controller){
     var hand_size = proto_hand.length; 
     //initialize a 2D array
     var super_array = array(controller.mana);
+    /*
     for(int i = 0; i<hand_size; i++){
         super_array.push(array(hand_size+1));
-    }
+   
+     }
+     
     //check if we have a hand even existing, if we do then we can keep going
     if(hand_size > 0){ 
         for (var i = 0; i<=hand_size; i++){
@@ -94,6 +97,7 @@ var knapsackMatrix = function(state, controller){
         }
     }
     //return the board
+    */
 }
 
 

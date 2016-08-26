@@ -65,13 +65,13 @@ exports.createOptions = function (controller, state) {
                     var option = {
                         "option":exports.PLAY_CARD_TYPE,
                         "cardGuid":element.cardGuid,
-                        "target":-1
+                        "target":"-1"
                     }
                     options.push(option);
                 }
                 else
                 {
-                    var battleCryTargetOptions = cardFile.GenerateOPtion(element, state.controller[Controller], state);
+                    var battleCryTargetOptions = cardFile.generateOptions(element, state.controllers[controller], state);
                     battleCryTargetOptions.forEach(function(optionElement){
                         options.push(optionElement);
                     })

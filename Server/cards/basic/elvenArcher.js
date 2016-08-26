@@ -36,8 +36,10 @@ exports.generateOptions = function(card, controller, state)
 {
     var options = [];
 
-    var targets = ent.returnAllAliveAndOnTeam(controller.team == 1 ? 0 : 1, state);
+    var targets = ent.returnAllAlive(state);
     var eneCont = ent.getOtherController(controller, state);
+    console.log(targets.length);
+
 
     targets.forEach(function(element){
         var playOption = {
@@ -47,7 +49,6 @@ exports.generateOptions = function(card, controller, state)
         }
         options.push(playOption);
     })
-
     return options;
 }
 

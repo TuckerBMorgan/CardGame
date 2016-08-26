@@ -29,14 +29,41 @@ exports.returnAllOfType = function (entityCategory, state) {
     return returnables;
 }
 
+exports.returnAllAlive = function(state)
+{
+    var returnables = [];
+
+    var keys = Object.keys(state["entities"]);
+
+    keys.forEach(function(element)
+    {
+        if(state["entities"][element]["state"] == "InPlay")
+        {
+            returnables.push(state["entities"][element]);
+        }
+    })
+    
+    keys = Object.keys(state["controllers"]);
+
+    keys.forEach(function(element)
+    {
+       // returnables.push(state["controllers"][element]);
+    })
+
+    return returnables;
+}
+
 exports.returnAllAliveAndOnTeam = function(team, state)
 {
     var returnables = [];
-    state["entities"].forEach(function(element)
+    
+    var keys = Object.keys(state["entities"]);
+
+    keys.forEach(function(element)
     {
-        if(element.team == team)
+        if(state["entities"][element]["team"] == team)
         {
-            if(element.state != "dead")
+            if(state["entities"][element][state] != "InPlay")
             {
                 returnables.push(element);
             }

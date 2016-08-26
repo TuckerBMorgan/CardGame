@@ -27,6 +27,7 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
     protected int baseMana;
     public ControllerState controllerState;
     protected string targetingEntity;
+    private CardAvatar careAboutCard;
     
 
     public void Setup()
@@ -41,6 +42,202 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
 
     public abstract void StartTurn();
     public abstract void EndTurn();
+
+    void Update()
+    {
+        CheckForBoardClick();
+    }
+
+    private void CheckForBoardClick()
+    {
+        if (!PlayArea.Singelton.GetGameStart())
+            return;
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (controllerState == ControllerState.waiting)
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit rch;
+                if (Physics.Raycast(ray, out rch, 1000000))
+                {
+                    GameObject go = rch.collider.gameObject;
+                    if (go.tag == "Card")
+                    {
+                        CardAvatar ca = go.GetComponentInParent<CardAvatar>();
+                        if (ca.cardAvatarState == CardAvatarState.inHand)
+                        {
+                            if (ca.GetControllerGuid() == guid)
+                            {
+                                ca.cardAvatarState = CardAvatarState.inTransit;
+                                careAboutCard = ca;
+                                controllerState = ControllerState.movingCard;
+                            }
+                        }
+                    }
+                    else if (go.tag == "Hero")
+                    {
+
+                    }
+
+                }
+            }
+            else if (controllerState == ControllerState.targeting)
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit rch;
+                if (Physics.Raycast(ray, out rch, 1000000))
+                {
+                    GameObject go = rch.collider.gameObject;
+                    if (go.tag == "Card")
+                    {
+                        CardAvatar ca = go.GetComponentInParent<CardAvatar>();
+
+                        if (ca.cardAvatarState == CardAvatarState.inPlay)
+                        {
+                            string cardGuid = ca.GetGuid();
+                            foreach (Option op in targetOptions)
+                            {
+                                if ((op as PlayCardOption).targetGuid == cardGuid)
+                                {
+                                    targetOptions = null;
+                                    careAboutCard = null;
+                                    controllerState = ControllerState.waiting;
+                                    OptionsManager.Singleton.PickUpOption(op);
+                                    return;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            //this would be for spells or something similar I think   
+                        }
+
+                    }
+                    else if (go.tag == "Hero")
+                    {
+
+                    }
+                }
+            }
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            if (careAboutCard != null)
+            {
+                if (controllerState == ControllerState.movingCard)
+                {
+                    if (PlayArea.Singelton.InPlayArea(careAboutCard.transform.position))
+                    {
+                        if (OptionsManager.Singleton.options.ContainsKey(careAboutCard.GetGuid()))
+                        {
+                            var options = OptionsManager.Singleton.options[careAboutCard.GetGuid()];
+                            foreach (Option op in options)
+                            {
+                                if (op.GetType() == typeof(PlayCardOption))
+                                {
+                                    if ((op as PlayCardOption).targetGuid == "-1")
+                                    {
+                                        OptionsManager.Singleton.PickUpOption(op);
+                                        careAboutCard.cardAvatarState = CardAvatarState.inPlay;
+                                        controllerState = ControllerState.waiting;
+                                        careAboutCard = null;
+                                        return;
+                                    }
+                                    else
+                                    {
+                                        CardLookingForTargets(options);
+                                        controllerState = ControllerState.targeting;
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            careAboutCard.cardAvatarState = CardAvatarState.inHand;
+                            careAboutCard = null;
+                        }
+                    }
+                    else
+                    {
+                        careAboutCard.cardAvatarState = CardAvatarState.inHand;
+                        careAboutCard = null;
+                    }
+                }
+                else if (controllerState == ControllerState.targeting)
+                {
+                    if (careAboutCard != null)
+                    {
+                        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                        RaycastHit rch;
+                        if (Physics.Raycast(ray, out rch, 10000000))
+                        {
+                            string targetGuid = "";
+
+                            if (rch.collider.gameObject.tag == "Card")
+                            {
+                                targetGuid = rch.collider.gameObject.GetComponentInParent<CardAvatar>().GetGuid();
+                            }
+                            else if (rch.collider.gameObject.tag == "Hero")
+                            {
+                                targetGuid = rch.collider.gameObject.GetComponentInParent<HeroAvatar>().careAboutGuid;
+                            }
+
+                            if (careAboutCard.cardAvatarState == CardAvatarState.inHand)
+                            {
+                                if (targetOptions != null)
+                                {
+                                    foreach (Option op in targetOptions)
+                                    {
+                                        if (op.GetType() == typeof(PlayCardOption))
+                                        {
+                                            if ((op as PlayCardOption).targetGuid == targetGuid)
+                                            {
+                                                OptionsManager.Singleton.PickUpOption(op);
+                                                careAboutCard = null;
+                                                targetOptions = null;
+                                                controllerState = ControllerState.waiting;
+                                            }
+                                        }
+                                        else if (op.GetType() == typeof(PlaySpellOption))
+                                        {
+                                            //this might be folded up into the PlayCardOptions
+                                        }
+                                    }
+                                }
+                            }
+                            else if (careAboutCard.cardAvatarState == CardAvatarState.inPlay)
+                            {
+                                if (targetOptions != null)
+                                {
+                                    foreach (Option op in targetOptions)
+                                    {
+                                        if ((op as AttackOption).defenderGuid == targetGuid)
+                                        {
+                                            OptionsManager.Singleton.PickUpOption(op);
+                                            careAboutCard = null;
+                                            targetOptions = null;
+                                            controllerState = ControllerState.waiting;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else if (Input.GetMouseButtonDown(1))
+        {
+
+        }
+        else if (Input.GetMouseButtonUp(1))
+        {
+
+        }
+    }
+
 
     public void SetGuid(string guid)
     {
@@ -202,38 +399,6 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
     public bool IsIsHand(Card card)
     {
         return hand.Contains(card);
-    }
-
-    public void OnDownOnHero(HeroAvatar heroAvatar)
-    {
-
-    }
-
-    public void OnUpOnHero(HeroAvatar heroAvatar)
-    {
-
-    }
-
-    public void OnDownOnCard(CardAvatar cardAvatar)
-    {
-        if (controllerState == ControllerState.waiting)
-        {
-            if (cardAvatar.cardAvatarState == CardAvatarState.inHand)
-            {
-                cardAvatar.cardAvatarState = CardAvatarState.inTransit;
-                controllerState = ControllerState.movingCard;
-            }
-
-            return;
-        }
-    
-
-
-    }
-
-    public void OnUpOnCard(CardAvatar cardAvatar)
-    {
-
     }
 
     public void OnCardAvatarClicked(CardAvatar cardAvatar)

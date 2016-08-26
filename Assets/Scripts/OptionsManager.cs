@@ -82,6 +82,7 @@ public class OptionsManager : MonoBehaviour {
                     PlayCardOption pc = new PlayCardOption();
                     pc.n = count;
                     pc.cardGuid = j["cardGuid"].str;
+                    pc.targetGuid = j["target"].str;
 
                     count++;
                     if(!options.ContainsKey(pc.cardGuid))
