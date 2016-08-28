@@ -6,7 +6,6 @@ exports.updateState = function(state)
 {   
     
     
-    
     //Check for dead heroes
     var keys = Object.keys(state.controllers);
     

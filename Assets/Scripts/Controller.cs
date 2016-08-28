@@ -100,9 +100,10 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
                             {
                                 if ((op as PlayCardOption).targetGuid == cardGuid)
                                 {
+                                    controllerState = ControllerState.waiting;
+                                    careAboutCard.cardAvatarState = CardAvatarState.inPlay;
                                     targetOptions = null;
                                     careAboutCard = null;
-                                    controllerState = ControllerState.waiting;
                                     OptionsManager.Singleton.PickUpOption(op);
                                     return;
                                 }
@@ -147,6 +148,7 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
                                     else
                                     {
                                         CardLookingForTargets(options);
+                                        careAboutCard.cardAvatarState = CardAvatarState.waitingForTarget;
                                         controllerState = ControllerState.targeting;
                                         return;
                                     }
@@ -223,6 +225,13 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
                                     }
                                 }
                             }
+                        }
+                        else
+                        {
+                            careAboutCard.cardAvatarState = CardAvatarState.inHand;
+                            careAboutCard = null;
+                            targetOptions = null;
+                            controllerState = ControllerState.waiting;
                         }
                     }
                 }

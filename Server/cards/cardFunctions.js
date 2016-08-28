@@ -27,7 +27,7 @@ exports.basicCanPlay = function (card, controller, state) {
 }
 
 exports.baseIsAlive = function (card, controller, state) {
-    return card.baseHealth > 0;
+    return card.currentHealth > 0;
 }
 
 //Why must evertyhing BREAK EVERYTHING

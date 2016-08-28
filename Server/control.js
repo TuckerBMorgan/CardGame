@@ -10,6 +10,7 @@ var AI = require('./aicontroller')
 var updateState = require('./updateState');
 var testDecks = require('./TestDecks/testdeck')
 var playCard = require('./runes/playCard')
+var SetHeroHealth = require("./runes/SetHeroHealth");
 
 var state = {
     "controllers":{},//by guid look up of all controllers
@@ -433,6 +434,13 @@ function bootstrap(state) {
                 server.sendMessage(JSON.stringify(sec), state.controllers[element].socket);          
             }
         })
+    })
+
+
+    keys.forEach(function(element){
+        var hero = state["controllers"][element]["hero"];
+        console.log(hero);
+        Rune.executeRune(SetHeroHealth.CreateCard(element, hero["baseHealth"]), state);
     })
 }
 

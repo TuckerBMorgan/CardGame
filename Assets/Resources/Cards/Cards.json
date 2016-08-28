@@ -283,8 +283,14 @@
 				"elvenArcher":{
 					"cardName":"Elven Archer",
 					"desc":"Don't bother asking her out on a date/ She'll shoot you down.",
-					"cardText":"<b>Battlecry<b>: Deal 1 Damage.",
+					"cardText":"<b>Battlecry</b>: Deal 1 Damage.",
 					"art":"elevenArcher"
+				},
+				"nightBlade":{
+					"cardName":"Nightblade",
+					"desc":"Your face is the place you'd probably least like a dagger, and where rogues are most likely to deliver them.",
+					"cardText":"<b>Battlecry</b>: Deal 3 damage to the enemy hero.",
+					"art":"nightblade"
 				}
           }
       }

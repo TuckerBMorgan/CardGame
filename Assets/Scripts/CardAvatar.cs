@@ -50,7 +50,7 @@ public class CardAvatar : MonoBehaviour, entity
         textOfCard = new List<Text>(GetComponentsInChildren<Text>());
         
     }
-
+    
     public void Setup(Card card, string guid, string playerGuid)
     {
         Front.SetActive(true);

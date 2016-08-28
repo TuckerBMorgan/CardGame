@@ -39,7 +39,7 @@ exports.execute = function(rune, state)
             }
         teamCount++;
         entity.addEntity(state.controllers[rune.guid], rune.guid, state);
-    }
+   }
     else
     {
         console.log("Something is trying to create controller with the same guid as an exsiting");

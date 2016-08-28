@@ -3,7 +3,8 @@ var heroUtil = require("../heroUtil");
 
 exports.hero = {
     "name":"Hunter",
-    "health":heroUtil.BASE_HERO_HEALTH,
+    "baseHealth":heroUtil.BASE_HERO_HEALTH,
+    "health":0,
     "mana": 0,
     "type":entity.HERO,
     "power":{

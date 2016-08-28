@@ -27,6 +27,7 @@ public class HeroAvatar : MonoBehaviour {
 	void Start () {
 
         RuneManager.Singelton.AddListener(typeof(NewController), SetHero);
+        RuneManager.Singelton.AddListener(typeof(SetHeroHealth), OnSetHeroHealth);
         RuneManager.Singelton.AddListener(typeof(SetBaseMana), OnSetBaseMana);
         RuneManager.Singelton.AddListener(typeof(SetMana), OnSetMana);
         RuneManager.Singelton.AddListener(typeof(ModifyHealth), OnModifyHealth);
@@ -48,8 +49,24 @@ public class HeroAvatar : MonoBehaviour {
         }
 
 
+        int currentHealth = int.Parse(health.text);
+        currentHealth += mh.amount;
+        health.text = currentHealth.ToString();
 
+        action();
+    }
 
+    public void OnSetHeroHealth(Rune rune, System.Action action)
+    {
+        SetHeroHealth shh = rune as SetHeroHealth;
+
+        if (shh.heroGuid != careAboutGuid)
+        {
+            action();
+            return;
+        }
+
+        health.text = shh.health.ToString();
         action();
     }
 

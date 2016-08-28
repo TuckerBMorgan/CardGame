@@ -3,20 +3,14 @@ var ent = require('../../entityManager');
 var cardTags = require('../cardTags');
 var RuneVM = require('../../RuneVM');
 
-var ModifyAttack = require('../../runes/ModifyAttack');
-var ModifyHealth = require('../../runes/ModifyHealth');
-
-var SetHealth = require('../../runes/SetHealth');
-var SetAttack = require('../../runes/SetAttack');
-
 //START_OF_CARD_DATA
 exports.card = {
   "type": ent.MINION,
-  "cost": 0,
-  "baseAttack": 6,
+  "cost": 3,
+  "baseAttack": 2,
   "currentHealth":0,
   "totalHealth":0,
-  "baseHealth": 6,
+  "baseHealth": 2,
   "set":cardTags.BASIC,
   "id":"stormwindChampion",
   "tags":{

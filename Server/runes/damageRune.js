@@ -14,7 +14,7 @@ exports.execute = function (rune, state) {
 exports.CreateRune = function (sourceGuid, targetGuid, amount) {
     
     var rune = {
-        "runeType":"damageRune",
+        "runeType":"DamageRune",
         "source":sourceGuid,
         "target":targetGuid,
         "amount":amount

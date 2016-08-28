@@ -38,7 +38,6 @@ exports.generateOptions = function(card, controller, state)
 
     var targets = ent.returnAllAlive(state);
     var eneCont = ent.getOtherController(controller, state);
-    console.log(targets.length);
 
 
     targets.forEach(function(element){

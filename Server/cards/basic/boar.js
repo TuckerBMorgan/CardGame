@@ -7,7 +7,7 @@ var util = require('../../util');
 //START_OF_CARD_DATA
 exports.card = {
   "type": ent.MINION,
-  "cost": 0,
+  "cost": 1,
   "baseAttack": 1,
   "currentHealth":0,
   "totalHealth":0,
