@@ -5,6 +5,10 @@ exports.execute = function(rune, state) {
         var card = entities.getEntity(rune["cardGuid"], state);
         var amount = rune["amount"];
         card["totalHealth"] += amount;
+        if(card["currentHealth"] > card["totalHealth"])
+        {
+            card["currentHealth"] = card["totalHealth"];
+        }
 }
 
 exports.CreateRune = function(cardGuid, amount)
