@@ -7,7 +7,7 @@ exports.execute = function(rune, state) {
         card["totalHealth"] += amount;
 }
 
-exports.CreateCard = function(cardGuid, amount)
+exports.CreateRune = function(cardGuid, amount)
 {
     var rune = {
         "runeType":"SetHealth",

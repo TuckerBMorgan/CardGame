@@ -1,8 +1,6 @@
 var cardFunctions = require('../cardFunctions')
 var ent = require('../../entityManager');
 var cardTags = require('../cardTags');
-var Rune = require('../../RuneVM');
-var util = require('../../util');
 
 //START_OF_CARD_DATA
 exports.card = {

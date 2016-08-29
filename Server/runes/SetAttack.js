@@ -7,11 +7,11 @@ exports.execute = function(rune, state) {
         card["totalAttack"] += amount;
 }
 
-exports.CreateCard = function(cardGuid, amount)
+exports.CreateRune = function(targetGuid, amount)
 {
     var rune = {
         "runeType":"SetAttack",
-        "cardGuid":cardGuid,
+        "cardGuid":targetGuid,
         "amount":amount
     }
     

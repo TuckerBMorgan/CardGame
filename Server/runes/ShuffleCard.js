@@ -20,7 +20,7 @@ exports.execute = function (rune, state) {
     })  
 }
 
-exports.CreateCard = function(controllerGuid, cardGuid)
+exports.CreateRune = function(controllerGuid, cardGuid)
 {
     var rune = {
         "runeType":"ShuffleCard",

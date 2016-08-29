@@ -6,7 +6,7 @@ exports.execute = function(rune, state) {
        controller.hero.health = rune.health;
 }
 
-exports.CreateCard = function(heroGuid, health)
+exports.CreateRune = function(heroGuid, health)
 {
     var rune = {
         "runeType":"SetHeroHealth",

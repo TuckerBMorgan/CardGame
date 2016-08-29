@@ -20,7 +20,6 @@ exports.card = {
   "set":cardTags.BASIC,
   "id":"stormwindChampion",
   "tags":{
-      [cardTags.CHARGE]:true,
       [cardTags.AURA]:true
   },
   "enchantments":[
@@ -47,35 +46,22 @@ exports.filterCard = function (card, otherCard, controller, state) {
     return false;
 }
 
-exports.STORMWIND_AURA_TOP_HEALTH_AMOUNT = 1;
+
+exports.STORMWIND_AURA_HEALTH_BUFF_AMOUNT = 1;
+
+exports.STORMWIND_AURA_ATTACK_BUFF_AMOUNT = 1;
 
 exports.applyAura = function (card, otherCard, controller, state) {
-    var setHealthRune = {
-        "runeType":"SetHealth",
-        "cardGuid":otherCard.cardGuid,
-        "amount":exports.STORMWIND_AURA_TOP_HEALTH_AMOUNT,
-    }
-    
-    var modifyHealthRune = {
-        "runeType":"ModifyHealth",
-        "source":card.cardGuid,
-        "target":otherCard.cardGuid,
-        "amount":exports.STORMWIND_AURA_TOP_HEALTH_AMOUNT = 1
-    }
-    
-    RuneVM.executeRune(setHealthRune, state);
-    
-    RuneVM.executeRune(modifyHealthRune, state);
+
+    RuneVM.executeRune(SetHealth.CreateRune(otherCard.cardGuid, exports.STORMWIND_AURA_HEALTH_BUFF_AMOUNT), state);
+    RuneVM.executeRune(ModifyHealth.CreateRune(otherCard.cardGuid, card.cardGuid, exports.STORMWIND_AURA_HEALTH_BUFF_AMOUNT), state);
+
+    RuneVM.executeRune(SetAttack.CreateRune(otherCard.cardGuid, exports.STORMWIND_AURA_ATTACK_BUFF_AMOUNT), state);
+    RuneVM.executeRune(ModifyAttack.CreateRune(otherCard.cardGuid, card.cardGuid, exports.STORMWIND_AURA_ATTACK_BUFF_AMOUNT), state);
+
 }
 
-
 exports.removeAura = function (card, otherCard, controller, state) {
-    
-    var setHealthRune = {
-        "runeType":"SetHealth",
-        "cardGuid":otherCard.cardGuid,
-        "amount":-exports.STORMWIND_AURA_TOP_HEALTH_AMOUNT
-    }
-           
-    RuneVM.executeRune(setHealthRune, state);
+    RuneVM.executeRune(SetHealth.CreateRune(otherCard.cardGuid, -exports.STORMWIND_AURA_HEALTH_BUFF_AMOUNT), state);
+    RuneVM.executeRune(SetAttack.CreateRune(otherCard.cardGuid, -exports.STORMWIND_AURA_ATTACK_BUFF_AMOUNT), state);
 }

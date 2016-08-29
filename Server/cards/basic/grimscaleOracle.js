@@ -9,19 +9,15 @@ var SetAttack = require('../../runes/SetAttack');
 //START_OF_CARD_DATA
 exports.card = {
   "type": ent.MINION,
-  "cost": 3,
-  "baseAttack": 2,
-  "currentHealth":0,
-  "totalHealth":0,
-  "baseHealth": 2,
+  "cost": 1,
+  "baseAttack": 1,
+  "baseHealth": 1,
   "set":cardTags.BASIC,
-  "id":"raidLeader",
+  "id":"grimscaleOracle",
   "tags":{
-      [cardTags.AURA]:true
-  },
-  "enchantments":[
-    
-  ]
+      [cardTags.AURA]:true,
+      [cardTags.MURLOC]:true
+  }
 }
 //END_OF_CARD_DATA
 
@@ -36,7 +32,7 @@ exports.takeDamage = cardFunctions.baseTakeDamage;
 exports.isAlive = cardFunctions.baseIsAlive;
 
 exports.filterCard = function (card, otherCard, controller, state) {
-    if(card.team == otherCard.team && card.cardGuid != otherCard.cardGuid)
+    if(card.cardGuid != otherCard.cardGuid && card.tags[cardTags.MURLOC] != undefined)
     {
         return true;
     }

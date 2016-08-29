@@ -440,7 +440,7 @@ function bootstrap(state) {
     keys.forEach(function(element){
         var hero = state["controllers"][element]["hero"];
         console.log(hero);
-        Rune.executeRune(SetHeroHealth.CreateCard(element, hero["baseHealth"]), state);
+        Rune.executeRune(SetHeroHealth.CreateRune(element, hero["baseHealth"]), state);
     })
 }
 

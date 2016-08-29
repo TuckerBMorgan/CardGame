@@ -13,7 +13,7 @@ exports.execute = function (rune, state) {
     }
 }
 
-exports.CreateCard = function (target, source, amount) {
+exports.CreateRune = function (target, source, amount) {
     var rune = {
         "runeType":"ModifyAttack",
         "target":target,

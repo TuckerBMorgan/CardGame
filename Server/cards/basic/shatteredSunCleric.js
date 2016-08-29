@@ -8,28 +8,24 @@ var Options = require('../../createOptions')
 //START_OF_CARD_DATA
 exports.card = {
   "type": ent.MINION,
-  "cost": 1,
-  "baseAttack": 1,
-  "currentHealth":0,
-  "totalHealth":0,
-  "baseHealth": 1,
+  "cost": 3,
+  "baseAttack": 2,
+  "baseHealth": 2,
   "set":cardTags.BASIC,
-  "id":"elvenArcher",
+  "id":"shatteredSunCleric",
   "tags":{
       [cardTags.BATTLE_CRY]:true,
       [cardTags.TARGET]:true
-  },
-  "enchantments":[
-    
-  ]
+  }
 }
 //END_OF_CARD_DATA
 
-exports.ELVEN_ARCHER_DAMAGE_AMOUNT = 1;
+exports.SUN_CLERIC_ATTACK_BUFF_AMOUNT = 1;
+exports.SUN_CLERIC_HEALTH_BUFF_AMOUNT = 1;
 
 //On Battle cry Novice engineer should deal the playing character a card
 exports.onBattleCry = function (playOption, card, controller, state) {
-    Rune.executeRune(DamageRune.CreateRune(card["cardGuid"], playOption["target"], exports.ELVEN_ARCHER_DAMAGE_AMOUNT, state));
+    Rune.executeRune(DamageRune.CreateRune(card["cardGuid"], playOption["target"], exports.IRON_FORGE_DAMAGE_AMOUNT, state));
 }
 
 exports.generateOptions = function(card, controller, state)

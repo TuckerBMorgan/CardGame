@@ -2,19 +2,19 @@ var cardFunctions = require('../cardFunctions')
 var ent = require('../../entityManager');
 var cardTags = require('../cardTags');
 var Rune = require('../../RuneVM');
-var DamageRune = require('../../runes/damageRune');
+var ModifyHealth = require('../../runes/ModifyHealth');
 var Options = require('../../createOptions')
 
 //START_OF_CARD_DATA
 exports.card = {
   "type": ent.MINION,
   "cost": 1,
-  "baseAttack": 1,
+  "baseAttack": 2,
   "currentHealth":0,
   "totalHealth":0,
   "baseHealth": 1,
   "set":cardTags.BASIC,
-  "id":"elvenArcher",
+  "id":"voodooDoctor",
   "tags":{
       [cardTags.BATTLE_CRY]:true,
       [cardTags.TARGET]:true
@@ -29,7 +29,7 @@ exports.ELVEN_ARCHER_DAMAGE_AMOUNT = 1;
 
 //On Battle cry Novice engineer should deal the playing character a card
 exports.onBattleCry = function (playOption, card, controller, state) {
-    Rune.executeRune(DamageRune.CreateRune(card["cardGuid"], playOption["target"], exports.ELVEN_ARCHER_DAMAGE_AMOUNT, state));
+    Rune.executeRune(ModifyHealth.CreateRune(playOption["target"], card["cardGuid"], exports.ELVEN_ARCHER_DAMAGE_AMOUNT, state));
 }
 
 exports.generateOptions = function(card, controller, state)
@@ -41,12 +41,16 @@ exports.generateOptions = function(card, controller, state)
 
 
     targets.forEach(function(element){
-        var playOption = {
-            "option":Options.PLAY_CARD_TYPE,
-            "cardGuid":card.cardGuid,
-            "target":element.cardGuid
+        
+        if(element.currentHealth < element.totalHealth)
+        {
+            var playOption = {
+                "option":Options.PLAY_CARD_TYPE,
+                "cardGuid":card.cardGuid,
+                "target":element.cardGuid
+            }
+            options.push(playOption);
         }
-        options.push(playOption);
     })
 
     if(eneCont.hero.health < eneCont.hero.baseHealth)
@@ -68,7 +72,7 @@ exports.generateOptions = function(card, controller, state)
             }
             options.push(playOption);
     }
-
+    
     return options;
 }
 

@@ -12,7 +12,7 @@ exports.executeRune = function (rune, state) {
     
 }
 
-exports.CreateCard = function (controllerGuid, cardGuid, amount) {
+exports.CreateRune = function (controllerGuid, cardGuid, amount) {
     var rune = {
         "runeType":"heal",
         "controllerGuid":controllerGuid,
