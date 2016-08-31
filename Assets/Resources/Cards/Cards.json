@@ -315,7 +315,13 @@
           "desc": "Ready! Aim! Drink!",
           "cardText": "<b>Battlecry</b>: Dead 1 damage.",
           "art": "ironforgeRifleman"
-        }
+        },
+		"shatteredSunCleric":{
+			"cardName":"Shattered Sun Cleric",
+			"desc":"They always have a spare flash of Sunell Energy Drink \u+2122!",
+			"cardText":"<b>Battlecry</b>: Give a friendly minion +1/+1.",
+			"art":"shatteredSunCleric"
+		}
       }
     }
   }

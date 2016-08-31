@@ -44,13 +44,13 @@ exports.updateState = function(state)
     //This is done is this way     
     //save off current enchamnets
     //remove current enchamnets
-    var previousEnchamnets = {};
+    var previousAuras = {};
     var ents = entities.returnAllInPlay(state);
     ents.forEach(function (element) {
-        if(element["enchantments"].length > 0)
+        if(element["auras"].length > 0)
         {
-            previousEnchamnets[element.cardGuid] = element.enchaments;
-            element.enchaments = [];
+            previousAuras[element.cardGuid] = element["auras"];
+            element["auras"] = [];
         }
     })
     
@@ -61,37 +61,37 @@ exports.updateState = function(state)
             ents.forEach(function (checkEle) {
                 if(file.filterCard(element, checkEle, null, state))
                 {
-                    checkEle["enchantments"].push(element.cardGuid);
+                    checkEle["auras"].push(element.cardGuid);
                 }
             })
         }
     })
     
-    var currentEnchamnets = {};
+    var currentAuras = {};
     ents.forEach(function (element) {
-        if(element["enchantments"].length > 0)
+        if(element["auras"].length > 0)
         {
-            currentEnchamnets[element.cardGuid] = element["enchantments"];
+            currentAuras[element.cardGuid] = element["auras"];
         }
     })
-    var oldKeys = Object.keys(previousEnchamnets);
-    var newKeys = Object.keys(currentEnchamnets);
+    var oldKeys = Object.keys(previousAuras);
+    var newKeys = Object.keys(currentAuras);
     newKeys.forEach(function(element) {
-           var enchaments = previousEnchamnets[element];
-           if(enchaments != undefined)
+           var auras = previousAuras[element];
+           if(auras != undefined)
            {
                var add = [];
                var removes = [];
-               var newEnchants = currentEnchamnets[element];
-               add = newEnchants.filter(function (newElement) {
-                   if(enchaments.indexOf(newElement) == -1){
+               var newAuras = currentAuras[element];
+               add = newAuras.filter(function (newElement) {
+                   if(auras.indexOf(newElement) == -1){
                        return true;
                    }
                    return false;
                })
                
-               removes = enchaments.filter(function (oldElement) {
-                   if(newEnchants.indexOf(oldElement) == -1)
+               removes = auras.filter(function (oldElement) {
+                   if(newAuras.indexOf(oldElement) == -1)
                    {
                        return true;
                    }
@@ -113,7 +113,7 @@ exports.updateState = function(state)
            else
            {
                //we need to add all of the enchamnets in this case
-                var adds = currentEnchamnets[element];
+                var adds = currentAuras[element];
                 adds.forEach(function (cardId) {
                    var enchanter = entities.getEntity(cardId, state);
                    var card = require('./cards/' + enchanter.set + "/" + enchanter.id);

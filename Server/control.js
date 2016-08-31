@@ -320,7 +320,7 @@ exports.executeOptions = function (index, controller, state) {
                 break;
                 
                 case options.PLAY_CARD_TYPE:
-                    Rune.executeRune(playCard.CreateRune(controller["guid"], controller["options"][index]["cardGuid"], useOption ), state);
+                    Rune.executeRune(playCard.CreateRune(controller["guid"], useOption ), state);
                 break;
                 
                 case options.PLAY_SPELL:

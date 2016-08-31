@@ -4,6 +4,7 @@ var cardTags = require('../cardTags');
 var Rune = require('../../RuneVM');
 var DamageRune = require('../../runes/damageRune');
 var Options = require('../../createOptions')
+var AddEnchatments = require("../../runes/AddEnchantment");
 
 //START_OF_CARD_DATA
 exports.card = {
@@ -23,9 +24,26 @@ exports.card = {
 exports.SUN_CLERIC_ATTACK_BUFF_AMOUNT = 1;
 exports.SUN_CLERIC_HEALTH_BUFF_AMOUNT = 1;
 
+
+exports.castEnchantments = function(rune, state)
+{
+    RuneVM.executeRune(SetHealth.CreateRune(rune["target"]["cardGuid"], exports.SUN_CLERIC_HEALTH_BUFF_AMOUNT), state);
+    RuneVM.executeRune(ModifyHealth.CreateRune(rune["target"]["cardGuid"], rune["source"]["cardGuid"], exports.SUN_CLERIC_HEALTH_BUFF_AMOUNT), state);
+
+    RuneVM.executeRune(SetAttack.CreateRune(rune["target"]["cardGuid"], exports.SUN_CLERIC_ATTACK_BUFF_AMOUNT), state);
+    RuneVM.executeRune(ModifyAttack.CreateRune(rune["target"]["cardGuid"], rune["source"]["cardGuid"], exports.SUN_CLERIC_ATTACK_BUFF_AMOUNT), state);
+
+}
+
+exports.removeEnchantments = function(card, state)
+{ 
+    RuneVM.executeRune(SetHealth.CreateRune(rune["target"]["cardGuid"], -exports.SUN_CLERIC_HEALTH_BUFF_AMOUNT), state);
+    RuneVM.executeRune(SetAttack.CreateRune(rune["target"]["cardGuid"], -exports.SUN_CLERIC_ATTACK_BUFF_AMOUNT), state);
+}
+
 //On Battle cry Novice engineer should deal the playing character a card
 exports.onBattleCry = function (playOption, card, controller, state) {
-    Rune.executeRune(DamageRune.CreateRune(card["cardGuid"], playOption["target"], exports.IRON_FORGE_DAMAGE_AMOUNT, state));
+    Rune.executeRune(AddEnchatments.CreateRune(playOption["target"], card["cardGuid"]), state);
 }
 
 exports.generateOptions = function(card, controller, state)

@@ -153,6 +153,24 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
                                         return;
                                     }
                                 }
+                                else if(op.GetType() == typeof(PlaySpellOption))
+                                {
+                                    if((op as PlaySpellOption).target == "-1")
+                                    {
+                                        OptionsManager.Singleton.PickUpOption(op);
+                                        careAboutCard.cardAvatarState = CardAvatarState.inPlay;
+                                        controllerState = ControllerState.waiting;
+                                        careAboutCard = null;
+                                        return;
+                                    }
+                                    else
+                                    {
+                                        CardLookingForTargets(options);
+                                        careAboutCard.cardAvatarState = CardAvatarState.waitingForTarget;
+                                        controllerState = ControllerState.targeting;
+                                        return;
+                                    }
+                                }
                             }
                         }
                         else
@@ -204,7 +222,13 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
                                         }
                                         else if (op.GetType() == typeof(PlaySpellOption))
                                         {
-                                            //this might be folded up into the PlayCardOptions
+                                            if((op as PlaySpellOption).target == targetGuid)
+                                            {
+                                                OptionsManager.Singleton.PickUpOption(op);
+                                                careAboutCard = null;
+                                                targetOptions = null;
+                                                controllerState = ControllerState.waiting;
+                                            }
                                         }
                                     }
                                 }

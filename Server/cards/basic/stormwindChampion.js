@@ -14,17 +14,12 @@ exports.card = {
   "type": ent.MINION,
   "cost": 0,
   "baseAttack": 6,
-  "currentHealth":0,
-  "totalHealth":0,
   "baseHealth": 6,
   "set":cardTags.BASIC,
   "id":"stormwindChampion",
   "tags":{
       [cardTags.AURA]:true
-  },
-  "enchantments":[
-    
-  ]
+  }
 }
 //END_OF_CARD_DATA
 

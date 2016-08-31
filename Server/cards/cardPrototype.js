@@ -19,5 +19,10 @@ exports.cardPrototype = {
   
   "enchantments":[
     
+  ],
+
+  "auras":[
+
   ]
+  
 }
