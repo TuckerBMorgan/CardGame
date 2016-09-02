@@ -5,11 +5,11 @@ var Rune = require('./RuneVM')
 var error = require('./errorMessages')
 var entities = require('./entityManager')
 var options = require('./createOptions')
-var controllerRune = require('./runes/NewController')
+var controllerRune = require('./runes/newController')
 var AI = require('./aicontroller')
 var updateState = require('./updateState');
 var testDecks = require('./TestDecks/testdeck')
-var playCard = require('./runes/playCard')
+var playCard = require('./runes/PlayCard')
 var SetHeroHealth = require("./runes/SetHeroHealth");
 
 var state = {
@@ -110,7 +110,7 @@ exports.routing = function (message, socket) {
             {
                 var card = util.loadCard(useDeck[i]);
                 var useCard = {
-                    "runeType":"CreateCard",
+                    "runeType":"createCard",
                 }
                 var cardkeys = Object.keys(card);
                 //copy the keys from the card we just yanked, we want to make sure that CreateCard is the first key in the object
@@ -126,7 +126,7 @@ exports.routing = function (message, socket) {
             {
                 var card = util.loadCard(useDeck[i]);
                 var useCard = {
-                    "runeType":"CreateCard",
+                    "runeType":"createCard",
                 }
                 var cardkeys = Object.keys(card);
                 cardkeys.forEach(function (element) {

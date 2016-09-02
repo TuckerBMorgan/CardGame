@@ -1,6 +1,6 @@
 var entities = require('./entityManager');
 var tags = require('./cards/cardTags');
-var Controller = require('./runes/NewController');
+var Controller = require('./runes/newController');
 
 exports.PLAY_CARD_TYPE = "PlayCard";
 exports.ATTACK_TYPE = "Attack";

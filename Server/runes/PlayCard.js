@@ -1,7 +1,7 @@
 var entity = require('../entityManager')
 var Rune = require('../RuneVM')
 var server = require('../server');
-var cont = require('./NewController');
+var cont = require('./newController');
 var tags = require('../cards/cardTags');
 
 exports.execute = function (rune, state) {

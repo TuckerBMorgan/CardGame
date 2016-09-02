@@ -1,6 +1,6 @@
 var fs = require('fs'); 
 var server = require('../server');
-var Rune = require('../RuneVm')
+var Rune = require('../RuneVM')
 
 //Sent to all players, after all players have connected and picked there openining hands
 //{
