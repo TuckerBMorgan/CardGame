@@ -11,7 +11,7 @@ exports.execute = function (rune, state) {
         {
             //why does this need to be a function
             //I guess BOLF?
-            require('../cards/' + ent.set  + "/" + ent.id).takeDamage(ent, rune.amount, entities.getEntity(rune.source, state));
+            ent.takeDamage(ent, rune.amount, entities.getEntity(rune.source, state));
         }
         else
         {

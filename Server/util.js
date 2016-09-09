@@ -12,18 +12,14 @@ exports.createGuid = function () {
 
 exports.loadCard = function(fileName) {
       var contents =  require("./cards/" + fileName);
-      var obj = JSON.parse(JSON.stringify(contents.card));
+
       var def = JSON.parse(JSON.stringify(defaultCard.cardPrototype));
-      
-      var obKeys = Object.keys(obj);
-      obKeys.forEach(function (element) {
-          def[element] = obj[element];
-      })
-      
-      return def;
+      var card = Object.assign(def, contents.card);
+
+      return card;
 }
 
 exports.dealCard = function (deck) {
         var index = Math.floor(Math.random() * deck.length);
         return deck[index].cardGuid;
-}
+} 

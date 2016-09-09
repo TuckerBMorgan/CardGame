@@ -5,6 +5,9 @@ var Rune = require('../../RuneVM');
 var DamageRune = require('../../runes/damageRune');
 var Options = require('../../createOptions')
 
+
+exports.IRON_FORGE_DAMAGE_AMOUNT = 1;
+
 //START_OF_CARD_DATA
 exports.card = {
   "type": ent.MINION,
@@ -16,19 +19,16 @@ exports.card = {
   "tags":{
       [cardTags.BATTLE_CRY]:true,
       [cardTags.TARGET]:true
-  }
-}
-//END_OF_CARD_DATA
-
-exports.IRON_FORGE_DAMAGE_AMOUNT = 1;
-
-//On Battle cry Novice engineer should deal the playing character a card
-exports.onBattleCry = function (playOption, card, controller, state) {
-    Rune.executeRune(DamageRune.CreateRune(card["cardGuid"], playOption["target"], exports.IRON_FORGE_DAMAGE_AMOUNT, state));
-}
-
-exports.generateOptions = function(card, controller, state)
-{
+  },
+  "canPlay":cardFunctions.basicCanPlay,
+  "attack":cardFunctions.basicAttack,
+  "canAttack":cardFunctions.canAttack,
+  "isAlive":cardFunctions.baseIsAlive,
+  "takeDamage":cardFunctions.takeDamage,
+  "onBattleCry":function (playOption, card, controller, state) {
+        Rune.executeRune(DamageRune.CreateRune(card["cardGuid"], playOption["target"], exports.IRON_FORGE_DAMAGE_AMOUNT, state));
+  },
+  "generateOptions":function(card, controller, state){
     var options = [];
 
     var targets = ent.returnAllAlive(state);
@@ -64,15 +64,8 @@ exports.generateOptions = function(card, controller, state)
             options.push(playOption);
     }
 
-    return options;
+    return options;},
+
+
 }
-
-exports.canPlay = cardFunctions.basicCanPlay
-
-exports.attack = cardFunctions.basicAttack;
-
-exports.canAttack = cardFunctions.basicCanAttack;
-
-exports.takeDamage = cardFunctions.baseTakeDamage;
-
-exports.isAlive = cardFunctions.baseIsAlive;
+//END_OF_CARD_DATA

@@ -6,6 +6,9 @@ var ModifyAttack = require('../../runes/ModifyAttack');
 var AddEnchatment = require('../../runes/AddEnchantment');
 var RuneVM = require("../../RuneVM");
 
+
+exports.GURUBASHI_ATTACK_BUFF = 3;
+
 //START_OF_CARD_DATA
 exports.card = {
   "type": ent.MINION,
@@ -18,35 +21,24 @@ exports.card = {
   },
   "enchantments":[
     
-  ]
+  ],
+  "canPlay":cardFunctions.basicCanPlay,
+  "attack":cardFunctions.basicAttack,
+  "canAttack":cardFunctions.canAttack,
+  "isAlive":cardFunctions.baseIsAlive,
+  "castEnchantments":function(rune, state){
+        RuneVM.executeRune(SetAttack.CreateRune(rune["target"]["cardGuid"], exports.GURUBASHI_ATTACK_BUFF), state);
+        RuneVM.executeRune(ModifyAttack.CreateRune(rune["target"]["cardGuid"], rune["source"]["cardGuid"], exports.GURUBASHI_ATTACK_BUFF), state);  
+    },
+    "removeEnchatments":function(card, state){
+        RuneVM.executeRune(SetAttack.CreateRune(card["cardGuid"], -exports.GURUBASHI_ATTACK_BUFF), state);
+    },
+    "takeDamage":function (card, amount, source, state){
+        card.currentHealth += amount;
+        if(card["tags"][cardTags.SILENCE] == undefined)
+        {
+            RuneVM.executeRune(AddEnchatment.CreateRune(card.cardGuid, card.cardGuid), state);
+        }
+    }   
 }
 //END_OF_CARD_DATA
-
-exports.canPlay = cardFunctions.basicCanPlay
-
-exports.attack = cardFunctions.basicAttack;
-
-exports.canAttack = cardFunctions.basicCanAttack;
-
-exports.GURUBASHI_ATTACK_BUFF = 3;
-
-exports.castEnchantments = function(rune, state)
-{
-    RuneVM.executeRune(SetAttack.CreateRune(rune["target"]["cardGuid"], exports.GURUBASHI_ATTACK_BUFF), state);
-    RuneVM.executeRune(ModifyAttack.CreateRune(rune["target"]["cardGuid"], rune["source"]["cardGuid"], exports.GURUBASHI_ATTACK_BUFF), state);
-}
-
-exports.removeEnchatments = function(card, state)
-{
-    RuneVM.executeRune(SetAttack.CreateRune(card["cardGuid"], -exports.GURUBASHI_ATTACK_BUFF), state);
-}
-
-exports.takeDamage = function (card, amount, source, state){
-    card.currentHealth += amount;
-    if(card["tags"][cardTags.SILENCE] == undefined)
-    {
-       RuneVM.executeRune(AddEnchatment.CreateRune(card.cardGuid, card.cardGuid), state);
-    }
-}
-
-exports.isAlive = cardFunctions.baseIsAlive;

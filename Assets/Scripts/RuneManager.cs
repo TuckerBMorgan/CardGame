@@ -55,7 +55,7 @@ public class RuneManager : MonoBehaviour
 
 
             var type = Type.GetType(typeOfRune);
-            var runeObj = Activator.CreateInstance(type);
+			var runeObj = Activator.CreateInstance(type);
             for (int i = 0; i < jsonObject.keys.Count; i++)
             {
                 var property = type.GetProperty(jsonObject.keys[i]);

@@ -478,8 +478,13 @@ public class PlayArea : MonoBehaviour
         Controller player = EntityManager.Singelton.GetEntity(ps.controllerGuid) as Controller;
 
         RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid(), TypeOfRemoveFromHand.INTO_PLAY);
+		card.GetCardAvatar().transform.position = card.GetCardAvatar().transform.position + new Vector3(10000,0,0);
+		card.GetCardAvatar().cardAvatarState = CardAvatarState.inGraveyad;
+		card.GetCardAvatar().gameObject.SetActive(false);
         action();
     }
+
+
     /*
     public void ModifyHealthRune(Rune rune, Action action)
     {

@@ -5,6 +5,7 @@ var cardTags = require('../cardTags')
 var damageRune = require('../../runes/damageRune');
 var rune = require("../../RuneVM");
 
+exports.NIGHT_BLADE_DAMAGE_AMOUNT = 3;
 
 //START_OF_CARD_DATA
 exports.card = {
@@ -19,13 +20,13 @@ exports.card = {
   },
   "enchantments":[
     
-  ]
-}
-//END_OF_CARD_DATA
-
-exports.NIGHT_BLADE_DAMAGE_AMOUNT = 3;
-
-exports.onBattleCry = function (playOption, card, controller, state) {
+  ],
+  "canPlay":cardFunctions.basicCanPlay,
+  "attack":cardFunctions.basicAttack,
+  "canAttack":cardFunctions.canAttack,
+  "isAlive":cardFunctions.baseIsAlive,
+  "takeDamage":cardFunctions.takeDamage,
+  "onBattleCry":function (playOption, card, controller, state) {
 
     var controllers = state["controllers"];
     var other = "";
@@ -37,16 +38,6 @@ exports.onBattleCry = function (playOption, card, controller, state) {
         }
     })
 
-    rune.executeRune(damageRune.CreateRune(card.cardGuid, other, exports.NIGHT_BLADE_DAMAGE_AMOUNT), state);
+    rune.executeRune(damageRune.CreateRune(card.cardGuid, other, exports.NIGHT_BLADE_DAMAGE_AMOUNT), state);},
 }
-
-
-exports.canPlay = cardFunctions.basicCanPlay
-
-exports.attack = cardFunctions.basicAttack;
-
-exports.canAttack = cardFunctions.basicCanAttack;
-
-exports.takeDamage = cardFunctions.baseTakeDamage;
-
-exports.isAlive = cardFunctions.baseIsAlive;
+//END_OF_CARD_DATA

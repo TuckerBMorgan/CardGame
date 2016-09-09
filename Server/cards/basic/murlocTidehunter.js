@@ -4,6 +4,9 @@ var cardTags = require('../cardTags');
 var Rune = require('../../RuneVM');
 var util = require('../../util');
 
+
+exports.MURLOC_SCOUT_PATH = "basic/murlocScout";
+
 //START_OF_CARD_DATA
 exports.card = {
   "type": ent.MINION,
@@ -20,14 +23,13 @@ exports.card = {
   },
   "enchantments":[
     
-  ]
-}
-//END_OF_CARD_DATA
-
-exports.MURLOC_SCOUT_PATH = "basic/murlocScout";
-
-//On Battle cry Novice engineer should deal the playing character a card
-exports.onBattleCry = function (playOption, card, controller, state) {
+  ],
+  "canPlay":cardFunctions.basicCanPlay,
+  "attack":cardFunctions.basicAttack,
+  "canAttack":cardFunctions.canAttack,
+  "isAlive":cardFunctions.baseIsAlive,
+  "takeDamage":cardFunctions.takeDamage,
+  "onBattleCry":function (playOption, card, controller, state) {
     var murlocGuid = util.createGuid();
     
     var summon = {
@@ -37,15 +39,6 @@ exports.onBattleCry = function (playOption, card, controller, state) {
         "cardGuid":murlocGuid,
         "cardId":exports.MURLOC_SCOUT_PATH
     }
-    Rune.executeRune(summon, state);
+    Rune.executeRune(summon, state);}
 }
-
-exports.canPlay = cardFunctions.basicCanPlay
-
-exports.attack = cardFunctions.basicAttack;
-
-exports.canAttack = cardFunctions.basicCanAttack;
-
-exports.takeDamage = cardFunctions.baseTakeDamage;
-
-exports.isAlive = cardFunctions.baseIsAlive;
+//END_OF_CARD_DATA

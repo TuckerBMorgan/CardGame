@@ -18,7 +18,12 @@ exports.card = {
   },
   "enchantments":[
     
-  ]
+  ],
+  "canPlay":cardFunctions.basicCanPlay,
+  "attack":cardFunctions.basicAttack,
+  "canAttack":cardFunctions.canAttack,
+  "takeDamage":cardFunctions.takeDamage,
+  "isAlive":cardFunctions.baseIsAlive,
 }
 //END_OF_CARD_DATA
 

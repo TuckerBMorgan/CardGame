@@ -4,6 +4,8 @@ var cardTags = require('../cardTags');
 var Rune = require('../../RuneVM');
 var util = require('../../util');
 
+exports.BOAR_PATH = "basic/boar";
+
 //START_OF_CARD_DATA
 exports.card = {
   "type": ent.MINION,
@@ -19,14 +21,13 @@ exports.card = {
   },
   "enchantments":[
     
-  ]
-}
-//END_OF_CARD_DATA
-
-exports.BOAR_PATH = "basic/boar";
-
-//On Battle cry Novice engineer should deal the playing character a card
-exports.onBattleCry = function (playOption, card, controller, state) {
+  ],
+  "canPlay":cardFunctions.basicCanPlay,
+  "attack":cardFunctions.basicAttack,
+  "canAttack":cardFunctions.canAttack,
+  "isAlive":cardFunctions.baseIsAlive,
+  "takeDamage":cardFunctions.takeDamage,
+  "onBattleCry":function (playOption, card, controller, state) {
     var boarGuid = util.createGuid();
     
     var summon = {
@@ -37,14 +38,7 @@ exports.onBattleCry = function (playOption, card, controller, state) {
         "cardId":exports.BOAR_PATH
     }
     Rune.executeRune(summon, state);
+  }
+
 }
-
-exports.canPlay = cardFunctions.basicCanPlay
-
-exports.attack = cardFunctions.basicAttack;
-
-exports.canAttack = cardFunctions.basicCanAttack;
-
-exports.takeDamage = cardFunctions.baseTakeDamage;
-
-exports.isAlive = cardFunctions.baseIsAlive;
+//END_OF_CARD_DATA

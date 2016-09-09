@@ -7,7 +7,7 @@ exports.execute = function (rune, state) {
 
     ent["enchatments"].forEach(function(element){
         var sourceEnt = entities.getEntity(element, state);
-        require("../cards/" + sourceEnt.set + "/" + sourceEnt.id).removeEnchatments(ent, state);
+        sourceEnt.removeEnchatments(ent, state);
     });
 
 }

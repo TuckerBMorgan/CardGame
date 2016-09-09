@@ -4,6 +4,8 @@ var cardTags = require('../cardTags');
 var Rune = require('../../RuneVM');
 
 
+exports.DARK_SCALE_HEAL_AMOUNT = 2;
+
 //START_OF_CARD_DATA
 exports.card = {
   "type": ent.MINION,
@@ -21,43 +23,33 @@ exports.card = {
   "enchantments":[
     
   ]
-}
-//END_OF_CARD_DATA
-
-exports.DARK_SCALE_HEAL_AMOUNT = 2;
-
-//On Battle cry Novice engineer should deal the playing character a card
-exports.onBattleCry = function (playOption, card, controller, state) {
-    
+  ,
+  "canPlay":cardFunctions.basicCanPlay,
+  "attack":cardFunctions.basicAttack,
+  "canAttack":cardFunctions.canAttack,
+  "takeDamage":cardFunctions.takeDamage,
+  "isAlive":cardFunctions.baseIsAlive,
+  "onBattleCry":function (playOption, card, controller, state) {
     var inPlayOthers = controller.inPlay;
     var HealRunes = [];
-    
+
     for(var i = 0;i<inPlayOthers.length;i++)
     {
         if(card.cardGuid == inPlayOthers[i].cardGuid)
-            continue;
-            
+        continue;
+
         var heal = {
             "runeType":"Heal",
             "source":card.cardGuid,
             "target":inPlayOthers[i].cardGuid,
             "amount":exports.DARK_SCALE_HEAL_AMOUNT
         }
-        
+
         HealRunes.push(heal);
     }
-    
+
     HealRunes.forEach(function (runes) {
         Rune.executeRune(runes, state);
-    })
+    })}
 }
-
-exports.canPlay = cardFunctions.basicCanPlay
-
-exports.attack = cardFunctions.basicAttack;
-
-exports.canAttack = cardFunctions.basicCanAttack;
-
-exports.takeDamage = cardFunctions.baseTakeDamage;
-
-exports.isAlive = cardFunctions.baseIsAlive;
+//END_OF_CARD_DATA

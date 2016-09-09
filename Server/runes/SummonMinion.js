@@ -33,7 +33,7 @@ exports.execute = function (rune, state) {
    
    //maybe this as well?
    var useCard = {
-       "runeType":"createCard",
+       "runeType":"CreateCard",
    }
 
    //populates the useCard rune with elements of the found card

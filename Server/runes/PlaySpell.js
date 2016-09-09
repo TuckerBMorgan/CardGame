@@ -4,12 +4,12 @@ var SetMana = require('./SetMana');
 
 exports.execute = function (rune, state) {
     
-    var ent = entities.getEntity(rune["option"]["source"], state);
+    var ent = entities.getEntity(rune["option"]["cardGuid"], state);
     var controller  = entities.getEntity(rune.controllerGuid, state);
     
-    require('../cards/' + ent.set + "/" + ent.id).spellText(rune, controller, state);
+    ent.spellText(rune, ent, controller, state);
     
-    Rune.executeRune(SetMana.CreateRune(controller.guid, controller.mana - ent.cost, state));
+    Rune.executeRune(SetMana.CreateRune(controller.guid, controller.mana - ent.cost, state), state);
 }
 
 exports.CreateRune = function(controllerGuid, cardGuid, option)
@@ -17,6 +17,7 @@ exports.CreateRune = function(controllerGuid, cardGuid, option)
     var rune = {
         "runeType":"PlaySpell",
         "controllerGuid":controllerGuid,
+        "cardGuid":cardGuid,
         "option":option
     }
 

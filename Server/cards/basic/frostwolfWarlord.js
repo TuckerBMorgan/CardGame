@@ -18,10 +18,13 @@ exports.card = {
   },
   "enchantments":[
     
-  ]
-}
-//END_OF_CARD_DATA
-exports.onBattleCry = function (playOption, card, controller, state) {
+  ],
+  "canPlay":cardFunctions.basicCanPlay,
+  "attack":cardFunctions.basicAttack,
+  "canAttack":cardFunctions.canAttack,
+  "takeDamage":cardFunctions.takeDamage,
+  "isAlive":cardFunctions.baseIsAlive,
+  "onBattleCry":function (playOption, card, controller, state) {
    
    var others = ent.returnAllAliveAndOnTeam(card.team, state);
    var modHealthRune = {
@@ -30,15 +33,5 @@ exports.onBattleCry = function (playOption, card, controller, state) {
        "amount":others.length
    }
 
-   rune.executeRune(modHealthRune, state);
+   rune.executeRune(modHealthRune, state);}
 }
-
-exports.canPlay = cardFunctions.basicCanPlay
-
-exports.attack = cardFunctions.basicAttack;
-
-exports.canAttack = cardFunctions.basicCanAttack;
-
-exports.takeDamage = cardFunctions.baseTakeDamage;
-
-exports.isAlive = cardFunctions.baseIsAlive;

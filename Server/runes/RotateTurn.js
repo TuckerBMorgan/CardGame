@@ -1,5 +1,5 @@
 var options = require('../createOptions');
-var controllerRune = require('./newController');
+var controllerRune = require('./NewController');
 var server = require('../server');
 var Rune = require('../RuneVM');
 var ai = require("../aicontroller");

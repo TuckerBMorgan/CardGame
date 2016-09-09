@@ -321,7 +321,20 @@
 			"desc":"They always have a spare flash of Sunell Energy Drink \u+2122!",
 			"cardText":"<b>Battlecry</b>: Give a friendly minion +1/+1.",
 			"art":"shatteredSunCleric"
-		}
+		},
+		"arcaneMissles":{
+			"cardName":"Arcane Missles",
+			"desc":"You'd think you'd be able to control your missles a little better since you're a powerful mage and all.",
+			"cardText":"Deal 3 damage randonly split among enemy characters",
+			"art":"arcaneMissles"
+		},
+		"ancestralHealing":{
+			"cardName":"Ancestral Healing",
+			"desc":"I personally fprefer some non-ancestral right-the-heck-now healing, but maybe that is just me.",
+			"cardText":"Restore a minion to full Health and give it Taunt.",
+			"art":"ancertralHealing"
+		},
+		
       }
     }
   }

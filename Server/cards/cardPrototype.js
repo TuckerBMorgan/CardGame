@@ -11,7 +11,7 @@ exports.cardPrototype = {
   "baseHealth": -1,
   
   "team":-1,
-  "id":"archmage",
+  "id":"cardPrototype",
   
   "tags" : {
     

@@ -26,6 +26,8 @@ public class CreateCard : Rune {
     public int totalHealth { get; set; }
     public int team { get; set; }
     public int baseAttack { get; set; }
+	public int totalAttack{ get; set; }
+	public int currentAttack{ get; set; }
     public string state { get; set; }
     public string set { get; set; }
     public CardType type { get; set; }

@@ -19,12 +19,13 @@ exports.card = {
   },
   "enchantments":[
     
-  ]
-}
-//END_OF_CARD_DATA
-
-//On Battle cry Novice engineer should deal the playing character a card
-exports.onBattleCry = function (playOption, card, controller, state) {
+  ],
+  "canPlay":cardFunctions.basicCanPlay,
+  "attack":cardFunctions.basicAttack,
+  "canAttack":cardFunctions.canAttack,
+  "isAlive":cardFunctions.baseIsAlive,
+  "takeDamage":cardFunctions.takeDamage,
+  "onBattleCry":function (playOption, card, controller, state) {
     
     var deck = controller.deck;
     if(deck.length <= 0)
@@ -38,15 +39,6 @@ exports.onBattleCry = function (playOption, card, controller, state) {
         "controllerGuid":controller.guid,
         "cardGuid":deck[index].cardGuid
     }
-    rune.executeRune(dealCard, state);
+    rune.executeRune(dealCard, state);}
 }
-
-exports.canPlay = cardFunctions.basicCanPlay
-
-exports.attack = cardFunctions.basicAttack;
-
-exports.canAttack = cardFunctions.basicCanAttack;
-
-exports.takeDamage = cardFunctions.baseTakeDamage;
-
-exports.isAlive = cardFunctions.baseIsAlive;
+//END_OF_CARD_DATA

@@ -1,6 +1,6 @@
 var entities = require('./entityManager');
 var tags = require('./cards/cardTags');
-var Controller = require('./runes/newController');
+var Controller = require('./runes/NewController');
 
 exports.PLAY_CARD_TYPE = "PlayCard";
 exports.ATTACK_TYPE = "Attack";
@@ -53,11 +53,10 @@ exports.createOptions = function (controller, state) {
     //Can I play any of the cards in my hand in the current board state
     var hand = state.controllers[controller].hand;
     hand.forEach(function (element) {
-        var cardFile = require('./cards/'  + element.set + "/" + element.id);
         if(element.type == entities.MINION)
         {
             //least at the moment we have simple playcard options for minions
-            if(cardFile.canPlay(element, state.controllers[controller], state))
+            if(element.canPlay(element, state.controllers[controller], state))
             {
                 if(element["tags"][tags.TARGET] == undefined)
                 {
@@ -71,7 +70,7 @@ exports.createOptions = function (controller, state) {
                 }
                 else
                 {
-                    var battleCryTargetOptions = cardFile.generateOptions(element, state.controllers[controller], state);
+                    var battleCryTargetOptions = element.generateOptions(element, state.controllers[controller], state);
                     battleCryTargetOptions.forEach(function(optionElement){
                         options.push(optionElement);
                     })
@@ -81,9 +80,9 @@ exports.createOptions = function (controller, state) {
         //Spells are a little more complicated becuase they have to target, or not and as such they create their own play options
         else
         {
-            if(cardFile.canPlay(element, state.controllers[controller], state))
+            if(element.canPlay(element, state.controllers[controller], state))
             {
-                var opsArray = require('./cards/'  + element.set + "/" + element.id).generatePlayOptions(element, state.controllers[controller], state);
+                var opsArray = element.generatePlayOptions(element, state.controllers[controller], state);
                 opsArray.forEach(function (element) {
                     options.push(element);
                 })
@@ -124,8 +123,7 @@ exports.createOptions = function (controller, state) {
     
     mineInPlay.forEach(function (element) {
         useList.forEach(function (innerElement) {
-            var file = require("./cards/" + element.set + "/" + element.id);
-            if(file.canAttack(element, innerElement, controller, state))
+            if(element.canAttack(element, innerElement, controller, state))
             {
                 var attackOtions = {
                     "option":exports.ATTACK_TYPE,

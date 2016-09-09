@@ -6,7 +6,7 @@ exports.execute = function (rune, state) {
     var ent = entities.getEntity(rune.target, state);
     var castingCard = entities.getEntity(rune.source, state);
 
-    require("../cards/" + castingCard.set + "/" + castingCard.id).castEnchantment(rune, state);
+    castingCard.castEnchantment(rune, state);
     ent["enchantments"].push(rune.source);
 }
 

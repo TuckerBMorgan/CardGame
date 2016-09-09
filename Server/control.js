@@ -1,11 +1,11 @@
-var newController = require("./runes/newController")
+var newController = require("./runes/NewController")
 var server = require('./server');
 var util = require('./util')
 var Rune = require('./RuneVM')
 var error = require('./errorMessages')
 var entities = require('./entityManager')
 var options = require('./createOptions')
-var controllerRune = require('./runes/newController')
+var controllerRune = require('./runes/NewController')
 var AI = require('./aicontroller')
 var updateState = require('./updateState');
 var testDecks = require('./TestDecks/testdeck')
@@ -110,7 +110,7 @@ exports.routing = function (message, socket) {
             {
                 var card = util.loadCard(useDeck[i]);
                 var useCard = {
-                    "runeType":"createCard",
+                    "runeType":"CreateCard",
                 }
                 var cardkeys = Object.keys(card);
                 //copy the keys from the card we just yanked, we want to make sure that CreateCard is the first key in the object
@@ -126,7 +126,7 @@ exports.routing = function (message, socket) {
             {
                 var card = util.loadCard(useDeck[i]);
                 var useCard = {
-                    "runeType":"createCard",
+                    "runeType":"CreateCard",
                 }
                 var cardkeys = Object.keys(card);
                 cardkeys.forEach(function (element) {
@@ -307,15 +307,14 @@ exports.executeOptions = function (index, controller, state) {
         if(index >= 0 && index < controller.options.length)
         {
             var useOption = controller.options[index];
-            console.log(useOption["option"])
+            console.log(useOption)
             switch(useOption["option"])
             {
                 case options.ATTACK_TYPE:
                     var entity = entities.getEntity(useOption["attackGuid"], state);
                     if(entity.type === entities.MINION)
                     {
-                        var cardFile = require("./cards/" + entity.set + "/" +entity.id);
-                        cardFile.attack(entity, useOption["defenderGuid"], controller, state);
+                        entity.attack(entity, useOption["defenderGuid"], controller, state);
                     }
                 break;
                 
@@ -324,12 +323,12 @@ exports.executeOptions = function (index, controller, state) {
                 break;
                 
                 case options.PLAY_SPELL:
-                
+
                     var playSpellRune = {
                         "runeType":"PlaySpell",
-                        "cardGuid":controller.options[index].cardGuid,
-                        "targetGuid":controller.options[index].targetGuid,
-                        "controllerGuid":controller.guid
+                        "controllerGuid":controller.guid,
+                        "cardGuid":useOption["cardGuid"],
+                        "option":useOption
                     }
                     Rune.executeRune(playSpellRune, state);
                 

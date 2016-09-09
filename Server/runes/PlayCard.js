@@ -1,7 +1,7 @@
 var entity = require('../entityManager')
 var Rune = require('../RuneVM')
 var server = require('../server');
-var cont = require('./newController');
+var cont = require('./NewController');
 var tags = require('../cards/cardTags');
 
 exports.execute = function (rune, state) {
@@ -14,7 +14,7 @@ exports.execute = function (rune, state) {
     //This minion has a battle cry 
     if(card["tags"].hasOwnProperty(tags.BATTLE_CRY))
     {
-        require('../cards/' + card["set"] + "/" + card["id"]).onBattleCry(rune.playOption, card, controller, state);
+        card.onBattleCry(rune.playOption, card, controller, state);
     }
     
     controller["inPlay"].push(card);
