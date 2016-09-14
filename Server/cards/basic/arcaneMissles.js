@@ -18,24 +18,29 @@ exports.card = {
   "spellText":function (rune, card, controller, state) {
     
         var enemyInPlay = ent.getEnemyMinions(controller, state);
+        var enemyController = ent.getOtherController(controller, state);
+
+        console.log(enemyController.toString());
 
         if(enemyInPlay == null)
             return;
    
         var targets = [];
-    
-        for(var i = 0;i<Math.min(3, enemyInPlay.length);i++)
+        
+        enemyInPlay.forEach(function(element){
+            targets.push(element.cardGuid);
+        })
+        targets.push(enemyController.guid);
+
+        for(var i = 0;i<3;i++)
         {
-            var index =  Math.floor(Math.random( ) * enemyInPlay.length);
-            if(enemyInPlay[index].baseHealth <= 0)
-            {
-                continue;     
-            }
+            var index =  Math.floor(Math.random( ) * targets.length);
+            
        
             var dmg = {
                 "runeType":"DamageRune",
                 "source":card.cardGuid,
-                "target":enemyInPlay[index].cardGuid,
+                "target":targets[index],
                 "amount":exports.ARCANCE_MISSLE_DAMAGE_AMOUNT
             }
             Rune.executeRune(dmg);

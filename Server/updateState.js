@@ -117,12 +117,29 @@ exports.updateState = function(state)
            }
     });
 
-    //check against previous list of enchamnets
-    //do removes for ones that are no longer there
-    //do adds for new ones
-    //if there are any adds of removes we must do a redo
-    
-    
+    ents.forEach(function(element){
+        var removes = [];
+        if(element["enchantments"].length > 0)
+        {
+            for(var i = 0;i<element["enchantments"].length;i++)
+            {
+                var spellObj = state["spellEnchantments"][element["enchantments"][i]];
+                if(spellObj != undefined)
+                {
+                    if(!spellObj.stillActive(spellObj, element))
+                    {
+                        spellObj.RemoveEnchantment(element, state);
+                        removes.push(i);
+                    }
+                }
+            }
+        }
+        while(removes.length > 0)
+        {
+            var val = removes.shift();
+            element["enchantments"].splice(val, 1);
+        }
+    })
     
     //if anyone died we have to do this whole thing again, and again, again
     if(redo == true)

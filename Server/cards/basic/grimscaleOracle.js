@@ -22,8 +22,8 @@ exports.card = {
   },
   "canPlay":cardFunctions.basicCanPlay,
   "attack":cardFunctions.basicAttack,
-  "canAttack":cardFunctions.canAttack,
-  "takeDamage":cardFunctions.takeDamage,
+  "canAttack":cardFunctions.basicCanAttack,
+  "takeDamage":cardFunctions.basicTakeDamage,
   "isAlive":cardFunctions.baseIsAlive,
   "filterCard":function (card, otherCard, controller, state) {
     if(card.cardGuid != otherCard.cardGuid && card.tags[cardTags.MURLOC] != undefined)

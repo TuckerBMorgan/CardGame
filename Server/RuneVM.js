@@ -26,8 +26,7 @@ function procesRune(rune, state) {
    if(eventKeys != null){
     //For each person for wants to listen to this event
         if(!eventKeys.some(function (entity) {
-            var ent = entities.getEntity(entity, state);
-            if(!ent[element + "Listener"](rune, entity, state))
+            if(!entity[element + "Listener"](rune, entity, state))
             {
                 return true;
             }

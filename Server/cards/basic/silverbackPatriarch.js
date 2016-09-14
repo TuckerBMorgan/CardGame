@@ -23,9 +23,9 @@ exports.card = {
   ],
   "canPlay":cardFunctions.basicCanPlay,
   "attack":cardFunctions.basicAttack,
-  "canAttack":cardFunctions.canAttack,
+  "canAttack":cardFunctions.basicCanAttack,
   "isAlive":cardFunctions.baseIsAlive,
-  "takeDamage":cardFunctions.takeDamage,
+  "takeDamage":cardFunctions.basicTakeDamage,
 }
 //END_OF_CARD_DATA
 

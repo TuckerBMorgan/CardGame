@@ -16,11 +16,11 @@ exports.execute = function (rune, state) {
         else
         {
             //I might want this to be a function like the one above, just not sure at the moment really
-            if(en.currentHealth + rune.amount <= ent.totalhealth)
+            if(ent.currentHealth + rune.amount <= ent.totalhealth)
             {
                 ent.currentHealth += rune.amount;
             }
-            else if(en.currentHealth + rune.amount > ent.totalhealth)
+            else if(ent.currentHealth + rune.amount > ent.totalhealth)
             {
                 ent.currentHealth = ent.totalhealth;
             }
@@ -34,7 +34,7 @@ exports.execute = function (rune, state) {
 
 exports.CreateRune = function (target, source, amount) {
     var rune = {
-        "runeType":"modifyHealth",
+        "runeType":"ModifyHealth",
         "target":target,
         "source":source,
         "amount":amount

@@ -75,14 +75,19 @@ exports.returnAllAliveAndOnTeam = function(team, state)
 exports.getOtherController = function(controller, state)
 {
     var keys = Object.keys(state.controllers);
+    var returnCont = null;
     keys.forEach(function(element)
     {
+        if(returnCont != null)
+            return;
+        
         if(state["controllers"][element].guid != controller.guid)
         {
-            return state["controllers"][element];
+            returnCont = state["controllers"][element];
         }
     })
-    return null;
+
+    return returnCont;
 }
 
 exports.getEnemyMinions = function (controller, state) {

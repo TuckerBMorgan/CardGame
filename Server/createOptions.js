@@ -60,7 +60,6 @@ exports.createOptions = function (controller, state) {
             {
                 if(element["tags"][tags.TARGET] == undefined)
                 {
-                    
                     var option = {
                         "option":exports.PLAY_CARD_TYPE,
                         "cardGuid":element.cardGuid,

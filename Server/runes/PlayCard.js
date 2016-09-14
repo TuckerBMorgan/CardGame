@@ -6,8 +6,9 @@ var tags = require('../cards/cardTags');
 
 exports.execute = function (rune, state) {
     
+    console.log(rune);
     var controller = entity.getEntity(rune["controllerGuid"], state);
-    var card = entity.getEntity(rune["cardGuid"], state);
+    var card = entity.getEntity(rune["playOption"]["cardGuid"], state);
     var index = controller["hand"].indexOf(card);
     controller["hand"].splice(index, 1);
     

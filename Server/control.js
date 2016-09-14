@@ -12,6 +12,7 @@ var testDecks = require('./TestDecks/testdeck')
 var playCard = require('./runes/PlayCard')
 var SetHeroHealth = require("./runes/SetHeroHealth");
 
+
 var state = {
     "controllers":{},//by guid look up of all controllers
     "entities":{},
@@ -19,7 +20,8 @@ var state = {
     "controllersByIP":{},
     "cards":{},
     "playersReady":0,
-    "attackedThisTurn":[]
+    "attackedThisTurn":[],
+    "spellEnchantments":{}
 }
 
 var CONNCETION_NUM_NEEDED = 1;
@@ -319,7 +321,7 @@ exports.executeOptions = function (index, controller, state) {
                 break;
                 
                 case options.PLAY_CARD_TYPE:
-                    Rune.executeRune(playCard.CreateRune(controller["guid"], useOption ), state);
+                    Rune.executeRune(playCard.CreateRune(controller["guid"], useOption["cardGuid"],useOption ), state);
                 break;
                 
                 case options.PLAY_SPELL:
@@ -347,11 +349,14 @@ exports.executeOptions = function (index, controller, state) {
                 default:
                 break;
             }
+
+
+            updateState.updateState(state); 
+
             var characterOptions = options.createOptions(state.turnOrder[state.OnTurnPlayer].guid, state);
             state.turnOrder[state.OnTurnPlayer].options = characterOptions;
             state.turnOrder[state.OnTurnPlayer].state = controllerRune.IN_TURN;
             
-            updateState.updateState(state); 
             
             var optionsPack = {
                 "runeType":"optionRune",

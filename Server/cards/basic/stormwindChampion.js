@@ -26,9 +26,9 @@ exports.card = {
   },
   "canPlay":cardFunctions.basicCanPlay,
   "attack":cardFunctions.basicAttack,
-  "canAttack":cardFunctions.canAttack,
+  "canAttack":cardFunctions.basicCanAttack,
   "isAlive":cardFunctions.baseIsAlive,
-  "takeDamage":cardFunctions.takeDamage,
+  "takeDamage":cardFunctions.basicTakeDamage,
   "filterCard":function (card, otherCard, controller, state) {
         if(card.team == otherCard.team && card.cardGuid != otherCard.cardGuid)
         {

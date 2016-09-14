@@ -24,8 +24,8 @@ exports.card = {
   ],
   "canPlay":cardFunctions.basicCanPlay,
   "attack":cardFunctions.basicAttack,
-  "canAttack":cardFunctions.canAttack,
-  "takeDamage":cardFunctions.takeDamage,
+  "canAttack":cardFunctions.basicCanAttack,
+  "takeDamage":cardFunctions.basicTakeDamage,
   "isAlive":cardFunctions.baseIsAlive,
   "onBattleCry":function (playOption, card, controller, state) {
     var dragonGuid = util.createGuid();

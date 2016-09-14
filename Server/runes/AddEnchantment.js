@@ -6,13 +6,15 @@ exports.execute = function (rune, state) {
     var ent = entities.getEntity(rune.target, state);
     var castingCard = entities.getEntity(rune.source, state);
 
-    castingCard.castEnchantment(rune, state);
+    var entObject = state["spellEnchantments"][rune.source];
+    entObject.AddEnchantment(rune, state);
+
     ent["enchantments"].push(rune.source);
 }
 
 exports.CreateRune = function (target, source) {
     var rune = {
-        "runeType":"AddEnchatment",
+        "runeType":"AddEnchantment",
         "target":target,
         "source":source
     }

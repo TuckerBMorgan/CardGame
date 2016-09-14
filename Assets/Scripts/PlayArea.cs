@@ -480,7 +480,7 @@ public class PlayArea : MonoBehaviour
         RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid(), TypeOfRemoveFromHand.INTO_PLAY);
 		card.GetCardAvatar().transform.position = card.GetCardAvatar().transform.position + new Vector3(10000,0,0);
 		card.GetCardAvatar().cardAvatarState = CardAvatarState.inGraveyad;
-		card.GetCardAvatar().gameObject.SetActive(false);
+		card.GetCardAvatar().gameObject.SetActive(false);	
         action();
     }
 

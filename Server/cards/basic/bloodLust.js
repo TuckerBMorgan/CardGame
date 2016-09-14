@@ -3,8 +3,7 @@ var ent = require('../../entityManager');
 var spellConts = require('../spellConstants');
 var Rune = require('../../RuneVM');
 var cardTags = require("../cardTags");
-var AddTag = require("../../runes/AddTag");
-var ModifyHealth = require('../../runes/ModifyHealth');
+
 
 exports.card = {
   "type": ent.SPELL,
@@ -30,13 +29,7 @@ exports.canPlay = cardFunctions.basicCanPlay
 //this is the meat of the card
 exports.spellText = function (rune, controller, state) {
     
-    var addTag = AddTag.CreateRune(rune["option"]["source"], rune["option"]["target"], cardTags.TAUNT);
-    var card = ent.getEntity(rune["option"]["target"]);
-    var healthRune = ModifyHealth.CreateRune(card.cardGuid, rune["option"]["source"], card.totalHealth - card.currentHealth);
-
-    Rune.executeRune(healthRune, state);
-    Rune.executeRune(addTag,state);
-
+    
 
 }
 

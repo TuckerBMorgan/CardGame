@@ -3,7 +3,7 @@ var ent = require('../../entityManager');
 var cardTags = require('../cardTags');
 var SetAttack = require('../../runes/SetAttack');
 var ModifyAttack = require('../../runes/ModifyAttack');
-var AddEnchatment = require('../../runes/AddEnchantment');
+var AddEnchantment = require('../../runes/AddEnchantment');
 var RuneVM = require("../../RuneVM");
 
 
@@ -24,7 +24,7 @@ exports.card = {
   ],
   "canPlay":cardFunctions.basicCanPlay,
   "attack":cardFunctions.basicAttack,
-  "canAttack":cardFunctions.canAttack,
+  "canAttack":cardFunctions.basicCanAttack,
   "isAlive":cardFunctions.baseIsAlive,
   "castEnchantments":function(rune, state){
         RuneVM.executeRune(SetAttack.CreateRune(rune["target"]["cardGuid"], exports.GURUBASHI_ATTACK_BUFF), state);
@@ -37,7 +37,7 @@ exports.card = {
         card.currentHealth += amount;
         if(card["tags"][cardTags.SILENCE] == undefined)
         {
-            RuneVM.executeRune(AddEnchatment.CreateRune(card.cardGuid, card.cardGuid), state);
+            RuneVM.executeRune(AddEnchantment.CreateRune(card.cardGuid, card.cardGuid), state);
         }
     }   
 }

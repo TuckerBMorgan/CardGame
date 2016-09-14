@@ -19,7 +19,6 @@ exports.CreateRune = function (sourceGuid, targetGuid, amount) {
         "target":targetGuid,
         "amount":amount
     }
-    
     return rune;
 }
 

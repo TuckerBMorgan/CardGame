@@ -27,8 +27,8 @@ exports.card = {
   ],
   "canPlay":cardFunctions.basicCanPlay,
   "attack":cardFunctions.basicAttack,
-  "canAttack":cardFunctions.canAttack,
-  "takeDamage":cardFunctions.takeDamage,
+  "canAttack":cardFunctions.basicCanAttack,
+  "takeDamage":cardFunctions.basicTakeDamage,
   "isAlive":cardFunctions.baseIsAlive,
   "onBattleCry":function (playOption, card, controller, state) {
     Rune.executeRune(DamageRune.CreateRune(card["cardGuid"], playOption["target"], exports.ELVEN_ARCHER_DAMAGE_AMOUNT, state));
