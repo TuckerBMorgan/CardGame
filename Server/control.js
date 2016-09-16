@@ -21,7 +21,9 @@ var state = {
     "cards":{},
     "playersReady":0,
     "attackedThisTurn":[],
-    "spellEnchantments":{}
+    "spellEnchantments":{},
+    "preEventListeners":{},
+    "postEventListeners":{}
 }
 
 var CONNCETION_NUM_NEEDED = 1;

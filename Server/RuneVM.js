@@ -20,26 +20,32 @@ exports.executeRune = function (rune, state) {
 }
 
 function procesRune(rune, state) {
-   // console.log("Executing rune: " + JSON.stringify(rune));
-    
-   var eventKeys = eventsListeners[rune.runeType];
+
+   var eventKeys = state["preEventListeners"][rune.runeType];
    if(eventKeys != null){
     //For each person for wants to listen to this event
-        if(!eventKeys.some(function (entity) {
-            if(!entity[element + "Listener"](rune, entity, state))
-            {
-                return true;
-            }
-            return false;
-        }))
-        {   
-            return;
+        if(!eventKeys.some(function (object) {
+          return !object[element+ "Listener"](rune, object, state);
+        })){   
             //this means a rune was killed by one of the entities that was listining in
+            return;
         }
-}   
+    }
+
     var file = require("./runes/" + rune.runeType);
     file.execute(rune, state);
-        
+    
+    var eventKeys = state["postEventListeners"][rune.runeType];
+    if(eventKeys != null){
+    //For each person for wants to listen to this event
+        if(!eventKeys.some(function (object) {
+          return !object[element+ "Listener"](rune, object, state);
+        })){   
+            //this means a rune was killed by one of the entities that was listining in
+            return;
+        }
+    }
+
     var keys = Object.keys(state.controllers);
     keys.forEach(function (elements) {
         if(file.canSee(state.controllers[elements], state))
@@ -59,37 +65,36 @@ function procesRune(rune, state) {
     }
 }
 
-exports.addListenerPre = function (entity, event) {
-    
-    if(!(event in eventsListeners))
+exports.addListenerPre = function (object, event, state) {
+
+    if(!(event in state["preEventListeners"]))
     {
-        eventsListeners[event] = [];
+        state["preEventListeners"][event] = [];
     }
     
-    if(eventsListeners[event].indexOf(entity) == -1)
+    if(state["preEventListeners"][event].indexOf(object) == -1)
     {
-        eventsListeners[event].unshift(entity);
+        state["preEventListeners"][event].unshift(object);
     }
-        
 }
 
-exports.removeListenerPre = function (entity, event) {
+exports.removeListenerPre = function (object, event) {
     //Lets do this latter
 } 
 
-exports.removeListenerPost = function (entity, event) {
+exports.removeListenerPost = function (object, event) {
     //Lets do this latter
 }
 
-exports.addListenerPost = function (entity, event) {
+exports.addListenerPost = function (object, event) {
 
-    if(!(event in eventsListeners))
+    if(!(event in state["postEventListeners"]))
     {
-        eventsListeners[event] = [];
+        state["postEventListeners"][event] = [];
     }
     
-    if(eventsListeners[event].indexOf(entity) == -1)
+    if(state["postEventListeners"][event].indexOf(object) == -1)
     {
-        eventsListeners[event].push(entity);
+        state["postEventListeners"][event].push(entity);
     }
 }

@@ -330,9 +330,15 @@
 		},
 		"ancestralHealing":{
 			"cardName":"Ancestral Healing",
-			"desc":"I personally fprefer some non-ancestral right-the-heck-now healing, but maybe that is just me.",
+			"desc":"I personally prefer some non-ancestral right-the-heck-now healing, but maybe that is just me.",
 			"cardText":"Restore a minion to full Health and give it Taunt.",
 			"art":"ancertralHealing"
+		},
+		"bloodLust":{
+			"cardName":"BloodLust",
+			"desc":"blaarghghLLGHRHARAAHAHHH!!",
+			"cardText":"Give your minions +3 Attack this turn.",
+			"art":"BloodLust"
 		},
 		
       }

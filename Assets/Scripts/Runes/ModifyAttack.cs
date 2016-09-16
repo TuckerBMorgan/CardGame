@@ -9,6 +9,9 @@ public class ModifyAttack : Rune {
 
 	public override void Execute (System.Action action)
 	{
+		Debug.Log ("SDFSDFSDFSDFSDFSDFSDFSDF");
+		var ent = EntityManager.Singelton.GetEntity (target) as damageable;
+		ent.ModifyAttack (amount);
 		action ();
 	}
 

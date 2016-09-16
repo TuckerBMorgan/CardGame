@@ -41,7 +41,7 @@ exports.card = {
         RuneVM.executeRune(SetAttack.CreateRune(rune["target"], exports.SUN_CLERIC_ATTACK_BUFF_AMOUNT), state);
         RuneVM.executeRune(ModifyAttack.CreateRune(rune["target"], rune["source"], exports.SUN_CLERIC_ATTACK_BUFF_AMOUNT), state);
     },
-    "removeEnchantments":function(card, state){ 
+    "RemoveEnchantments":function(card, state){ 
         RuneVM.executeRune(SetHealth.CreateRune(card["cardGuid"], -exports.SUN_CLERIC_HEALTH_BUFF_AMOUNT), state);
         RuneVM.executeRune(SetAttack.CreateRune(card["cardGuid"], -exports.SUN_CLERIC_ATTACK_BUFF_AMOUNT), state);
     },  
@@ -49,16 +49,10 @@ exports.card = {
 
         var enchatmentObject = {
             "source":card["cardGuid"],
-            "target":playOption["target"],
             "stillActive":function(entObject, target){
-                console.log(target);
-                if(target["tags"].hasOwnProperty(cardTags.SILENCE) != -1)
-                {
-                    return false;
-                }
-                return true;
+                return !target["tags"].hasOwnProperty(cardTags.SILENCE);
             },
-            "RemoveEnchantment":exports.card.removeEnchantments,
+            "RemoveEnchantment":exports.card.RemoveEnchantments,
             "AddEnchantment":exports.card.AddEnchantments
         }
         state["spellEnchantments"][card["cardGuid"]] = enchatmentObject;

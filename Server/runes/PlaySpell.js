@@ -4,7 +4,7 @@ var SetMana = require('./SetMana');
 
 exports.execute = function (rune, state) {
     
-    var ent = entities.getEntity(rune["playOption"]["cardGuid"], state);
+    var ent = entities.getEntity(rune["option"]["cardGuid"], state);
     var controller  = entities.getEntity(rune.controllerGuid, state);
     
     ent.spellText(rune, ent, controller, state);

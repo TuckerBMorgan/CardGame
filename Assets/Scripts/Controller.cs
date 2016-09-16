@@ -395,6 +395,21 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
         return health;
     }
 
+	public void SetAttack(int attack)
+	{
+		
+	}
+
+	public void ModifyAttack(int amount)
+	{
+		
+	}
+
+	public int GetAttack()
+	{
+		return 0;
+	}
+
     public int GetMana()
     {
         return mana;

@@ -8,6 +8,8 @@ public class SetAttack : Rune {
 
 	public override void Execute (System.Action action)
 	{
+		var ent = EntityManager.Singelton.GetEntity (cardGuid) as damageable;
+		ent.SetAttack (amount);
 		action ();
 	}
 

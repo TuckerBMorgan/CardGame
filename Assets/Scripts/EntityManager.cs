@@ -13,6 +13,10 @@ public interface damageable
     void ModifyHealth(int amount);
     void SetHealth(int health);
     int GetHealth();
+
+	void ModifyAttack (int amount);
+	void SetAttack (int attack);
+	int GetAttack();
     
 }
 
@@ -27,7 +31,6 @@ public class EntityManager : MonoBehaviour {
         Singelton = this;
     }
     
-
     public entity GetEntity(string guid)
     {
         if(entities.ContainsKey(guid))
