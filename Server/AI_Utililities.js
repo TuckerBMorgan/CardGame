@@ -24,6 +24,94 @@ var hand_Card_Prototype ={
 };
 */
 
+/*
+*Returns true if the card is taunting
+*
+*Inputs:
+	card->The card currently being checked
+*Outputs:
+	True if the card is taunting
+	False if the card is not taunting
+*/
+var checkTaunt = function(card){
+	return card["tags"][cardTags.TAUNT];
+}
+
+/*
+*Returns true if the card is silenced
+*
+*Inputs:
+	card->The card currently being checked
+*Outputs:
+	True if the card is silenced
+	False if the card is not silenced
+*/
+var checkSilence = function(card){
+	return card["tags"][cardTags.SILENCE];
+}
+
+/*
+*Returns an array of all of the actively taunting cards in a controller
+*
+*Inputs:
+	controller->the controller which we are checking for active taunts
+*Outputs:
+	an array of card objects which are currently actively taunting the field
+*/
+var checkActiveTaunts = function(controller){
+	//open array
+	var activeTaunts = [];
+	//lets store the location we are pulling from
+	var inPlayers = controller["inPlay"];
+	//iterate through the cards
+	for(var i = 0; i<inPlayers.length; i++){
+		//keep the current card closeby
+		var currentCard = inPlayers[i];
+		//add the current card if its not silenced and not taunting 
+		if(checkSilence(currentCard)==false && checkTaunt(currentCard)==true){
+			activeTaunts.push(currentCard);
+		}
+	}
+	//return whatever is in the array
+	return activeTaunts;
+}
+
+/*
+*Returns the integer strength of a set of cards in play
+*
+*Inputs:
+	cardSet->the set of cards which we are checking for AP
+*Outputs:
+	an integer indicating the sum AP on inplay cards
+*/
+var getActiveAP = function(cardSet){
+	//getAP
+    AP = 0;
+    for(var i = 0; i<cardSet.length; i++){
+        AP+=cardSet[i]["totalAttack"];
+    }
+	//return whatever is in the array
+	return AP;
+}
+
+/*
+*Returns the integer hit points of a set of cards in play
+*
+*Inputs:
+	cardSet->the set of cards which we are checking for AP
+*Outputs:
+	an integer indicating the sum HP on inplay cards
+*/
+var getActiveHP = function(cardSet){
+	//getAP
+    HP = 0;
+    for(var i = 0; i<cardSet.length; i++){
+        HP+=cardSet[i]["currentHealth"];
+    }
+	//return whatever is in the array
+	return HP;
+}
+
 
 /*
 *An easy to utilize prototype creation function
@@ -38,8 +126,8 @@ var makeHandProto = function(guid){
 	var card = util.loadCard(guid);
 	//take the guid and cost of the card and those are the two features of the prototype
 	proto = {
-		 [guid]:guid,
-		 [mana]:card.cost
+		 "guid":guid,
+		 "mana":card["cost"]
 		};
 	//return this object
 	return proto;
@@ -107,6 +195,29 @@ var card_Group_Copy = function(cards){
 	return newGroup;
 }
 
+/**
+*Returns a deep copy of the CARDS property in the most recent
+*	version of the state object (as of 9/16/2016)
+*
+*INPUTS:
+	card_set: the object set of card variables 
+*
+*
+*/
+var card_object_superCopy = function(card_set){
+	//create the new object set
+	var new_card_set = {};
+	//get the keys for the object
+	var key_set = Object.keys(card_set);
+	//iterate through the keys
+	for(var i = 0; i< key_set.length; i++){
+		//set the new object key with a copy of the card at that key location
+		new_card_set[key_set[i]] = Object.assign({}, card_set[key_set[i]]);
+	}
+	//return the copy of the cards
+	return new_card_set;
+}
+
 
 /***
 *Creates a deep copy of an entire controller(player) so we can test some stuff with it
@@ -137,7 +248,9 @@ var deep_Copy_Controller = function(controller){
     	grave.push(controller["graveyard"][i]);
     }
 
+    //set of GUIDs that are dead
     NC["graveyard"] = grave;
+    //set of booleans mapped to their GUIDs
     NC["seenCards"] = card_Copy(controller["seenCards"]);
 
 
@@ -145,7 +258,7 @@ var deep_Copy_Controller = function(controller){
     NC["hero"] = card_Copy(controller.hero);
     NC["name"] = controller["name"];
     NC["type"] = controller["type"];
-    NC["guid"] = controller[".guid"];
+    NC["guid"] = controller["guid"];
     NC["mana"] = controller["mana"];
     NC["team"] = controller["team"];
     NC["state"] = controller["state"];
@@ -153,6 +266,68 @@ var deep_Copy_Controller = function(controller){
     //give us what we want
     return NC;
 
+}
+
+/**
+*Creates a deep copy of a state object, this is really really complicated
+*
+*Inputs:
+	state: the state we wish to see copied so we can manipulate it
+*Outputs:
+	A deep copy of the state in need of copying
+*/
+var copy_state = function(state){
+	var new_state = {};
+	var new_controllers = {};
+	var new_entities = {};
+	var new_connections = [];
+	var new_controllers_by_ip = {};
+	var new_cards = {};
+	var new_attackedThisTurn = [];
+	//easy
+	new_state["playersReady"] = state["playersReady"];
+
+	//create the new controllers
+	//get the old controllers
+	var controller_set = Object.keys(state["controllers"]);
+	//iterate through the keys
+	controller_set.foreach(function(element){
+		//push the deep copy of the key's value from the source to the key of the target
+		new_controllers[element] = deep_Copy_Controller(controller_set[element]);
+		
+		//add this to the entity list
+		new_entities[new_controllers[element]["guid"]] = new_controllers[element];
+		
+		//iterate through the inplay cards and add them to the entity list
+		for(var i = 0; i<new_controllers[element]; i++){
+			new_entities[new_controllers[element]["cardGuid"]] = new_controllers[element]["inPlay"][i];
+		}
+
+		
+
+	})
+	//set the new state's controllers
+	new_state["controllers"] = new_controllers;
+	//iterate through the entirety of the entity super object and deep copy anything 
+		//non existent in the recieving entity list
+	original_guid_list = Object.keys(state["entities"]);
+	//iterate through the keys
+	state["entities"].foreach(function(element){
+		//if the key already exists in the entity list SKIP!
+		if(element in new_entities){
+			continue;
+		}
+		//otherwise we have to generate a new card for it! 
+		else{
+			new_entities[element] = card_Copy(state["entities"][element]);
+		}
+	}
+	new_state["entities"] = new_entities;
+	new_state["cards"] = card_object_superCopy(state["cards"]);
+
+
+
+	return new_state;
 }
 
 /**
@@ -169,3 +344,4 @@ function compare_copies(va, vb){
 	vb_string = JSON.stringify(vb);
 	return ((va_string.localeCompare(vb_string)) == 0);
 }
+
