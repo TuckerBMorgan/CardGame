@@ -6,7 +6,8 @@ var count = 0;
 var eventsListeners = {};
 
 exports.executeRune = function (rune, state) {
-    
+    //add the rune to the state list
+    state["runes"].push(rune);
     if(count > 0)
     {
         queue.push(rune);
