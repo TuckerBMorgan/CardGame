@@ -302,26 +302,23 @@ var copy_state = function(state){
 		for(var i = 0; i<new_controllers[element]; i++){
 			new_entities[new_controllers[element]["cardGuid"]] = new_controllers[element]["inPlay"][i];
 		}
-
-		
-
-	})
+	});
 	//set the new state's controllers
 	new_state["controllers"] = new_controllers;
 	//iterate through the entirety of the entity super object and deep copy anything 
 		//non existent in the recieving entity list
 	original_guid_list = Object.keys(state["entities"]);
 	//iterate through the keys
-	state["entities"].foreach(function(element){
+	
+	original_guid_list.foreach(function(element){
 		//if the key already exists in the entity list SKIP!
-		if(element in new_entities){
-			continue;
-		}
 		//otherwise we have to generate a new card for it! 
-		else{
+		if(!(element in new_entities)){
 			new_entities[element] = card_Copy(state["entities"][element]);
 		}
-	}
+		
+	});
+	
 	new_state["entities"] = new_entities;
 	new_state["cards"] = card_object_superCopy(state["cards"]);
 
@@ -329,6 +326,38 @@ var copy_state = function(state){
 
 	return new_state;
 }
+
+/**
+*Takes in a state object and creates a new object populated by completely 
+	replaying and executing every rune executed on the existing state
+*
+*
+*
+*/
+var copy_state_by_replay = function(state){
+	//empty state
+	var new_State = {
+		"controllers":{},//by guid look up of all controllers
+	    "entities":{},//guid look up for all cards and controllers
+	    "connections":[],
+	    "controllersByIP":{},
+	    "cards":{},//copies of each distinct card used
+	    "playersReady":0,
+	    "attackedThisTurn":[],//an array of the GUIDs that have gotten into combat this turn
+	    "spellEnchantments":{},
+	    "preEventListeners":{},
+	    "postEventListeners":{},
+	    "runes":[]
+	}
+
+	//grab the only things that we cannot grab from running the runes
+	for(var i = 0; i<state["connections"]; i++){
+
+	}
+
+}
+
+
 
 /**
 *Turns two large JSON objects into strings and then compares
