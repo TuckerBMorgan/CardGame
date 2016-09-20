@@ -15,12 +15,12 @@ var SetHeroHealth = require("./runes/SetHeroHealth");
 
 var state = {
     "controllers":{},//by guid look up of all controllers
-    "entities":{},
+    "entities":{},//guid look up for all cards and controllers
     "connections":[],
     "controllersByIP":{},
-    "cards":{},
+    "cards":{},//copies of each distinct card used
     "playersReady":0,
-    "attackedThisTurn":[],
+    "attackedThisTurn":[],//an array of the GUIDs that have gotten into combat this turn
     "spellEnchantments":{},
     "preEventListeners":{},
     "postEventListeners":{}
