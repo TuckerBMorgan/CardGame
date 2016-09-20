@@ -211,16 +211,20 @@ public class CardAvatar : MonoBehaviour, entity
 
 	public void SetAttack(int newAttack)
 	{
-		attackText.GetComponent<Text> ().text = newAttack.ToString ();
+	//	attackText.GetComponent<Text> ().text = newAttack.ToString ();
+		int current = int.Parse(attackText.GetComponent<Text>().text);
+		if (current > newAttack) 
+		{
+			current = newAttack;
+		}
+		attackText.GetComponent<Text> ().text = current.ToString ();
 	}
 
 	public void ModifyAttack(int amount)
 	{
-		Debug.Log ("SDFSDF");
 		int current = int.Parse (attackText.GetComponent<Text> ().text);
 		current = current + amount;
 		attackText.GetComponent<Text> ().text = current.ToString () + " ";
-		Debug.Log(current + " " + amount);
 	}
 
     public void SetControllerGuid(string controllerGuid)

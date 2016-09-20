@@ -45,6 +45,10 @@ exports.execute = function (rune, state) {
    //not totally happy with this, but just cannot think of a better way of this
    useCard["totalHealth"] = useCard["baseHealth"];
    useCard["currentHealth"] = useCard["baseHealth"];
+   useCard["totalAttack"] = useCard["baseAttack"];
+   useCard["currentAtack"] = useCard["baseAttack"];
+
+   
    useCard["team"] = controller["team"];
    useCard["state"] = "InPlay";
 

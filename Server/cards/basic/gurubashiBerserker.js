@@ -31,7 +31,7 @@ exports.card = {
         RuneVM.executeRune(ModifyAttack.CreateRune(rune["target"]["cardGuid"], rune["source"]["cardGuid"], exports.GURUBASHI_ATTACK_BUFF), state);  
     },
     "removeEnchatments":function(card, state){
-        RuneVM.executeRune(SetAttack.CreateRune(card["cardGuid"], -exports.GURUBASHI_ATTACK_BUFF), state);
+        RuneVM.executeRune(SetAttack.CreateRune(card["cardGuid"], card["totalAttack"] -exports.GURUBASHI_ATTACK_BUFF), state);
     },
     "takeDamage":function (card, amount, source, state){
         card.currentHealth += amount;

@@ -25,7 +25,8 @@ function procesRune(rune, state) {
    if(eventKeys != null){
     //For each person for wants to listen to this event
         if(!eventKeys.some(function (object) {
-          return !object[element+ "Listener"](rune, object, state);
+            console.log(object);
+          return !object[rune.runeType + "Listener"](rune, object, state);
         })){   
             //this means a rune was killed by one of the entities that was listining in
             return;

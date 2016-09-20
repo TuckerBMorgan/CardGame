@@ -49,11 +49,13 @@ public class MinionCard : Card, damageable {
     public void SetHealth(int health)   
     {
         useHealth = health;
+		cardAvatar.SetHealth (useHealth);
     }
 
 	public void SetAttack(int attack)
 	{
 		useAttack = attack;
+		cardAvatar.SetAttack (attack);
 	}
 
 	public void ModifyAttack(int amount)
