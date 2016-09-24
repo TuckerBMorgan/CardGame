@@ -37,16 +37,15 @@ exports.card = {
         return false;
     },
     "applyAura":function (card, otherCard, controller, state) {
-        RuneVM.executeRune(SetHealth.CreateRune(otherCard.cardGuid, exports.STORMWIND_AURA_HEALTH_BUFF_AMOUNT), state);
+        RuneVM.executeRune(SetHealth.CreateRune(otherCard.cardGuid, card["totalHealth"] + exports.STORMWIND_AURA_HEALTH_BUFF_AMOUNT), state);
         RuneVM.executeRune(ModifyHealth.CreateRune(otherCard.cardGuid, card.cardGuid, exports.STORMWIND_AURA_HEALTH_BUFF_AMOUNT), state);
 
-        RuneVM.executeRune(SetAttack.CreateRune(otherCard.cardGuid, exports.STORMWIND_AURA_ATTACK_BUFF_AMOUNT), state);
+        RuneVM.executeRune(SetAttack.CreateRune(otherCard.cardGuid, card["totalAttack"] + exports.STORMWIND_AURA_ATTACK_BUFF_AMOUNT), state);
         RuneVM.executeRune(ModifyAttack.CreateRune(otherCard.cardGuid, card.cardGuid, exports.STORMWIND_AURA_ATTACK_BUFF_AMOUNT), state);
-
     },
     "removeAura":function (card, otherCard, controller, state) {
-        RuneVM.executeRune(SetHealth.CreateRune(otherCard.cardGuid, -exports.STORMWIND_AURA_HEALTH_BUFF_AMOUNT), state);
-        RuneVM.executeRune(SetAttack.CreateRune(otherCard.cardGuid, -exports.STORMWIND_AURA_ATTACK_BUFF_AMOUNT), state);
+        RuneVM.executeRune(SetHealth.CreateRune(otherCard.cardGuid, card["totalHealth"] - exports.STORMWIND_AURA_HEALTH_BUFF_AMOUNT), state);
+        RuneVM.executeRune(SetAttack.CreateRune(otherCard.cardGuid, card["totalAttack"] - exports.STORMWIND_AURA_ATTACK_BUFF_AMOUNT), state);
     }
 }
 //END_OF_CARD_DATA

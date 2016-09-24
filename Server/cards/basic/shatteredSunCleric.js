@@ -35,15 +35,16 @@ exports.card = {
   "isAlive":cardFunctions.baseIsAlive,
   "takeDamage":cardFunctions.basicTakeDamage,
   "AddEnchantments":function(rune, state){
-        RuneVM.executeRune(SetHealth.CreateRune(rune["target"], exports.SUN_CLERIC_HEALTH_BUFF_AMOUNT), state);
-        RuneVM.executeRune(ModifyHealth.CreateRune(rune["target"], rune["source"], exports.SUN_CLERIC_HEALTH_BUFF_AMOUNT), state);
+        var theCard = ent.getEntity(rune["target"], state);
+        RuneVM.executeRune(SetHealth.CreateRune(rune["target"], theCard["totalHealth"] + exports.SUN_CLERIC_HEALTH_BUFF_AMOUNT), state);
+        RuneVM.executeRune(ModifyHealth.CreateRune(rune["target"], rune["source"],exports.SUN_CLERIC_HEALTH_BUFF_AMOUNT), state);
 
-        RuneVM.executeRune(SetAttack.CreateRune(rune["target"], exports.SUN_CLERIC_ATTACK_BUFF_AMOUNT), state);
+        RuneVM.executeRune(SetAttack.CreateRune(rune["target"], theCard["totalAttack"] + exports.SUN_CLERIC_ATTACK_BUFF_AMOUNT), state);
         RuneVM.executeRune(ModifyAttack.CreateRune(rune["target"], rune["source"], exports.SUN_CLERIC_ATTACK_BUFF_AMOUNT), state);
     },
     "RemoveEnchantments":function(card, state){ 
-        RuneVM.executeRune(SetHealth.CreateRune(card["cardGuid"], -exports.SUN_CLERIC_HEALTH_BUFF_AMOUNT), state);
-        RuneVM.executeRune(SetAttack.CreateRune(card["cardGuid"], -exports.SUN_CLERIC_ATTACK_BUFF_AMOUNT), state);
+        RuneVM.executeRune(SetHealth.CreateRune(card["cardGuid"], card["totalHealth"] - exports.SUN_CLERIC_HEALTH_BUFF_AMOUNT), state);
+        RuneVM.executeRune(SetAttack.CreateRune(card["cardGuid"], card["totalAttack"] - exports.SUN_CLERIC_ATTACK_BUFF_AMOUNT), state);
     },  
     "onBattleCry":function (playOption, card, controller, state) {
 

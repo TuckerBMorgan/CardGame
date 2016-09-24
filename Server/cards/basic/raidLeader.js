@@ -38,9 +38,9 @@ exports.card = {
    },
     "applyAura":function (card, otherCard, controller, state) {
 
-        RuneVM.executeRune(SetAttack.CreateRune(otherCard.cardGuid, exports.RAID_LEADER_ATTACK_BUFF_AMOUNT), state);
+        RuneVM.executeRune(SetAttack.CreateRune(otherCard.cardGuid, card["totalAttack"] + exports.RAID_LEADER_ATTACK_BUFF_AMOUNT), state);
         RuneVM.executeRune(ModifyAttack.CreateRune(otherCard.cardGuid, card.cardGuid, exports.RAID_LEADER_ATTACK_BUFF_AMOUNT), state);
     },
     "removeAura":function (card, otherCard, controller, state) {
-        RuneVM.executeRune(SetAttack.CreateRune(otherCard.cardGuid, -exports.STORMWIND_AURA_ATTACK_BUFF_AMOUNT), state);}
+        RuneVM.executeRune(SetAttack.CreateRune(otherCard.cardGuid, card["totalAttack"] - exports.STORMWIND_AURA_ATTACK_BUFF_AMOUNT), state);}
 }

@@ -6,6 +6,11 @@ exports.execute = function (rune, state) {
     
     var ent = entities.getEntity(rune["option"]["cardGuid"], state);
     var controller  = entities.getEntity(rune.controllerGuid, state);
+
+    var controller = entities.getEntity(rune["controllerGuid"], state);
+    var card = entities.getEntity(rune["option"]["cardGuid"], state);
+    var index = controller["hand"].indexOf(card);
+    controller["hand"].splice(index, 1);
     
     ent.spellText(rune, ent, controller, state);
     

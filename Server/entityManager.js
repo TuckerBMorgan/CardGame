@@ -4,7 +4,7 @@ var sortableEntites = [];
 
 exports.MINION = 0;
 exports.SPELL = 1;
-exports.HERO = 2;   
+exports.HERO = 2;
 
 exports.addEntity = function (entity, entityGuid, state) {
     state["entities"][entityGuid] = entity;

@@ -128,7 +128,6 @@ exports.updateState = function(state)
                 {
                     if(!spellObj.stillActive(spellObj, element))
                     {
-                        console.log("FOR SOME REASON THIS IS INACTIVE");
                         spellObj.RemoveEnchantment(element, state);
                         removes.push(i);
                     }
