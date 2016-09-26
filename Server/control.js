@@ -23,7 +23,8 @@ var state = {
     "attackedThisTurn":[],//an array of the GUIDs that have gotten into combat this turn
     "spellEnchantments":{},
     "preEventListeners":{},
-    "postEventListeners":{}
+    "postEventListeners":{},
+    "runes":[]//every rune that is run is tracked here
 }
 
 var CONNCETION_NUM_NEEDED = 1;
@@ -39,16 +40,20 @@ exports.connectionLost = function () {
     }
 }
 
+
 exports.routing = function (message, socket) {
+    //lets try and set an object
     var obj;
     try
     {
+        //a message comes across the wire and we open a json object equal to the message
         obj = JSON.parse(message);
     }
     catch(e)
     {
         console.log(e + " on message " + message + "that is not a valid json object");
     }
+    //switching on the type occurring
     switch (obj["type"]) {
         //valid newConnection rune
         //{
@@ -56,29 +61,47 @@ exports.routing = function (message, socket) {
         // "name":"foo"    
         //}
         case "newConnection":
+            //increment the connection number
             connectionNum++;
+            //if we hit the sweet spot of how many we need to start a game
             if(connectionNum == CONNCETION_NUM_NEEDED)
             {
+                //add this connection to the socket list
                 sockets.push(socket);
                 
+                //create a faker *for AI?*
                 var fakesocket = {
                     "remoteAddress":"00-00-00"
                 }
+                //add that one to the socket list
                 sockets.push(fakesocket);
+                //init state.controllers to be an open object
                 state.controllers = {};
+                //init entities to be an open object
                 state.entities = {};
+                //init controllersByIP as an open object
                 state.controllersByIP = {};
+                //init connections as an empty array
                 state.connections = [];
+                //add each socket to the connections array
                 sockets.forEach(function(element) {
                     state.connections.push(element.remoteAddress);
                 })
+                //run bootstrap on this state
+                    //what we have at this point are empty objects and empty arrays
+                    //but we do have a valid connection list of remote addresses
                 bootstrap(state);
+                //now that bootstrap has run we have created each new controller and told the other player about it
+                //increment the ready number
                 state.playersReady++;
             }
             else if(connectionNum == 0)
             {
+                //add the most recent socket
                 sockets.push(socket);
+                //add a fake socket
                 sockets.push(fakesocket);
+                //increment twice
                 connectionNum++;
                 connectionNum++;
             }
@@ -101,31 +124,43 @@ exports.routing = function (message, socket) {
             var keys = Object.keys(state.controllers);
             //random who will go first
             var goFirst = Math.floor((Math.random() * 100)) % 2;
-                
+            
+            //quickly be able to reference each "player"
             var first = state.controllers[keys[0]];
             var second = state.controllers[keys[1]];
+
+            //set the turn order array and which turn it is
             state["turnOrder"] = [];
             state["OnTurnPlayer"] = 0;
             state.turnOrder[0] = first;
             state.turnOrder[1] = second;
+
+            //the deck that will be used for both characters
             var useDeck = testDecks.deck;
             
+            //iterate through the use deck
             for(var i = 0;i<useDeck.length;i++) 
             {
+                //for each car, load it into a temp variable called card
                 var card = util.loadCard(useDeck[i]);
+                //card comes back where the prototype items are equal to the card values and card now carries the function calls as well
+                //create the create card rune
                 var useCard = {
                     "runeType":"CreateCard",
                 }
+                //get the properties of a single card
                 var cardkeys = Object.keys(card);
                 //copy the keys from the card we just yanked, we want to make sure that CreateCard is the first key in the object
                 cardkeys.forEach(function (element) {
                     useCard[element] = card[element];
                 })
+                //set the GUIDs so that this card can be accessed by the player GUID and it's unique GUID
                 useCard.controllerGuid = first.guid;
                 useCard.cardGuid = util.createGuid();
+                //execute create card on this card
                 Rune.executeRune(useCard, state);
             }
-            
+            //same as the above
             for(var i = 0;i<30;i++) 
             {
                 var card = util.loadCard(useDeck[i]);
@@ -153,6 +188,7 @@ exports.routing = function (message, socket) {
                     i--;
                     continue;
                 }
+                //if the card is unique we add it to the first hand
                 firstHand.push(newGuid);
             }
             
@@ -169,16 +205,19 @@ exports.routing = function (message, socket) {
                 secondHand.push(newGuid);
             }
             
+            //for each dealt card in the first player's hand
             for(var i = 0;i<firstHand.length;i++)
             {
+                //create a new rune for dealing cards
                 var dealCardRune = {
                     "runeType":"DealCard",
                     "controllerGuid":first.guid,
                     "cardGuid":firstHand[i]
                 }
+                //deal the card
                 Rune.executeRune(dealCardRune, state);
             }
-            
+            //same as above
             for(var i = 0;i<secondHand.length;i++)
             {
                 var dealCardRune = {
@@ -188,6 +227,7 @@ exports.routing = function (message, socket) {
                 }
                 Rune.executeRune(dealCardRune, state);
             }
+            
             first.state = controllerRune.MULLIGAN;
             second.state = controllerRune.MULLIGAN;
             var op1 = options.createOptions(first.guid, state);
@@ -383,6 +423,7 @@ exports.executeOptions = function (index, controller, state) {
         
 }
 
+//set up the game executed once enough players have connected
 function bootstrap(state) {
     //for each connection that we have create a controller
     state.connections.forEach(function(element, index) {
@@ -395,17 +436,27 @@ function bootstrap(state) {
         }
         else 
         {
+            //AI will always be index 1
             type = newController.AI_CONTROLLER;
             state.ai = {};
         }
+        //create a new controller object
         var obj = { 
+            //the GUID we created
             "guid":guid,
+            //name of the controller
             "name":name,
+            //AI vs player
             "controllerType":type,
+            //the hero
             "hero":"hunter"
         }
+        //create the new controller by executing obj as a rune
+        //  state.controllers[guid] is set to the newly created controller via execute rune
         newController.execute(obj, state)
+        //get the IP of the controller and point it to the controller
         state.controllersByIP[element] = state.controllers[guid];
+        //the controller has a pointer towards the socket value
         state.controllers[guid].socket = sockets[index];
     }, this);
     
