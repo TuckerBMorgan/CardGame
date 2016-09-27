@@ -20,6 +20,8 @@ exports.loadCard = function(fileName) {
 }
 
 exports.dealCard = function (deck) {
+		//grab a random index
         var index = Math.floor(Math.random() * deck.length);
+        //return the card GUID at that index
         return deck[index].cardGuid;
 } 
