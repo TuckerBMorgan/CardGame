@@ -340,8 +340,12 @@
 			"cardText":"Give your minions +3 Attack this turn.",
 			"art":"BloodLust"
 		},
-		
-      }
+		"fireElemental":{
+      		"cardName":"Fire Elemental",
+			"desc":"He can never take a bath. Ewww.",
+			"cardText":"<b>Battlcry</b>: Deal 3 Damage.",
+			"art":"fireElemental" 
+	    }
     }
   }
 }

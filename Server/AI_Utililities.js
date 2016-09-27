@@ -315,13 +315,13 @@ var copy_state = function(state){
 	state["entities"].foreach(function(element){
 		//if the key already exists in the entity list SKIP!
 		if(element in new_entities){
-			continue;
+		//	continue;
 		}
 		//otherwise we have to generate a new card for it! 
 		else{
 			new_entities[element] = card_Copy(state["entities"][element]);
 		}
-	}
+	})
 	new_state["entities"] = new_entities;
 	new_state["cards"] = card_object_superCopy(state["cards"]);
 
