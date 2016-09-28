@@ -318,7 +318,7 @@
         },
 		"shatteredSunCleric":{
 			"cardName":"Shattered Sun Cleric",
-			"desc":"They always have a spare flash of Sunell Energy Drink \u+2122!",
+			"desc":"They always have a spare flash of Sunell Energy Drink!",
 			"cardText":"<b>Battlecry</b>: Give a friendly minion +1/+1.",
 			"art":"shatteredSunCleric"
 		},
@@ -346,6 +346,7 @@
 			"cardText":"<b>Battlcry</b>: Deal 3 Damage.",
 			"art":"fireElemental" 
 	    }
+      }
     }
   }
 }

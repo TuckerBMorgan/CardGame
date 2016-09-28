@@ -121,7 +121,7 @@ exports.createOptions = function (controller, state) {
     }
     
     mineInPlay.forEach(function (element) {
-        useList.forEach(function (innerElement) {
+        useList.forEach(function (innerElement) {    
             if(element.canAttack(element, innerElement, controller, state))
             {
                 var attackOtions = {
