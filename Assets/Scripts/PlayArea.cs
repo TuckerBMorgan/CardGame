@@ -442,6 +442,7 @@ public class PlayArea : MonoBehaviour
 
     public void StarGameRune(Rune rune, Action action)
     {
+		Debug.Log ("SSDFSDF))))");
         gameStarted = true;
 
         float yPos = -2.0f;

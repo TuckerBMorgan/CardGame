@@ -119,12 +119,11 @@ public class CardAvatar : MonoBehaviour, entity
     //Entry point for the mesh to tell the whole card it is being clicked
     public void OnMouseDownOnMesh()
     {
-        if (!PlayArea.Singelton.GetGameStart())
+		if (!PlayArea.Singelton.GetGameStart())
         {
-            Controller ctr = EntityManager.Singelton.GetEntity(playerGuid) as Controller;
+			Controller ctr = EntityManager.Singelton.GetEntity(playerGuid) as Controller;
             PlayArea.Singelton.OnCardAvatarClickedForMulligan(ctr.GetCardIndexInHand(card));
-        //need to add in mulligna effect later
-            return;
+			return;
         }
 
         return;

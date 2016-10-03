@@ -25,14 +25,10 @@ function procesRune(rune, state) {
    var eventKeys = state["preEventListeners"][rune.runeType];
    if(eventKeys != null){
     //For each person for wants to listen to this event
-        if(!eventKeys.some(function (object) {
-            console.log(object);
-          return !object[rune.runeType + "Listener"](rune, object, state);
-        })){   
-            //this means a rune was killed by one of the entities that was listining in
-            return;
-        }
-    }
+        eventKeys.forEach(function (object) {
+          object[rune.runeType + "Listener"](rune, object, state);
+        })}
+    
 
     var file = require("./runes/" + rune.runeType);
     file.execute(rune, state);
@@ -40,12 +36,16 @@ function procesRune(rune, state) {
     var eventKeys = state["postEventListeners"][rune.runeType];
     if(eventKeys != null){
     //For each person for wants to listen to this event
-        if(!eventKeys.some(function (object) {
-          return !object[element+ "Listener"](rune, object, state);
-        })){   
-            //this means a rune was killed by one of the entities that was listining in
-            return;
-        }
+        eventKeys.forEach(function (object) {
+          object[element+ "Listener"](rune, object, state);
+        })
+    }
+
+    if(queue.length > 0)
+    {
+        count++;
+        procesRune(queue.shift(), state);
+        count--;
     }
 
     var keys = Object.keys(state.controllers);
@@ -59,12 +59,7 @@ function procesRune(rune, state) {
         }
     })
     
-    if(queue.length > 0)
-    {
-        count++;
-        procesRune(queue.shift(), state);
-        count--;
-    }
+    
 }
 
 exports.addListenerPre = function (object, event, state) {

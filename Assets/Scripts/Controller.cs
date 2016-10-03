@@ -65,15 +65,28 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
                     if (go.tag == "Card")
                     {
                         CardAvatar ca = go.GetComponentInParent<CardAvatar>();
-                        if (ca.cardAvatarState == CardAvatarState.inHand)
-                        {
-                            if (ca.GetControllerGuid() == guid)
-                            {
-                                ca.cardAvatarState = CardAvatarState.inTransit;
-                                careAboutCard = ca;
-                                controllerState = ControllerState.movingCard;
-                            }
-                        }
+						if (ca.cardAvatarState == CardAvatarState.inHand) 
+						{
+							if (ca.GetControllerGuid () == guid)
+							{
+								ca.cardAvatarState = CardAvatarState.inTransit;
+								careAboutCard = ca;
+								controllerState = ControllerState.movingCard;
+							}
+						}
+						else if (ca.cardAvatarState == CardAvatarState.inPlay)
+						{
+							if (ca.GetControllerGuid () == guid)
+							{
+								targetOptions = OptionsManager.Singleton.options[ca.GetGuid()];
+								if (targetOptions != null) 
+								{
+									careAboutCard = ca;
+									controllerState = ControllerState.targeting;
+									ca.cardAvatarState = CardAvatarState.waitingForTarget;
+								}
+							}
+						}
                     }
                     else if (go.tag == "Hero")
                     {
@@ -93,7 +106,7 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
                     {
                         CardAvatar ca = go.GetComponentInParent<CardAvatar>();
 
-                        if (ca.cardAvatarState == CardAvatarState.inPlay)
+						if (ca.cardAvatarState == CardAvatarState.inPlay && careAboutCard.cardAvatarState == CardAvatarState.inTransit)
                         {
                             string cardGuid = ca.GetGuid();
                             foreach (Option op in targetOptions)
@@ -187,15 +200,14 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
                 }
                 else if (controllerState == ControllerState.targeting)
                 {
-                    if (careAboutCard != null)
+					if (careAboutCard != null)
                     {
-                        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+						Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                         RaycastHit rch;
                         if (Physics.Raycast(ray, out rch, 10000000))
                         {
-                            string targetGuid = "";
-
-                            if (rch.collider.gameObject.tag == "Card")
+							string targetGuid = "";
+							if (rch.collider.gameObject.tag == "Card")
                             {
                                 targetGuid = rch.collider.gameObject.GetComponentInParent<CardAvatar>().GetGuid();
                             }
@@ -204,7 +216,7 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
                                 targetGuid = rch.collider.gameObject.GetComponentInParent<HeroAvatar>().careAboutGuid;
                             }
 
-                            if (careAboutCard.cardAvatarState == CardAvatarState.inHand)
+							if (careAboutCard.cardAvatarState == CardAvatarState.inHand)
                             {
                                 if (targetOptions != null)
                                 {
@@ -233,7 +245,7 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
                                     }
                                 }
                             }
-                            else if (careAboutCard.cardAvatarState == CardAvatarState.inPlay)
+							else if (careAboutCard.cardAvatarState == CardAvatarState.waitingForTarget)
                             {
                                 if (targetOptions != null)
                                 {
@@ -447,61 +459,6 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
     public bool IsIsHand(Card card)
     {
         return hand.Contains(card);
-    }
-
-    public void OnCardAvatarClicked(CardAvatar cardAvatar)
-    {
-       
-        if(controllerState == ControllerState.targeting)
-        {
-            TargetReport(cardAvatar.GetCard().GetGuid());
-            return;
-        }
-        switch(cardAvatar.cardAvatarState)
-        {
-            case CardAvatarState.inGraveyad:
-
-                break;
-            case CardAvatarState.inHand:
-                if(cardAvatar.GetControllerGuid() == guid)
-                {
-                    cardAvatar.cardAvatarState = CardAvatarState.inTransit;
-                    cardAvatar.transform.position += new Vector3(0, 0, -1);
-                }
-                break;
-            case CardAvatarState.inPlay:
-                if (controllerState == ControllerState.waiting)
-                {
-                    if (OptionsManager.Singleton.options.ContainsKey(cardAvatar.GetCard().GetGuid()))
-                    {
-                        var options = OptionsManager.Singleton.options[cardAvatar.GetCard().GetGuid()];
-                        foreach (Option op in options)
-                        {
-                            if (op.GetType() == typeof(AttackOption))
-                            {
-                                cardAvatar.cardAvatarState = CardAvatarState.waitingForTarget;
-                                EntityWantsToTarget(cardAvatar.GetCard().GetGuid());
-                            }
-                        }
-                    }
-                }
-                //a target has been picked, now all we have to do is validate it and act
-                else
-                {
-                    TargetReport(cardAvatar.GetCard().GetGuid());
-                }
-
-                break;
-
-            case CardAvatarState.inTransit:
-
-                //this should not happen
-                return;
-                
-            case CardAvatarState.waitingForTarget:
-                break;
-
-        }
     }
 
     public void OnHeroPortaitClicked(HeroAvatar heroAvatar)

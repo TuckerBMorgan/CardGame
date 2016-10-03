@@ -5,6 +5,8 @@ exports.execute = function (rune, state) {
     //this will need to be a better function later one
     
     var ent = entities.getEntity(rune.target, state);
+    
+    console.log(ent);
     if(ent.type == entities.MINION)
     {
         if(rune.amount < 0)

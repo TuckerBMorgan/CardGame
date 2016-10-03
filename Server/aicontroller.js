@@ -102,7 +102,7 @@ var knapsackMatrix = function(state, controller){
 
 
 exports.calculateMove = function(controller, options, state) {
-    
+  
     //the ai wants to play cards first, so get all playCard options
     var playCard = options.filter(function (element) {
          return (element["option"] == optionsTypes.PLAY_CARD_TYPE);
@@ -120,10 +120,11 @@ exports.calculateMove = function(controller, options, state) {
     })  
    
     var mana = controller.mana;
-    if(controller.mana == 0)
+    if(controller.mana == 0 || controller.hand.length == 0)
     {
         return 0;
     }
+    
     
     var playOrder = canPlay.sort(function (a, b) {
         var playCostA = a.baseHealth + a.baseAttack;

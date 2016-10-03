@@ -22,12 +22,12 @@ exports.card = {
   "canPlay":cardFunctions.basicCanPlay,
   "AddEnchantments":function(rune, state){
         var targetEnt = ent.getEntity(rune["target"], state);
-        console.log(targetEnt["totalAttack"]);
+        
         Rune.executeRune(SetAttack.CreateRune(rune["target"], targetEnt["totalAttack"] + exports.BLOOD_LUST_ATTACK_BUFF), state);
         Rune.executeRune(ModifyAttack.CreateRune(rune["target"], rune["source"], exports.BLOOD_LUST_ATTACK_BUFF), state);
   },
   "RemoveEnchantments":function(card, state){
-
+     console.log(card);
      Rune.executeRune(SetAttack.CreateRune(card["cardGuid"], card["totalAttack"] - exports.BLOOD_LUST_ATTACK_BUFF), state);
   },
   "spellText":function (rune, entity, controller, state) {
@@ -35,7 +35,7 @@ exports.card = {
           "source":rune["cardGuid"],
           "turnHasPassed":false,
           "stillActive":function(entObject, target){
-            if(this.turnHasPassed)
+            if(entObject.turnHasPassed)
             {
                 return false;
             }
@@ -43,13 +43,16 @@ exports.card = {
           },
          "RotateTurnListener":function(rune, object, state){
             object.turnHasPassed = true;
+            return false;
           },
           "AddEnchantment":exports.card.AddEnchantments,
           "RemoveEnchantment":exports.card.RemoveEnchantments
       }
       Rune.addListenerPre(enchantmentObject, "RotateTurn", state);
       state["spellEnchantments"][rune["option"]["cardGuid"]] = enchantmentObject;
+      
       var allMinionsOnMySide = ent.returnAllAliveAndOnTeam(controller["team"], state)
+
       allMinionsOnMySide.forEach(function(element){
             //this is just super jank because doing something to avoid controllers
             if(element > 2)

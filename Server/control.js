@@ -486,7 +486,6 @@ function bootstrap(state) {
             }
             if(state.controllers[element].type == newController.PLAYER_CONTROLLER)
             {
-                console.log(JSON.stringify(sec));
                 //and send it
                 server.sendMessage(JSON.stringify(sec), state.controllers[element].socket);          
             }
@@ -496,7 +495,6 @@ function bootstrap(state) {
 
     keys.forEach(function(element){
         var hero = state["controllers"][element]["hero"];
-        console.log(hero);
         Rune.executeRune(SetHeroHealth.CreateRune(element, hero["baseHealth"]), state);
     })
 }

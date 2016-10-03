@@ -15,7 +15,7 @@ exports.loadCard = function(fileName) {
 
       var def = JSON.parse(JSON.stringify(defaultCard.cardPrototype));
       var card = Object.assign(def, contents.card);
-
+      card["enchantments"] = [];
       return card;
 }
 

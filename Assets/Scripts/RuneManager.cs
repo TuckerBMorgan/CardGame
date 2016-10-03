@@ -52,8 +52,6 @@ public class RuneManager : MonoBehaviour
         string typeOfRune = jsonObject[RUNE_TYPE].str;
         if (typeOfRune != "optionRune")
         {
-
-
             var type = Type.GetType(typeOfRune);
 			var runeObj = Activator.CreateInstance(type);
             for (int i = 0; i < jsonObject.keys.Count; i++)

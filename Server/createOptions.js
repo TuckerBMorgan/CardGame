@@ -101,27 +101,29 @@ exports.createOptions = function (controller, state) {
         {
             tauntList.push(element.cardGuid);
         }
-        else if(element.tags.hasOwnProperty(tags.STEALTH))
+        else if(!element.tags.hasOwnProperty(tags.STEALTH))
         {
             otherList.push(element.cardGuid);
         }
     })
-    var useLis = [];
+    
+    
+    var useList = [];
+    
     //We have atleast one taunt, we are unable to attack anyone else
     if(tauntList.length > 0)
-    {
+    {   
         useList = tauntList;
     }
-    //just use regular list to build targets
     else
     {
         useList = otherList;
         var controller = entities.getOtherController(me, state);
        // useList.push(controller.guid);
     }
-    
+
     mineInPlay.forEach(function (element) {
-        useList.forEach(function (innerElement) {    
+        useList.forEach(function (innerElement) {
             if(element.canAttack(element, innerElement, controller, state))
             {
                 var attackOtions = {

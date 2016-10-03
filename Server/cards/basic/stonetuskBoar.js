@@ -25,13 +25,3 @@ exports.card = {
   "takeDamage":cardFunctions.basicTakeDamage,
 }
 //END_OF_CARD_DATA
-
-exports.canPlay = cardFunctions.basicCanPlay
-
-exports.attack = cardFunctions.basicAttack;
-
-exports.canAttack = cardFunctions.basicCanAttack;
-
-exports.takeDamage = cardFunctions.baseTakeDamage;
-
-exports.isAlive = cardFunctions.baseIsAlive;  

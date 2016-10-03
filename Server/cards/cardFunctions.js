@@ -35,7 +35,6 @@ exports.baseIsAlive = function (card, controller, state) {
 //but this isnt good, and I dont like it, at allllllll, this has to be better
 exports.basicCanAttack = function(card, target, controller, state)
 {
-    console.log("SDF------------");
     if(state.attackedThisTurn.indexOf(card.cardGuid) != -1)
     {
         if(card.tags.hasOwnProperty(tags.WINDFURY))
@@ -60,12 +59,10 @@ exports.basicCanAttack = function(card, target, controller, state)
     }
     if(card.tags.hasOwnProperty(tags.SUMMONING_SICKNESS))
     {
-        console.log("SDF_0");
         return false;
     }
     if(card.baseAttack <= 0)
     {
-        console.log("SDF");
         return false;
     }
     return true;
@@ -81,6 +78,6 @@ exports.basicAttack = function (card, target, controller, state) {
     rune.executeRune(attackRune, state);
 }
 
-exports.baseTakeDamage  = function (card, amount, source, state){
+exports.basicTakeDamage  = function (card, amount, source, state){
     card.currentHealth += amount;
 }

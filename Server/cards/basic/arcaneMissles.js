@@ -20,8 +20,6 @@ exports.card = {
         var enemyInPlay = ent.getEnemyMinions(controller, state);
         var enemyController = ent.getOtherController(controller, state);
 
-        console.log(enemyController.toString());
-
         if(enemyInPlay == null)
             return;
    

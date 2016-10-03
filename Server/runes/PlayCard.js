@@ -16,7 +16,7 @@ exports.execute = function (rune, state) {
     if(card["tags"].hasOwnProperty(tags.BATTLE_CRY))
     {
         card.onBattleCry(rune.playOption, card, controller, state);
-    }
+    }   
     
     controller["inPlay"].push(card);
     
@@ -27,7 +27,7 @@ exports.execute = function (rune, state) {
       "controllerGuid":rune["controllerGuid"],
       "mana":controller["mana"] - card["cost"]
     }
-     
+    
      card["totalHealth"] = card["baseHealth"];
      card["currentHealth"] = card["baseHealth"];
      card["totalAttack"] = card["baseAttack"];

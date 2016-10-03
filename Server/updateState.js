@@ -118,11 +118,16 @@ exports.updateState = function(state)
     });
 
     ents.forEach(function(element){
+        
         var removes = [];
+
         if(element["enchantments"].length > 0)
         {
             for(var i = 0;i<element["enchantments"].length;i++)
             {
+                if(element["enchantments"] == "|||||||")
+                    continue;
+                    
                 var spellObj = state["spellEnchantments"][element["enchantments"][i]];
                 if(spellObj != undefined)
                 {
@@ -130,6 +135,7 @@ exports.updateState = function(state)
                     {
                         spellObj.RemoveEnchantment(element, state);
                         removes.push(i);
+                        redo = true;
                     }
                 }
             }
@@ -137,9 +143,13 @@ exports.updateState = function(state)
         while(removes.length > 0)
         {
             var val = removes.shift();
+            removes.forEach(function(num, index){
+                removes[index] = num - 1;
+            })
             element["enchantments"].splice(val, 1);
         }
     })
+    
     
     //if anyone died we have to do this whole thing again, and again, again
     if(redo == true)
