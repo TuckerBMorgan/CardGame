@@ -12,6 +12,9 @@
 *
 */
 
+var entities = require('./entityManager')
+var cardTags = require('./cards/cardTags')
+
 /*
 *An easy to utilize prototype for a hand card all it contains are GUID and mana
 *
@@ -23,6 +26,10 @@ var hand_Card_Prototype ={
 	mana = 0
 };
 */
+
+
+
+
 
 /*
 *Returns true if the card is taunting
@@ -178,19 +185,21 @@ var card_Copy = function(card){
 }
 
 /**
-*Creates a deep copy of a set of cards, usually for inPlay cards
+*Creates a deep copy of a set of cards in an array, also adds them to the entity list
 *Inputs:
 	cards: an array of several cards
 *Output:
 	an array of deep copied cards
 */
-var card_Group_Copy = function(cards){
+var card_Group_Copy = function(cards, state){
 	//initialize an array 
 	var newGroup = [];
 	//iterate through all cards of a set
 	for(var i = 0; i<=cards.length; i++){
 		//take the deep copy of cards[i] and push it into the array
-		newGroup.push(card_Copy(cards[i]));
+		var nc = card_Copy(cards[i]);
+		newGroup.push(nc);
+		entities.addEntity(nc, nc["guid"], state);
 	}
 	return newGroup;
 }
@@ -228,32 +237,18 @@ var card_object_superCopy = function(card_set){
 	The deep copy of a controller.
 *
 */
-var deep_Copy_Controller = function(controller){
+var deep_Copy_Controller = function(controller, state){
     var NC = Object.keys(controller);
     //this cant be deep copied, wait maybe it should, or we do some shallow-ish copy on it?
-    NC["deck"] = controller["deck"];
-    //I'll deep copy this since we can use this as a means to test strength
-    var mHand = [];
-    for(var i = 0; i<=controller["hand"].length; i++){
-    	//just push the IDs
-    	mHand.push(controller["hand"][i]);
-    }
-    NC["hand"] = mHand
+    NC["deck"] = card_Group_Copy(controller["deck"], state); 
+
+    NC["hand"] = card_Group_Copy(controller["hand"], state);
     //just call the card copy function
-    NC["inPlay"] = card_Group_Copy(controller["inPlay"]);
+    NC["inPlay"] = card_Group_Copy(controller["inPlay"], state);
     //go through each grave and push the ID to grave[]
-    var grave = [];
-    for(var i = 0; i<controller["graveyard"].length; i++){
-    	//just push the IDs
-    	grave.push(controller["graveyard"][i]);
-    }
-
-    //set of GUIDs that are dead
-    NC["graveyard"] = grave;
-    //set of booleans mapped to their GUIDs
+    NC["graveyard"] = card_Group_Copy(controller["graveyard"], state);
+    //must be reworked maybe add an argument to the card copy/groupcopy
     NC["seenCards"] = card_Copy(controller["seenCards"]);
-
-
     //anything I can easily copy shallow like IDs do it here
     NC["hero"] = card_Copy(controller.hero);
     NC["name"] = controller["name"];
@@ -277,52 +272,70 @@ var deep_Copy_Controller = function(controller){
 	A deep copy of the state in need of copying
 */
 var copy_state = function(state){
-	var new_state = {};
-	var new_controllers = {};
-	var new_entities = {};
-	var new_connections = [];
-	var new_controllers_by_ip = {};
-	var new_cards = {};
-	var new_attackedThisTurn = [];
+	var ns_state = {
+	    "controllers":{},//by guid look up of all controllers
+	    "entities":{},//guid look up for all cards and controllers
+	    "connections":[],
+	    "controllersByIP":{},
+	    "cards":{},//copies of each distinct card used
+	    "playersReady":0,
+	    "attackedThisTurn":[],//an array of the GUIDs that have gotten into combat this turn
+	    "spellEnchantments":{},
+	    "preEventListeners":{},
+	    "postEventListeners":{},
+	    "runes":[]//every rune that is run is tracked here
+	}
+
 	//easy
-	new_state["playersReady"] = state["playersReady"];
+	ns_state["playersReady"] = state["playersReady"];
 
 	//create the new controllers
 	//get the old controllers
 	var controller_set = Object.keys(state["controllers"]);
+	var controllers_ip = Object.keys(state["controllersByIP"]);
 	//iterate through the keys
-	controller_set.foreach(function(element){
-		//push the deep copy of the key's value from the source to the key of the target
-		new_controllers[element] = deep_Copy_Controller(controller_set[element]);
-		
+	controller_ip.foreach(function(element){
+		//grab the current controller's guid
+		var guid = state["controllersByIP"][element]["guid"];
+		//create the deep copy
+		var controller_DC = deep_Copy_Controller(state["controllersByIP"][element], ns_state);
+		//add the deep copy to the controller by IP list
+		ns_state["controllersByIP"][element] = controller_DC;
+		//add the deep copy to the controller list
+		ns_state["controllers"][guid] = controller_DC
 		//add this to the entity list
-		new_entities[new_controllers[element]["guid"]] = new_controllers[element];
-		
-		//iterate through the inplay cards and add them to the entity list
-		for(var i = 0; i<new_controllers[element]; i++){
-			new_entities[new_controllers[element]["cardGuid"]] = new_controllers[element]["inPlay"][i];
-		}
+		entity.addEntity( ns_state["controllers"][guid], guid, ns_state); 
 	});
-	//set the new state's controllers
-	new_state["controllers"] = new_controllers;
-	//iterate through the entirety of the entity super object and deep copy anything 
-		//non existent in the recieving entity list
-	original_guid_list = Object.keys(state["entities"]);
-	//iterate through the keys
+	//deep copy the cards
+	ns_state["cards"] = card_object_superCopy(state["cards"]);
+	//these are integers which do not change
+	ns_state["playersReady"] = state["playersReady"];
+	for(var i = 0; i<state["attackedThisTurn"].length; i++){
+		ns_state["attackedThisTurn"].push(state["attackedThisTurn"][i]);
+	}
+	//add the connections to the new state
+	for(var i = 0; i<state["connections"].length; i++){
+		ns_state["connections"].push(state["connections"][i]);
+	}
 	
-	original_guid_list.foreach(function(element){
-		//if the key already exists in the entity list SKIP!
-		//otherwise we have to generate a new card for it! 
-		if(!(element in new_entities)){
-			new_entities[element] = card_Copy(state["entities"][element]);
+	var pre_event_keys = Object.keys(state["preEventListeners"]);
+	pre_event_keys.foreach(function(element){
+		var listeners = [];
+		for(var i = 0; i<= state["preEventListeners"][element]; i++){
+			listeners.append(Object.assign({}, state["preEventListeners"][element][i]));
 		}
-		
+		ns_state["preEventListeners"][element] = listeners;
 	});
-	new_state["entities"] = new_entities;
-	new_state["cards"] = card_object_superCopy(state["cards"]);
+	var pre_event_keys = Object.keys(state["postEventListeners"]);
+	post_event_keys.foreach(function(element){
+		var listeners = [];
+		for(var i = 0; i<= state["postEventListeners"][element]; i++){
+			listeners.append(Object.assign({}, state["postEventListeners"][element][i]));
+		}
+		ns_state["postEventListeners"][element] = listeners;
+	});
 
-
-
+	//ignore runes for now
 	return new_state;
 }
 
