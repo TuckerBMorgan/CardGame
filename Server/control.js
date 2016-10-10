@@ -339,8 +339,12 @@ exports.executeMulligan = function (indices, controller, state)
             else
             {
                 var index =  AI.calculateMove(state.turnOrder[state.OnTurnPlayer], characterOptions, state);
+                var objj = {
+                        "index":index
+                    }
                 setTimeout(function () {
-                    exports.executeOptions(index, state.turnOrder[state.OnTurnPlayer], state);
+                    
+                    exports.executeOptions(objj, state.turnOrder[state.OnTurnPlayer], state);
                 },1600);
             }
         }
@@ -416,9 +420,11 @@ exports.executeOptions = function (payload, controller, state) {
             else
             {
                 var index =  AI.calculateMove(state.turnOrder[state.OnTurnPlayer], characterOptions, state);
-                
+                var objj = {
+                    "index":index
+                }
                 setTimeout(function () {
-                    exports.executeOptions(index, state.turnOrder[state.OnTurnPlayer], state);
+                    exports.executeOptions(objj, state.turnOrder[state.OnTurnPlayer], state);
                 },800);
             }
         }

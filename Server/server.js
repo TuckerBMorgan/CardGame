@@ -4,6 +4,11 @@ var control = require('./control');
 var ECONNRESETCODE = "ECONNRESET";
 var messageOutQueue = []
 
+
+console.log("\033[2J\033[1;1H");
+
+console.log("Server has started");
+
 var server = net.createServer(function(socket) {
     socket.on('data', function(data) {
         control.routing(data, socket);

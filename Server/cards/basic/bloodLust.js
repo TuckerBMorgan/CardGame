@@ -12,7 +12,7 @@ exports.BLOOD_LUST_ATTACK_BUFF = 3;
 
 exports.card = {
   "type": ent.SPELL,
-  "cost": 0,
+  "cost": 5,
     //A short note about IDS, THEY CANNOT CHANGE unless all files that use it change as a well, they are the only way to go from an instance of a entity to the file that they use
   "id":"bloodLust",
   "set":cardTags.BASIC,

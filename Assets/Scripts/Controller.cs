@@ -117,7 +117,11 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
                                     careAboutCard.cardAvatarState = CardAvatarState.inPlay;
                                     targetOptions = null;
                                     careAboutCard = null;
-                                    OptionsManager.Singleton.PickUpOption(op);
+									int index = PlayArea.Singelton.GetPossibleCardIndex (careAboutCard);
+                                    OptionsManager.Singleton.PickUpOption(op, index);
+
+
+
                                     return;
                                 }
                             }
@@ -152,7 +156,8 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
                                 {
                                     if ((op as PlayCardOption).targetGuid == "-1")
                                     {
-                                        OptionsManager.Singleton.PickUpOption(op);
+										int placeIndex = PlayArea.Singelton.GetPossibleCardIndex (careAboutCard);
+										OptionsManager.Singleton.PickUpOption(op, placeIndex);
                                         careAboutCard.cardAvatarState = CardAvatarState.inPlay;
                                         controllerState = ControllerState.waiting;
                                         careAboutCard = null;
@@ -226,7 +231,8 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
                                         {
                                             if ((op as PlayCardOption).targetGuid == targetGuid)
                                             {
-                                                OptionsManager.Singleton.PickUpOption(op);
+												int placeIndex = PlayArea.Singelton.GetPossibleCardIndex (careAboutCard);
+												OptionsManager.Singleton.PickUpOption(op, placeIndex);
                                                 careAboutCard = null;
                                                 targetOptions = null;
                                                 controllerState = ControllerState.waiting;

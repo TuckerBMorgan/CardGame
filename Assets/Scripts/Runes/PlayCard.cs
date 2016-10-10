@@ -23,6 +23,7 @@ public class PlayCard : Rune {
     public string cardGuid { get; set; }
     public OriginOfCard originOfCard { get; set; }
     public TypeOfRemoveFromHand typeOfRemoveFromHand { get; set; }
+	public int index{ get; set; }
 
 
     public PlayCard()

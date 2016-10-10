@@ -30,18 +30,9 @@ exports.card = {
   "takeDamage":cardFunctions.basicTakeDamage,
   "onBattleCry":function (playOption, card, controller, state) {
     var boarGuid = util.createGuid();
-    
-    var summon = {
-        "runeType":"SummonMinion",
-        "controllerGuid":controller.guid,
-        "sourceCardGuid":card.cardGuid,
-        "cardGuid":boarGuid,
-        "cardId":exports.BOAR_PATH
-    }
-
-    SummonRune.CreateRune(controller.guid, card.cardGuid, boarGuid, exports.BOAR_PATH);
+    var indexOf = controller["inPlay"].indexOf(card);
+    var summon = SummonRune.CreateRune(controller.guid, card.cardGuid, boarGuid, exports.BOAR_PATH, indexOf + 1);
     Rune.executeRune(summon, state);
   }
-
 }
 //END_OF_CARD_DATA

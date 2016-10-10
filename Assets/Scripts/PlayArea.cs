@@ -53,6 +53,26 @@ public class PlayArea : MonoBehaviour
     public int MulliganCount { get; private set; }
     private List<int> indexes;
 
+	public int GetPossibleCardIndex(CardAvatar placingCard)
+	{
+		if (playFields [homeGuid].Count == 0) 
+		{
+			return 0;
+		}
+
+		List<CardAvatar> checkCards = playFields [homeGuid];
+
+		for (int i = 0; i < checkCards.Count; i++) 
+		{
+			if (checkCards [i].transform.position.x > placingCard.transform.position.x) 
+			{
+				return i;
+			}
+		}
+		return checkCards.Count;
+	}
+
+
     public void Setup()
     {
         gameStarted = false;   
@@ -144,7 +164,7 @@ public class PlayArea : MonoBehaviour
         }
     }
 
-    public void AddCardToPlayArea(CardAvatar cardAvatar, string controllerGuid, OriginOfCard originOfCard)
+	public void AddCardToPlayArea(CardAvatar cardAvatar, string controllerGuid, OriginOfCard originOfCard, int index)
     {
         float yPos = 0;
         if (controllerGuid == homeGuid)
@@ -167,7 +187,8 @@ public class PlayArea : MonoBehaviour
             {
                 case OriginOfCard.HAND:
                     RemoveCardFromHand(cardAvatar, controllerGuid, TypeOfRemoveFromHand.INTO_PLAY);
-                    playFields[controllerGuid].Add(cardAvatar);
+					
+					playFields[controllerGuid].Insert(index, cardAvatar);
                     for (int i = 0; i < playFields[controllerGuid].Count; i++)
                     {
                         playFields[controllerGuid][i].SetDestination(new Vector3(-startPoint + (halfWidth * i), yPos, -3));
@@ -176,7 +197,7 @@ public class PlayArea : MonoBehaviour
                      break;
 
                 case OriginOfCard.SUMMON:
-                    playFields[controllerGuid].Add(cardAvatar);
+					playFields[controllerGuid].Insert(index, cardAvatar);
                     for (int i = 0; i < playFields[controllerGuid].Count; i++)
                     {
                         playFields[controllerGuid][i].SetDestination(new Vector3(-startPoint + (halfWidth * i), yPos, -3));
@@ -311,7 +332,7 @@ public class PlayArea : MonoBehaviour
             return;
         }
         RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid(), pc.typeOfRemoveFromHand);
-        AddCardToPlayArea(card.GetCardAvatar(), player.GetGuid(), pc.originOfCard);
+		AddCardToPlayArea(card.GetCardAvatar(), player.GetGuid(), pc.originOfCard, pc.index);
         action();
         action = null;
     }
@@ -355,7 +376,7 @@ public class PlayArea : MonoBehaviour
         go.GetComponent<CardAvatar>().SetControllerGuid(sm.controllerGuid);
 
         EntityManager.Singelton.AddEntity(useGuid, go.GetComponent<CardAvatar>());
-        AddCardToPlayArea(card.GetCardAvatar(), player.GetGuid(), OriginOfCard.SUMMON);
+		AddCardToPlayArea(card.GetCardAvatar(), player.GetGuid(), OriginOfCard.SUMMON, sm.fieldIndex);
         
         action();
         action = null;

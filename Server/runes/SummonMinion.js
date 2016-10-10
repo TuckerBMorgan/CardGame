@@ -23,11 +23,18 @@ exports.execute = function (rune, state) {
    //TODO: turn these three lines into a single function call, would just make the process
    //a little more unified 
    var card = util.loadCard(rune["cardId"]);
-   card.cardGuid = rune["cardGuid"];  
+   card.cardGuid = rune["cardGuid"];
    card.controllerGuid = controller["guid"];
    
    //adds the card to the inPlay list in the source controller
    controller.inPlay.push(card);
+
+   if(rune["fieldIndex"] > controller["inPlay"].length || rune["fieldIndex"] < 0)
+   {
+       rune["fieldIndex"] = controller["inPlay"].length;
+   }
+
+   controller.inPlay.splice(rune["fieldIndex"], 0, card);
      
    card.tags[tags.SUMMONING_SICKNESS] = true;
    
@@ -65,11 +72,12 @@ exports.execute = function (rune, state) {
    })
 }
 
-exports.CreateRune = function(controllerGuid, cardGuid, cardId, fieldIndex)
+exports.CreateRune = function(controllerGuid, sourceCardGuid, cardGuid, cardId, fieldIndex)
 {
     var rune = {
         "runeType":"SummonMinion",
         "controllerGuid":controllerGuid,
+        "sourceCardGuid":sourceCardGuid,
         "cardGuid":cardGuid,
         "cardId":cardId,
         "index":fieldIndex

@@ -147,6 +147,16 @@ public class OptionsManager : MonoBehaviour {
         FlushOptions();
     }
 
+	public void PickUpOption(Option op, int index)
+	{
+		string str = "{\"type\":\"option\",";
+		str += "\"index\":" + op.n + ",";
+		str += "\"boardIndex\":" + index + ",";
+		str += "\"timeStamp\":" + DateTime.Now.Second.ToString() + "}";
+		Client.Singelton.SendNewMessage(str);
+		FlushOptions();
+	}
+
     public bool HasOption(string guid, string key)
     {
         if (!options.ContainsKey(key))

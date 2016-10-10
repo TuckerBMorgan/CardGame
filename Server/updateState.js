@@ -124,10 +124,7 @@ exports.updateState = function(state)
         if(element["enchantments"].length > 0)
         {
             for(var i = 0;i<element["enchantments"].length;i++)
-            {
-                if(element["enchantments"] == "|||||||")
-                    continue;
-                    
+            {       
                 var spellObj = state["spellEnchantments"][element["enchantments"][i]];
                 if(spellObj != undefined)
                 {

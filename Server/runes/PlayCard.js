@@ -10,6 +10,7 @@ exports.execute = function (rune, state) {
     var controller = entity.getEntity(rune["controllerGuid"], state);
     var card = entity.getEntity(rune["playOption"]["cardGuid"], state);
     var index = controller["hand"].indexOf(card);
+
     controller["hand"].splice(index, 1);
     
     //This minion has a battle cry 
@@ -18,13 +19,13 @@ exports.execute = function (rune, state) {
         card.onBattleCry(rune.playOption, card, controller, state);
     }   
     
-    if(index > controller["inPlay"].length)
+    if(rune["index"] > controller["inPlay"].length)
     {
-        index = controller["inPlay"].length;
+        rune["index"] = controller["inPlay"].length;
     }
-    else if(index < 0)
+    else if(rune["index"] < 0)
     {
-        index = 0;
+        rune["index"] = 0;
     }
 
     controller["inPlay"].splice(rune["index"], 0, card);

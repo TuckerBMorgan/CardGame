@@ -20,3 +20,4 @@ exports.DRAGON  = "Dragon";
 exports.MECH = "Mech";
 exports.AURA = "Aura";
 exports.TARGET = "Target";
+exports.TOTEM = "Totem";
