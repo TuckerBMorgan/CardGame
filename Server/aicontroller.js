@@ -34,70 +34,95 @@ var MINION_card_comparator = function(card_A, card_B){
 /**
 *This raw evaluation metric calculates approximately how many turns 
 *   it takes for a player with a given board position to win
-*
+*   Simple crappy heuristic for now.
 *
 */
 var evaluate_player_position = function(state, player){
     //enemy minions
-    //enemy hp
-
+    var enemy_minions = entity.getEnemyMinions(player, state);
     //my minions
-    //my hp
+    var my_minions = entity.returnAllAliveAndOnTeam(player["team"], state);
+    //hero HP's
+    var enemy_hp = entity.getOtherController(player, state)["hero"]["health"];
+    var my_hp = player["hero"]["health"];
+    //get taunting minions HP
+    var enemy_taunt_hp = 0;
+    var enemy_taunters = ai_utilities.checkActiveTaunts(entity.getOtherController(player, state));
+    var my_taunt_hp = 0;
+    var my_taunters = ai_utilities.checkActiveTaunts(player)
+    //get AP of both sides
+    var enemy_AP = 0;
+    var my_AP = 0;
+    //do the loops for AP and taunts
+    //enemy AP first
+    for(var i = 0; i<enemy_minions.length; i++){
+        enemy_AP+=enemy_minions[i]["currentAttack"];
+    }
+    //friendly AP now
+    for(var i = 0; i<my_minions.length; i++){
+        my_AP+=my_minions[i]["currentAttack"];
+    }
+    //now get the taunts, enemies first
+    for(var i = 0; i<enemy_taunters.length; i++){
+        enemy_taunt_hp+=enemy_taunters[i]["currentHealth"];
+    }
+    //now for friendly taunt HP
+    for(var i = 0; i<my_taunters.length; i++){
+        my_taunt_hp+=my_taunters[i]["currentHealth"];
+    }
 
-    //enemy taunts
-    //my taunts
-
-    // return ((thier_taunt+theirhp)/sum(my_minions_ap))
-}
-
-
-/*
-*Negative return indicates Stronger enemy player position
-*
-*
-*
-*/
-var evaluate_position = function(state){
-    //var player1 = evaluate_player_position(state, /*player1*/);
-    //var player2 = evaluate_player_position(state, /*player2*/);
-
-    //return player1 - player2;
+    //do some math
+    //their score
+    var enemy_score = (my_taunt_hp+my_hp)/(enemy_AP);
+    //friendly score
+    var my_score = (enemy_taunt_hp+enemy_hp)/(my_AP);
+    return my_score - enemy_score;
 }
 
 var knapsackMatrix = function(state, controller){
     //hand sorted by mana cost
-    var proto_hand = proto_hand(controller);
+    var proto_hand = controller["hand"].sort(function(a,b){return a["cost"]-b["cost"]});
     //how big my hand is
     var hand_size = proto_hand.length; 
     //initialize a 2D array
-    var super_array = array(controller.mana);
-    /*
-    for(int i = 0; i<hand_size; i++){
+    var super_array = array(controller.mana+1);
+    
+    //adds an array of size (hand size) + 1
+    for(var i = 0; i<hand_size+1; i++){
         super_array.push(array(hand_size+1));
-   
      }
-     
     //check if we have a hand even existing, if we do then we can keep going
     if(hand_size > 0){ 
         for (var i = 0; i<=hand_size; i++){
-            for(var h = 0; h<controller.mana in mana){
+            for(var h = 0; h<controller.mana; h++){
                 if(i < 1){
-                    super_array[h][i] = 0;                
+                    super_array[h][i] = {
+                        "currentState" : ai_utilities.copy_state(state),
+                        "score" : evaluate_player_position(state, controller)
+                    };                
                 }
                 else{
-                    //deepcpy state of [i][h-1]
-                    //playcard on this deepcpy
-                    //record score and board
-                    //if score > score[i][h-1]
-                        //store this board as [i][h]
-                    //else 
-                        //store [i][h-1] as [i][h]
+                    var current_card = proto_hand[i];
+                    if(current_card["cost"]>=h){
+                        //deepcpy state of [i][h-1]
+                        //modify if possible
+                        //deepcpy state of [i-1][h]
+                        //playcard on this deepcpy
+                        //record score and board
+                        //if score > score[i][h-1]
+                            //store this board as [i][h]
+                        //else 
+                            //store [i][h-1] as [i][h]}
+                    }
+                    else{
+                        super_array[h][i] = super_array[i-1][h]
+                    }
                 }
             }
         }
     }
-    //return the board
-    */
+    //return the 2D array
+    return super_array
 }
 
 
