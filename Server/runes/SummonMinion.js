@@ -65,13 +65,14 @@ exports.execute = function (rune, state) {
    })
 }
 
-exports.CreateRune = function(controllerGuid, cardGuid, cardId)
+exports.CreateRune = function(controllerGuid, cardGuid, cardId, fieldIndex)
 {
     var rune = {
         "runeType":"SummonMinion",
         "controllerGuid":controllerGuid,
         "cardGuid":cardGuid,
-        "cardId":cardId
+        "cardId":cardId,
+        "index":fieldIndex
     }
     return rune;
 }

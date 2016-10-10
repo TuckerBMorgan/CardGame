@@ -270,7 +270,7 @@ exports.routing = function (message, socket) {
         //}
         case "option":
             var controller = state.controllersByIP[socket.remoteAddress];
-            exports.executeOptions(obj.index, controller, state);
+            exports.executeOptions(obj, controller, state);
         break;
         
         default:
@@ -346,8 +346,9 @@ exports.executeMulligan = function (indices, controller, state)
         }
 }
 
-exports.executeOptions = function (index, controller, state) {
+exports.executeOptions = function (payload, controller, state) {
      //They gave us a good number
+        var index = payload["index"];
         if(index >= 0 && index < controller.options.length)
         {
             var useOption = controller.options[index];
@@ -363,7 +364,8 @@ exports.executeOptions = function (index, controller, state) {
                 break;
                 
                 case options.PLAY_CARD_TYPE:
-                    Rune.executeRune(playCard.CreateRune(controller["guid"], useOption["cardGuid"],useOption ), state);
+                    var givenIndex = 
+                    Rune.executeRune(playCard.CreateRune(controller["guid"], useOption["cardGuid"],useOption, payload["boardIndex"] ), state);
                 break;
                 
                 case options.PLAY_SPELL:

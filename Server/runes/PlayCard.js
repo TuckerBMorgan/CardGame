@@ -18,7 +18,16 @@ exports.execute = function (rune, state) {
         card.onBattleCry(rune.playOption, card, controller, state);
     }   
     
-    controller["inPlay"].push(card);
+    if(index > controller["inPlay"].length)
+    {
+        index = controller["inPlay"].length;
+    }
+    else if(index < 0)
+    {
+        index = 0;
+    }
+
+    controller["inPlay"].splice(rune["index"], 0, card);
     
     card["tags"][tags.SUMMONING_SICKNESS] = true;
     
@@ -28,34 +37,35 @@ exports.execute = function (rune, state) {
       "mana":controller["mana"] - card["cost"]
     }
     
-     card["totalHealth"] = card["baseHealth"];
-     card["currentHealth"] = card["baseHealth"];
-     card["totalAttack"] = card["baseAttack"];
-     card["currentAttack"] = card["baseAttack"];
-     card["team"] = controller["team"];
-     card["state"] = "InPlay";
+    card["totalHealth"] = card["baseHealth"];
+    card["currentHealth"] = card["baseHealth"];
+    card["totalAttack"] = card["baseAttack"];
+    card["currentAttack"] = card["baseAttack"];
+    card["team"] = controller["team"];
+    card["state"] = "InPlay";
      
-     var keys = Object.keys(state["controllers"]);
-     keys.forEach(function (element) {
-         if(!(rune["cardGuid"] in state["controllers"][element]["seenCards"]))
-         {
-             if(state["controllers"][element]["type"] == cont.PLAYER_CONTROLLER)
-             {
-                server.sendMessage(JSON.stringify(card), state["controllers"][element]["socket"]);
-             }
-         }
-     })
+    var keys = Object.keys(state["controllers"]);
+    keys.forEach(function (element) {
+        if(!(rune["cardGuid"] in state["controllers"][element]["seenCards"]))
+        {
+            if(state["controllers"][element]["type"] == cont.PLAYER_CONTROLLER)
+            {
+               server.sendMessage(JSON.stringify(card), state["controllers"][element]["socket"]);
+            }
+        }
+    })
      
-     Rune.executeRune(setMana, state);
+    Rune.executeRune(setMana, state);
 }
 
-exports.CreateRune = function (controllerGuid, cardGuid, playOption) {
+exports.CreateRune = function (controllerGuid, cardGuid, playOption, fieldIndex) {
    
    var rune = {
        "runeType":"PlayCard",
        "controllerGuid":controllerGuid,
        "cardGuid":cardGuid,
-       "playOption":playOption
+       "playOption":playOption,
+       "index":fieldIndex
    }
 
    return rune;

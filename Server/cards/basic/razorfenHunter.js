@@ -3,6 +3,7 @@ var ent = require('../../entityManager');
 var cardTags = require('../cardTags');
 var Rune = require('../../RuneVM');
 var util = require('../../util');
+var SummonRune = require("../../runes/SummonMinion")
 
 exports.BOAR_PATH = "basic/boar";
 
@@ -37,6 +38,8 @@ exports.card = {
         "cardGuid":boarGuid,
         "cardId":exports.BOAR_PATH
     }
+
+    SummonRune.CreateRune(controller.guid, card.cardGuid, boarGuid, exports.BOAR_PATH);
     Rune.executeRune(summon, state);
   }
 
