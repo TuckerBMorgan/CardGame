@@ -57,7 +57,8 @@ exports.updateState = function(state)
     ents.forEach(function (element) {
         if(element.tags[Tags.AURA] != undefined){
             ents.forEach(function (checkEle) {
-                if(element.filterCard(element, checkEle, null, state))
+                var cont = entities.getControllerFromTeam(element["team"], state);
+                if(element.filterCard(element, checkEle, cont, state))
                 {
                     checkEle["auras"].push(element.cardGuid);
                 }

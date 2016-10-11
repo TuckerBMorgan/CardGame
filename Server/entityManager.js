@@ -72,6 +72,26 @@ exports.returnAllAliveAndOnTeam = function(team, state)
     return returnables;
 }
 
+exports.returnAllAliveAndOnOtherTeam = function(team, state)
+{
+    var returnables = [];
+    
+    var keys = Object.keys(state["entities"]);
+
+    keys.forEach(function(element)
+    {
+        if(state["entities"][element]["team"] != team)
+        {
+            if(state["entities"][element][state] != "InPlay")
+            {
+                returnables.push(element);
+            }
+        }
+    })
+    return returnables;
+    
+}
+
 exports.getOtherController = function(controller, state)
 {
     var keys = Object.keys(state.controllers);
@@ -88,6 +108,18 @@ exports.getOtherController = function(controller, state)
     })
 
     return returnCont;
+}
+
+exports.getControllerFromTeam = function(team, state)
+{
+    var keys = Object.keys(state.controllers);
+    for(var i = 0;i<keys.length;i++)
+    {
+        if(state["controllers"][keys[i]]["team"] == team)
+        {
+            return state["controllers"][keys[i]];
+        }
+    }
 }
 
 exports.getEnemyMinions = function (controller, state) {

@@ -316,42 +316,48 @@
           "cardText": "<b>Battlecry</b>: Dead 1 damage.",
           "art": "ironforgeRifleman"
         },
-		"shatteredSunCleric":{
-			"cardName":"Shattered Sun Cleric",
-			"desc":"They always have a spare flash of Sunell Energy Drink!",
-			"cardText":"<b>Battlecry</b>: Give a friendly minion +1/+1.",
-			"art":"shatteredSunCleric"
-		},
-		"arcaneMissles":{
-			"cardName":"Arcane Missles",
-			"desc":"You'd think you'd be able to control your missles a little better since you're a powerful mage and all.",
-			"cardText":"Deal 3 damage randonly split among enemy characters",
-			"art":"arcaneMissles"
-		},
-		"ancestralHealing":{
-			"cardName":"Ancestral Healing",
-			"desc":"I personally prefer some non-ancestral right-the-heck-now healing, but maybe that is just me.",
-			"cardText":"Restore a minion to full Health and give it Taunt.",
-			"art":"ancertralHealing"
-		},
-		"bloodLust":{
-			"cardName":"BloodLust",
-			"desc":"blaarghghLLGHRHARAAHAHHH!!",
-			"cardText":"Give your minions +3 Attack this turn.",
-			"art":"BloodLust"
-		},
-		"fireElemental":{
-      		"cardName":"Fire Elemental",
-			"desc":"He can never take a bath. Ewww.",
-			"cardText":"<b>Battlcry</b>: Deal 3 Damage.",
-			"art":"fireElemental" 
-	    },
-		"flametongueTotem":{
-			"cardName":"Flametongue Totem",
-			"desc":"Totemsmiths like to use the rarest woods for their totems. There are even rumors of totems made of Ironbark Protectors.",
-			"cardText":"Adjacent minion shave +2 Attack.",
-			"art":"flametongueTotem"
-		}
+        "shatteredSunCleric": {
+          "cardName": "Shattered Sun Cleric",
+          "desc": "They always have a spare flash of Sunell Energy Drink!",
+          "cardText": "<b>Battlecry</b>: Give a friendly minion +1/+1.",
+          "art": "shatteredSunCleric"
+        },
+        "arcaneMissles": {
+          "cardName": "Arcane Missles",
+          "desc": "You'd think you'd be able to control your missles a little better since you're a powerful mage and all.",
+          "cardText": "Deal 3 damage randonly split among enemy characters",
+          "art": "arcaneMissles"
+        },
+        "ancestralHealing": {
+          "cardName": "Ancestral Healing",
+          "desc": "I personally prefer some non-ancestral right-the-heck-now healing, but maybe that is just me.",
+          "cardText": "Restore a minion to full Health and give it Taunt.",
+          "art": "ancertralHealing"
+        },
+        "bloodLust": {
+          "cardName": "BloodLust",
+          "desc": "blaarghghLLGHRHARAAHAHHH!!",
+          "cardText": "Give your minions +3 Attack this turn.",
+          "art": "BloodLust"
+        },
+        "fireElemental": {
+          "cardName": "Fire Elemental",
+          "desc": "He can never take a bath. Ewww.",
+          "cardText": "<b>Battlcry</b>: Deal 3 Damage.",
+          "art": "fireElemental"
+        },
+        "flametongueTotem": {
+          "cardName": "Flametongue Totem",
+          "desc": "Totemsmiths like to use the rarest woods for their totems. There are even rumors of totems made of Ironbark Protectors.",
+          "cardText": "Adjacent minion shave +2 Attack.",
+          "art": "flametongueTotem"
+        },
+        "frostShock": {
+          "cardName": "Frost Shock",
+          "desc": "FROST SHOCK.",
+          "cardText": "Dear 1 damage to an enemy character and <b>Freeze</b> it.",
+          "art": "frostShock"
+        }
       }
     }
   }

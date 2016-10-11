@@ -1,7 +1,7 @@
 var cardFunctions = require('../cardFunctions')
 var ent = require('../../entityManager');
 var cardTags = require('../cardTags');
-
+var RuneVM = require("../../RuneVM");
 var ModifyAttack = require('../../runes/ModifyAttack');
 
 var SetAttack = require('../../runes/SetAttack');
@@ -11,7 +11,7 @@ exports.FLAMETONGUE_TOTEM_DAMAGE_BUFF = 2;
 //START_OF_CARD_DATA
 exports.card = {
   "type": ent.MINION,
-  "cost": 0,
+  "cost": 3,
   "baseAttack": 0,
   "currentHealth":0,
   "totalHealth":0,

@@ -19,7 +19,7 @@ var server = net.createServer(function(socket) {
         {
             delete require.cache[control];
             control.connectionLost();
-        }   
+        }
     })
 })
 
