@@ -80,49 +80,78 @@ var evaluate_player_position = function(state, player){
 }
 
 var knapsackMatrix = function(state, controller){
-    //hand sorted by mana cost
-    var proto_hand = controller["hand"].sort(function(a,b){return a["cost"]-b["cost"]});
-    //how big my hand is
-    var hand_size = proto_hand.length; 
-    //initialize a 2D array
-    var super_array = array(controller.mana+1);
-    
-    //adds an array of size (hand size) + 1
-    for(var i = 0; i<hand_size+1; i++){
-        super_array.push(array(hand_size+1));
-     }
-    //check if we have a hand even existing, if we do then we can keep going
-    if(hand_size > 0){ 
-        for (var i = 0; i<=hand_size; i++){
-            for(var h = 0; h<controller.mana; h++){
-                if(i < 1){
-                    super_array[h][i] = {
-                        "currentState" : ai_utilities.copy_state(state),
-                        "score" : evaluate_player_position(state, controller)
-                    };                
-                }
-                else{
-                    var current_card = proto_hand[i];
-                    if(current_card["cost"]>=h){
-                        //deepcpy state of [i][h-1]
-                        //modify if possible
-                        //deepcpy state of [i-1][h]
-                        //playcard on this deepcpy
-                        //record score and board
-                        //if score > score[i][h-1]
-                            //store this board as [i][h]
-                        //else 
-                            //store [i][h-1] as [i][h]}
+    var controller_guid = controller["guid"];
+    if(controller["hand"].length > 0){ 
+        //hand sorted by mana cost
+        var proto_hand = controller["hand"].sort(function(a,b){return a["cost"]-b["cost"]});
+        var max_hand_index = 0;
+        for(var i = 0; i<proto_hand.length; i++){
+            if(proto_hand[max_hand_index] <= controller["mana"]){
+                max_hand_index++;
+            }else{
+                break;
+            }
+        }
+        //how big my hand is
+        var hand_size = max_hand_index; 
+        if(hand_size > 0 ){
+            //initialize a 2D array
+            var super_array = array(hand_size);
+            
+            //adds an array of size mana  + 1
+            for(var i = 0; i<hand_size; i++){
+                super_array.push(array(controller["mana"]+1));
+             }
+             var default_score = evaluate_player_position(state, controller)
+            //loop through the 2D array we made
+            //first via the hand size which allows looping through the sorted hand
+            //  only upto the highest index we can actually play this turn
+            for (var i = 0; i<=hand_size; i++){
+                //loop through each spot of mana we can
+                for(var h = 0; h<=controller.mana; h++){
+                    //if we are looking at the first row then these are just the default score and input state
+                    if(i < 1){
+                        super_array[i][h] = {
+                            "currentState" : state,
+                            "score" : default_score
+                        };                
                     }
+                    //otherwise...
                     else{
-                        super_array[h][i] = super_array[i-1][h]
+                        //lets take a look at the only card we really care about
+                        var current_card = proto_hand[i-1];
+                        //if its less than the ammount of mana we are allowed to play with right now
+                        if(current_card["cost"]>=h){
+                            var scorecard_above = super_array[i-1][h];
+                            var copy_diagonal_left_state = ai_utilities.copy_state(super_array[i-1][h-current_card["cost"]]["currentState"]);
+                            //play current card onto copy; 
+                            //      Not sure how I want to do this yet, few moving parts using runes but that would be the best way, 
+                            //      need to disconnect the connection thing so that this can prototype possible boards
+                            var score_diagonal_play = evaluate_player_position(entity.getEntity(controller_guid, copy_diagonal_left_state), copy_diagonal_left_state);
+                            //if the earlier score is better than playing the card then we keep it
+                            if (scorecard_above["score"] > score_diagonal_play){
+                                super_array[i][h] = super_array[i-1][h];
+                            }
+                            //otherwise we play the card and keep going
+                            else{
+                                super_array[i][h] = {
+                                    "currentState" : copy_diagonal_left_state,
+                                    "score" : score_diagonal_play
+                                };
+                            }
+                        }
+                        //otherwise...
+                        else{
+                            super_array[i][h] = super_array[i-1][h]
+                        }
                     }
                 }
             }
+            return super_array
         }
     }
     //return the 2D array
-    return super_array
+    return false
 }
 
 
