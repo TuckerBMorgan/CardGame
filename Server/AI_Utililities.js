@@ -65,7 +65,7 @@ var checkSilence = function(card){
 *Outputs:
 	an array of card objects which are currently actively taunting the field
 */
-var checkActiveTaunts = function(controller){
+exports.checkActiveTaunts = function(controller){
 	//open array
 	var activeTaunts = [];
 	//lets store the location we are pulling from
@@ -174,9 +174,11 @@ Outputs:
 */
 var card_Copy = function(card){
 	//grab each of the keys/elements for a card object
-	returning_card = Object.keys(card);
+
+	card_keys = Object.keys(card);
 	//iterate through the keys
-	card.foreach(function(element){
+	var returning_card = {};
+	card_keys.forEach(function(element){
 		//push the value of the key from the source to the key of the target
 		returning_card[element] = card[element];
 	})
@@ -195,7 +197,7 @@ var card_Group_Copy = function(cards, state){
 	//initialize an array 
 	var newGroup = [];
 	//iterate through all cards of a set
-	for(var i = 0; i<=cards.length; i++){
+	for(var i = 0; i<cards.length; i++){
 		//take the deep copy of cards[i] and push it into the array
 		var nc = card_Copy(cards[i]);
 		newGroup.push(nc);
@@ -238,7 +240,7 @@ var card_object_superCopy = function(card_set){
 *
 */
 var deep_Copy_Controller = function(controller, state){
-    var NC = Object.keys(controller);
+    var NC = {};
     //this cant be deep copied, wait maybe it should, or we do some shallow-ish copy on it?
     NC["deck"] = card_Group_Copy(controller["deck"], state); 
 
@@ -271,7 +273,7 @@ var deep_Copy_Controller = function(controller, state){
 *Outputs:
 	A deep copy of the state in need of copying
 */
-var copy_state = function(state){
+exports.copy_state = function(state){
 	var ns_state = {
 	    "controllers":{},//by guid look up of all controllers
 	    "entities":{},//guid look up for all cards and controllers
@@ -294,7 +296,7 @@ var copy_state = function(state){
 	var controller_set = Object.keys(state["controllers"]);
 	var controllers_ip = Object.keys(state["controllersByIP"]);
 	//iterate through the keys
-	controller_ip.foreach(function(element){
+	controllers_ip.forEach(function(element){
 		//grab the current controller's guid
 		var guid = state["controllersByIP"][element]["guid"];
 		//create the deep copy
@@ -304,7 +306,7 @@ var copy_state = function(state){
 		//add the deep copy to the controller list
 		ns_state["controllers"][guid] = controller_DC
 		//add this to the entity list
-		entity.addEntity( ns_state["controllers"][guid], guid, ns_state); 
+		entities.addEntity( ns_state["controllers"][guid], guid, ns_state); 
 	});
 	//deep copy the cards
 	ns_state["cards"] = card_object_superCopy(state["cards"]);
@@ -319,24 +321,33 @@ var copy_state = function(state){
 	}
 	
 	var pre_event_keys = Object.keys(state["preEventListeners"]);
-	pre_event_keys.foreach(function(element){
+	pre_event_keys.forEach(function(element){
 		var listeners = [];
 		for(var i = 0; i<= state["preEventListeners"][element]; i++){
 			listeners.append(Object.assign({}, state["preEventListeners"][element][i]));
 		}
 		ns_state["preEventListeners"][element] = listeners;
 	});
-	var pre_event_keys = Object.keys(state["postEventListeners"]);
-	post_event_keys.foreach(function(element){
+	var post_event_keys = Object.keys(state["postEventListeners"]);
+	post_event_keys.forEach(function(element){
 		var listeners = [];
 		for(var i = 0; i<= state["postEventListeners"][element]; i++){
 			listeners.append(Object.assign({}, state["postEventListeners"][element][i]));
 		}
 		ns_state["postEventListeners"][element] = listeners;
 	});
-
+	ns_state["turnOrder"] = [];
+	for(var i = 0; i<state["turnOrder"].length; i++){
+		ns_state["turnOrder"].push(entities.getEntity(state["turnOrder"]["guid"], ns_state))
+	}
+	ns_state["ai"] = state["ai"];
+	ns_state["OnTurnPlayer"] = state["OnTurnPlayer"];
+	ns_state["runes"] = [];
+	for(var i = 0; i<state["runes"].length; i++){
+		ns_state["runes"].push(state["runes"][i]);
+	}
 	//ignore runes for now
-	return new_state;
+	return ns_state;
 }
 
 /**
