@@ -40,7 +40,7 @@ exports.updateState = function(state)
         })
     })
     
-    //This is done is this way     
+    //This is done is this way
     //save off current enchamnets
     //remove current enchamnets
     var previousAuras = {};

@@ -5,6 +5,9 @@ var Rune = require('../../RuneVM');
 var cardTags = require("../cardTags");
 var AddTag = require("../../runes/AddTag");
 var ModifyHealth = require('../../runes/ModifyHealth');
+var DamageRune = require('../../runes/DamageRune');
+
+exports.FROST_SHOCK_DAMAGE_AMOUNT = 1;
 
 exports.card = {
   "type": ent.SPELL,
@@ -17,12 +20,9 @@ exports.card = {
   "onPlay":cardFunctions.basicOnPlay,
   "canPlay":cardFunctions.basicCanPlay,
   "spellText":function (rune, controller, state) {
-        
         var addTag = AddTag.CreateRune(rune["option"]["source"], rune["option"]["target"], cardTags.FROZEN);
         var card = ent.getEntity(rune["option"]["target"]);
-        var healthRune = ModifyHealth.CreateRune(card.cardGuid, rune["option"]["source"], card.totalHealth - card.currentHealth);
-
-        Rune.executeRune(healthRune, state);
+        Rune.executeRune(DamageRune.CreateRune(rune["option"]["cardGuid"], rune["option"]["targetGuid"], exports.FROST_SHOCK_DAMAGE_AMOUNT), state);    
         Rune.executeRune(addTag,state);
     },
     "generatePlayOptions":function (card, controller, state) {

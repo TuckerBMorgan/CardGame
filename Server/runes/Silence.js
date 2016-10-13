@@ -1,5 +1,7 @@
 var entities = require('../entityManager')
 var cardTags = require('../cards/cardTags')
+var RemoveTag = require('./RemoveTag')
+var Rune = require('../RuneVM')
 
 exports.execute = function (rune, state) {
     //this will need to be a better function later one
@@ -10,6 +12,8 @@ exports.execute = function (rune, state) {
         sourceEnt.removeEnchatments(ent, state);
     });
 
+    var remove = RemoveTag.CreateRune(rune["source"], rune["target"], cardTags.FROZEN);
+    Rune.executeRune(remove, state);
 }
 
 exports.CreateRune = function (target, source) {
