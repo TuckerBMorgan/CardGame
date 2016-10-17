@@ -18,7 +18,8 @@ exports.CreateRune = function (controller, cardGuid) {
     var rune = {
         "runeType":"killMinion",
         "controller":controller,
-        "cardGuid":cardGuid
+        "cardGuid":cardGuid,
+        "ai_proto": false
     }
     return rune;
 }

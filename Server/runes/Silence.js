@@ -20,7 +20,8 @@ exports.CreateRune = function (target, source) {
     var rune = {
         "runeType":"silence",
         "target":target,
-        "source":source
+        "source":source,
+        "ai_proto":false
     }
     return rune;
 }

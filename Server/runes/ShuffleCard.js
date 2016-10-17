@@ -25,7 +25,8 @@ exports.CreateRune = function(controllerGuid, cardGuid)
     var rune = {
         "runeType":"ShuffleCard",
         "controllerGuid":controllerGuid, 
-        "cardGuid":cardGuid
+        "cardGuid":cardGuid,
+        "ai_proto":false
     }
     return rune;
 }

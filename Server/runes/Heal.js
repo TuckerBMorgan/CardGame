@@ -5,7 +5,8 @@ exports.executeRune = function (rune, state) {
         "runeType":"ModifyHealth",
         "source":rune.controllerGuid,
         "target":rune.cardGuid,
-        "amount":rune.amount
+        "amount":rune.amount,
+        "ai_proto": rune["ai_proto"]
     }
     
     rune.executeRune(modifyHealth, state);
@@ -17,7 +18,8 @@ exports.CreateRune = function (controllerGuid, cardGuid, amount) {
         "runeType":"heal",
         "controllerGuid":controllerGuid,
         "cardGuid":cardGuid,
-        "amount":amount
+        "amount":amount,
+        "ai_proto": false
     }
     return rune;
 }

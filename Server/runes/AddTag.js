@@ -14,7 +14,8 @@ exports.CreateRune = function (sourceGuid, targetGuid, tag)
         "runeType":"AddTag",
         "source":sourceGuid,
         "target":targetGuid,
-        "tag":tag
+        "tag":tag,
+        "ai_proto": false
     }
     return rune;
 }

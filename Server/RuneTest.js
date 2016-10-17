@@ -248,6 +248,41 @@ var card_Move_Test = function(){
 	return (Card_Movement_Proof(cg1b,cg1b2, cg2b, cg2b2))
 }
 
+/**
+*Returns true if the minion recieving this damage has been killed
+*
+*Inputs:
+	damage_In->Damage being dealt
+	HP_In-> Current HP before combat
+*Output:
+*/
+var kill_Test = function(damage_In, HP_In){
+	if(damage_In>=HP_In){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
+/*
+*Returns an integer indicating expected health of a minion after combat
+*
+Inputs:
+	damage_In->Damage being dealt
+	HP_In-> Current HP before combat
+*Output:
+	An integer indicating how much HP a minion has in range [0,inf)
+*/
+var expected_HP = function(damage_In, HP_In){
+	if(kill_Test(damage_In, HP_In)){
+		return 0;
+	}
+	else{
+		return HP_In - damage_In;
+	}
+}
+
 
 /**
 *Boolean returns true if damage between minions has correctly been accounted for
@@ -261,7 +296,20 @@ var card_Move_Test = function(){
 	Boolean indicating that card combat has occurred correctly
 *
 */
-var testDamage = function(){
+var testDamage = function(Minion1_Before, Minion1_After,Minion2_Before, Minion2_After){
+	// minion1 details
+	var M1_HP = Minion1_Before["currentHealth"];
+	var M1_CP = Minion1_Before["currentAttack"];
 
+	//minion2 details
+	var M2_HP = Minion2_Before["currentHealth"];
+	var M2_CP = Minion2_Before["currentAttack"];
+
+	//check combat details
+	var M1_EXP = expected_HP(M2_CP, M1_HP);
+	var M2_EXP = expected_HP(M1_CP, M2);
+
+	//return statement, if the HP in expected matches each minion after combat
+	return (M1_EXP==Minion1_After["currentHealth"])&&(M2_EXP==Minion2_After["currentHealth"]);
 }
 

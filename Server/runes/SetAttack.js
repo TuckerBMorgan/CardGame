@@ -12,7 +12,8 @@ exports.CreateRune = function(targetGuid, amount)
     var rune = {
         "runeType":"SetAttack",
         "cardGuid":targetGuid,
-        "amount":amount
+        "amount":amount,
+        "ai_proto": false
     }
     
     return rune;
