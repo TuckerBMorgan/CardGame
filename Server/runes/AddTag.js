@@ -4,7 +4,7 @@ var Rune = require('../RuneVM')
 
 
 exports.execute = function (rune, state) {
-     var ent = entities.getEnemyMinions(rune["targetGuid"]);
+     var ent = entities.getEntity(rune["target"], state);
      ent.tags[rune.tag] = true;
 }
 
@@ -14,8 +14,7 @@ exports.CreateRune = function (sourceGuid, targetGuid, tag)
         "runeType":"AddTag",
         "source":sourceGuid,
         "target":targetGuid,
-        "tag":tag,
-        "ai_proto": false
+        "tag":tag
     }
     return rune;
 }

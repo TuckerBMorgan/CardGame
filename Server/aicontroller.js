@@ -3,7 +3,7 @@ var entity = require('./entityManager');
 var optionsTypes = require('./createOptions')
 var playCard = require('./runes/PlayCard')
 var ai_utilities = require('./AI_Utililities')
-
+var Rune = require('./RuneVM')
 
 /*
 *Compares two given cards to determine relative power efficiency
@@ -125,6 +125,9 @@ var knapsackMatrix = function(state, controller){
                             var scorecard_above = super_array[i-1][h];
                             var copy_diagonal_left_state = ai_utilities.copy_state(super_array[i-1][h-current_card["cost"]]["currentState"]);
                             //play current card onto copy; 
+                            var playRune = playCard.CreateRune(controller_guid, current_card["guid"], current_card, null);
+                            playRune["ai_proto"] = true;
+                            Rune.executeRune(playRune, copy_diagonal_left_state);
                             //      Not sure how I want to do this yet, few moving parts using runes but that would be the best way, 
                             //      need to disconnect the connection thing so that this can prototype possible boards
                             var score_diagonal_play = evaluate_player_position(entity.getEntity(controller_guid, copy_diagonal_left_state), copy_diagonal_left_state);
@@ -156,7 +159,10 @@ var knapsackMatrix = function(state, controller){
 
 
 exports.calculateMove = function(controller, options, state) {
-  
+    
+    var pro = knapsackMatrix(state, controller);
+    console.log(pro);
+
     //the ai wants to play cards first, so get all playCard options
     var playCard = options.filter(function (element) {
          return (element["option"] == optionsTypes.PLAY_CARD_TYPE);
