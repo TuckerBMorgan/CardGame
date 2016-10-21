@@ -9,6 +9,12 @@ exports.execute = function (rune, state) {
     console.log(rune);
     var controller = entity.getEntity(rune["controllerGuid"], state);
     var card = entity.getEntity(rune["playOption"]["cardGuid"], state);
+    if(rune["ai_proto"]){
+      card = entity.getEntity(rune["cardGuid"], state);
+    }
+    else{
+      card = entity.getEntity(rune["playOption"]["cardGuid"], state);
+    }
     var index = controller["hand"].indexOf(card);
 
     controller["hand"].splice(index, 1);

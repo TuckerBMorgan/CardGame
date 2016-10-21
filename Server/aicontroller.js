@@ -97,7 +97,7 @@ var knapsackMatrix = function(state, controller){
         if(hand_size > 0 ){
             //initialize a 2D array
             var super_array = [];
-            
+            var default_score = evaluate_player_position(state, controller)
             for (var i = 0; i<=hand_size; i++){
                 //loop through each spot of mana we can
                 nArray = [];
@@ -109,16 +109,16 @@ var knapsackMatrix = function(state, controller){
             }
 
             //adds an array of size mana  + 1
-            for(var i = 0; i<hand_size; i++){
+            for(var i = 0; i<=hand_size; i++){
                 super_array.push(new Array(controller["mana"]+1));
              }
-             var default_score = evaluate_player_position(state, controller)
+            
             //loop through the 2D array we made
             //first via the hand size which allows looping through the sorted hand
             //  only upto the highest index we can actually play this turn
-            for (var i = 0; i<=hand_size; i++){
+            for (var i = 1; i<=hand_size; i++){
                 //loop through each spot of mana we can
-                for(var h = 0; h<=controller.mana; h++){
+                for(var h = 1; h<=controller.mana; h++){
                     //if we are looking at the first row then these are just the default score and input state
                     if(i > 1){
                         //lets take a look at the only card we really care about
@@ -130,7 +130,7 @@ var knapsackMatrix = function(state, controller){
                             var scorecard_diagonal = super_array[i-1][h-costly];
                             var copy_diagonal_left_state = ai_utilities.copy_state(scorecard_diagonal["currentState"]);
                             //play current card onto copy; 
-                            var playRune = playCard.CreateRune(controller_guid, current_card["guid"], current_card, null);
+                            var playRune = playCard.CreateRune(controller_guid, current_card["cardGuid"], current_card, null);
                             playRune["ai_proto"] = true;
                             Rune.executeRune(playRune, copy_diagonal_left_state);
                             //      Not sure how I want to do this yet, few moving parts using runes but that would be the best way, 
