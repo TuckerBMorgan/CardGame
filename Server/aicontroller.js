@@ -86,7 +86,7 @@ var knapsackMatrix = function(state, controller){
         var proto_hand = controller["hand"].sort(function(a,b){return a["cost"]-b["cost"]});
         var max_hand_index = 0;
         for(var i = 0; i<proto_hand.length; i++){
-            if(proto_hand[max_hand_index] <= controller["mana"]){
+            if(proto_hand[max_hand_index]["cost"] <= controller["mana"]){
                 max_hand_index++;
             }else{
                 break;
@@ -96,11 +96,21 @@ var knapsackMatrix = function(state, controller){
         var hand_size = max_hand_index; 
         if(hand_size > 0 ){
             //initialize a 2D array
-            var super_array = array(hand_size);
+            var super_array = [];
             
+            for (var i = 0; i<=hand_size; i++){
+                //loop through each spot of mana we can
+                nArray = [];
+                for(var h = 0; h<=controller.mana; h++){
+                    //if we are looking at the first row then these are just the default score and input state
+                    nArray.push({"currentState" : state,"score" : default_score});                
+                }
+                super_array.push(nArray)
+            }
+
             //adds an array of size mana  + 1
             for(var i = 0; i<hand_size; i++){
-                super_array.push(array(controller["mana"]+1));
+                super_array.push(new Array(controller["mana"]+1));
              }
              var default_score = evaluate_player_position(state, controller)
             //loop through the 2D array we made
@@ -110,20 +120,15 @@ var knapsackMatrix = function(state, controller){
                 //loop through each spot of mana we can
                 for(var h = 0; h<=controller.mana; h++){
                     //if we are looking at the first row then these are just the default score and input state
-                    if(i < 1){
-                        super_array[i][h] = {
-                            "currentState" : state,
-                            "score" : default_score
-                        };                
-                    }
-                    //otherwise...
-                    else{
+                    if(i > 1){
                         //lets take a look at the only card we really care about
                         var current_card = proto_hand[i-1];
+                        var costly = current_card["cost"];
                         //if its less than the ammount of mana we are allowed to play with right now
-                        if(current_card["cost"]>=h){
+                        if(costly<=h){
                             var scorecard_above = super_array[i-1][h];
-                            var copy_diagonal_left_state = ai_utilities.copy_state(super_array[i-1][h-current_card["cost"]]["currentState"]);
+                            var scorecard_diagonal = super_array[i-1][h-costly];
+                            var copy_diagonal_left_state = ai_utilities.copy_state(scorecard_diagonal["currentState"]);
                             //play current card onto copy; 
                             var playRune = playCard.CreateRune(controller_guid, current_card["guid"], current_card, null);
                             playRune["ai_proto"] = true;
