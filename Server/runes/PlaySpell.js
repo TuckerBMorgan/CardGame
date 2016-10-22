@@ -23,8 +23,7 @@ exports.CreateRune = function(controllerGuid, cardGuid, option)
         "runeType":"PlaySpell",
         "controllerGuid":controllerGuid,
         "cardGuid":cardGuid,
-        "option":option,
-        "ai_proto":false
+        "option":option
     }
 
     return rune;

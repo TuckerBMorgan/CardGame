@@ -48,16 +48,24 @@ function procesRune(rune, state) {
         count--;
     }
 
-    var keys = Object.keys(state.controllers);
-    keys.forEach(function (elements) {
-        if(file.canSee(state.controllers[elements], state))
-        {
-            if(state.controllers[elements].type == "PlayerController")
-            {
-                    server.sendMessage(JSON.stringify(rune), state.controllers[elements].socket);         
-            } 
+    var ex = true;
+
+    if(rune.hasOwnProperty("ai_proto")){
+        if(rune["ai_proto"]){
+            ex = false
         }
-    })
+    }
+    if(ex){
+        var keys = Object.keys(state.controllers);
+        keys.forEach(function (elements) {
+            if(file.canSee(state.controllers[elements], state))
+            {
+                if(state.controllers[elements].type == "PlayerController")
+                {
+                        server.sendMessage(JSON.stringify(rune), state.controllers[elements].socket);         
+                } 
+            }
+        })}
     
     
 }

@@ -39,8 +39,7 @@ exports.CreateRune = function (target, source, amount) {
         "runeType":"ModifyHealth",
         "target":target,
         "source":source,
-        "amount":amount,
-        "ai_proto": false
+        "amount":amount
     }
 
     return rune;

@@ -11,8 +11,7 @@ exports.CreateRune = function(heroGuid, health)
     var rune = {
         "runeType":"SetHeroHealth",
         "heroGuid":heroGuid,
-        "health":health,
-        "ai_proto":false
+        "health":health
     }
     
     return rune;

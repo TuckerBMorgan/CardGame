@@ -6,10 +6,8 @@ var entity = require('../entityManager')
 //  "cardGuid":"xxxxxxxx-xxxx-xxyx-xxxx-xxxxxxxx0xxx"
 //   //Then the card is attached as an object after   
 //}
-exports.execute = function (rune, state) {     
-	//take a given card and add it to the deck of the correct player  
+exports.execute = function (rune, state) {       
    state.controllers[rune.controllerGuid].deck.push(rune);
-   //add this card to the correct entity
    entity.addEntity(rune, rune.cardGuid, state);  
 }
 

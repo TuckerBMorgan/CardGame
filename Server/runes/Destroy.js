@@ -14,7 +14,6 @@ exports.CreateRune = function(sourceGuid, targetGuid, newGuid, id)
         "runeType":"Transform",
         "sourceGuid":sourceGuid,
         "targetGuid":targetGuid,
-        "ai_proto":false
     }
 
     return rune;

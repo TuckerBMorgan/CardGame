@@ -8,14 +8,7 @@ exports.execute = function (rune, state) {
     
     console.log(rune);
     var controller = entity.getEntity(rune["controllerGuid"], state);
-    var card = {};
-    if(rune["ai_proto"]){
-      card = entity.getEntity(rune["cardGuid"], state);
-      console.log(card);
-    }
-    else{
-      card = entity.getEntity(rune["playOption"]["cardGuid"], state);
-    }
+    var card = entity.getEntity(rune["playOption"]["cardGuid"], state);
     var index = controller["hand"].indexOf(card);
 
     controller["hand"].splice(index, 1);
@@ -43,7 +36,7 @@ exports.execute = function (rune, state) {
       "runeType":"SetMana",
       "controllerGuid":rune["controllerGuid"],
       "mana":controller["mana"] - card["cost"],
-      "ai_proto": rune["ai_proto"]
+      "ai_proto": true
     }
     
     card["totalHealth"] = card["baseHealth"];
@@ -52,9 +45,8 @@ exports.execute = function (rune, state) {
     card["currentAttack"] = card["baseAttack"];
     card["team"] = controller["team"];
     card["state"] = "InPlay";
-     
-    var keys = Object.keys(state["controllers"]);
-    if(!rune["ai_proto"]){
+    if(!rune.hasOwnProperty("ai_proto")){
+        var keys = Object.keys(state["controllers"]);
         keys.forEach(function (element) {
             if(!(rune["cardGuid"] in state["controllers"][element]["seenCards"]))
             {
@@ -64,7 +56,7 @@ exports.execute = function (rune, state) {
                 }
             }
         })
-    }
+      }
      
     Rune.executeRune(setMana, state);
 }
@@ -76,8 +68,7 @@ exports.CreateRune = function (controllerGuid, cardGuid, playOption, fieldIndex)
        "controllerGuid":controllerGuid,
        "cardGuid":cardGuid,
        "playOption":playOption,
-       "index":fieldIndex,
-       "ai_proto":false
+       "index":fieldIndex
    }
 
    return rune;

@@ -8,8 +8,7 @@ exports.CreateRune = function(controllerGuid, baseMana)
     var rune = {
         "runeType":"SetBaseMana",
         "controllerGuid":controllerGuid,
-        "baseMana":baseMana,
-        "ai_proto": false
+        "baseMana":baseMana
     }
     return rune;
 }

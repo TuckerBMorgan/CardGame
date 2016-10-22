@@ -18,8 +18,7 @@ exports.CreateRune = function (target, source, amount) {
         "runeType":"ModifyAttack",
         "target":target,
         "source":source,
-        "amount":amount,
-        "ai_proto": false
+        "amount":amount
     }
 
     return rune;

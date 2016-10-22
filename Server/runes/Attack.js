@@ -32,8 +32,7 @@ exports.CreateRune = function (sourceGuid, targetGuid)
     var rune = {
         "runeType":"Attack",
         "source":sourceGuid,
-        "target":targetGuid,
-        "ai_proto": false
+        "target":targetGuid
     }
     return rune;
 }
