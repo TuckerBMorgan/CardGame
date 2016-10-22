@@ -8,9 +8,10 @@ exports.execute = function (rune, state) {
     
     console.log(rune);
     var controller = entity.getEntity(rune["controllerGuid"], state);
-    var card = entity.getEntity(rune["playOption"]["cardGuid"], state);
+    var card = {};
     if(rune["ai_proto"]){
       card = entity.getEntity(rune["cardGuid"], state);
+      console.log(card);
     }
     else{
       card = entity.getEntity(rune["playOption"]["cardGuid"], state);

@@ -201,7 +201,7 @@ var card_Group_Copy = function(cards, state){
 		//take the deep copy of cards[i] and push it into the array
 		var nc = card_Copy(cards[i]);
 		newGroup.push(nc);
-		entities.addEntity(nc, nc["guid"], state);
+		entities.addEntity(nc, nc["cardGuid"], state);
 	}
 	return newGroup;
 }

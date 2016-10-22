@@ -38,16 +38,17 @@ var MINION_card_comparator = function(card_A, card_B){
 *
 */
 var evaluate_player_position = function(state, player){
+    var enemy = entity.getOtherController(player,state);
     //enemy minions
     var enemy_minions = entity.getEnemyMinions(player, state);
     //my minions
-    var my_minions = entity.returnAllAliveAndOnTeam(player["team"], state);
+    var my_minions = entity.getEnemyMinions(enemy, state);
     //hero HP's
-    var enemy_hp = entity.getOtherController(player, state)["hero"]["health"];
+    var enemy_hp = enemy["hero"]["health"];
     var my_hp = player["hero"]["health"];
     //get taunting minions HP
     var enemy_taunt_hp = 0;
-    var enemy_taunters = ai_utilities.checkActiveTaunts(entity.getOtherController(player, state));
+    var enemy_taunters = ai_utilities.checkActiveTaunts(enemy);
     var my_taunt_hp = 0;
     var my_taunters = ai_utilities.checkActiveTaunts(player)
     //get AP of both sides
@@ -73,10 +74,10 @@ var evaluate_player_position = function(state, player){
 
     //do some math
     //their score
-    var enemy_score = (my_taunt_hp+my_hp)/(enemy_AP);
+    var enemy_score = (my_taunt_hp+my_hp)/(enemy_AP+1);
     //friendly score
-    var my_score = (enemy_taunt_hp+enemy_hp)/(my_AP);
-    return my_score - enemy_score;
+    var my_score = (enemy_taunt_hp+enemy_hp)/(my_AP+1);
+    return enemy_score - my_score;
 }
 
 var knapsackMatrix = function(state, controller){
@@ -86,7 +87,7 @@ var knapsackMatrix = function(state, controller){
         var proto_hand = controller["hand"].sort(function(a,b){return a["cost"]-b["cost"]});
         var max_hand_index = 0;
         for(var i = 0; i<proto_hand.length; i++){
-            if(proto_hand[max_hand_index]["cost"] <= controller["mana"]){
+            if(proto_hand[i]["cost"] <= controller["mana"]){
                 max_hand_index++;
             }else{
                 break;
@@ -98,10 +99,10 @@ var knapsackMatrix = function(state, controller){
             //initialize a 2D array
             var super_array = [];
             var default_score = evaluate_player_position(state, controller)
-            for (var i = 0; i<=hand_size; i++){
+            for (var i = 0; i<=max_hand_index; i++){
                 //loop through each spot of mana we can
                 nArray = [];
-                for(var h = 0; h<=controller.mana; h++){
+                for(var h = 0; h<=controller["mana"]; h++){
                     //if we are looking at the first row then these are just the default score and input state
                     nArray.push({"currentState" : state,"score" : default_score});                
                 }
@@ -109,8 +110,8 @@ var knapsackMatrix = function(state, controller){
             }
 
             //adds an array of size mana  + 1
-            for(var i = 0; i<=hand_size; i++){
-                super_array.push(new Array(controller["mana"]+1));
+            for(var i = 0; i<=max_hand_index; i++){
+                //super_array.push(new Array(controller["mana"]+1));
              }
             
             //loop through the 2D array we made
@@ -135,7 +136,7 @@ var knapsackMatrix = function(state, controller){
                             Rune.executeRune(playRune, copy_diagonal_left_state);
                             //      Not sure how I want to do this yet, few moving parts using runes but that would be the best way, 
                             //      need to disconnect the connection thing so that this can prototype possible boards
-                            var score_diagonal_play = evaluate_player_position(entity.getEntity(controller_guid, copy_diagonal_left_state), copy_diagonal_left_state);
+                            var score_diagonal_play = evaluate_player_position(copy_diagonal_left_state, copy_diagonal_left_state["controllers"][controller_guid]);
                             //if the earlier score is better than playing the card then we keep it
                             if (scorecard_above["score"] > score_diagonal_play){
                                 super_array[i][h] = super_array[i-1][h];
