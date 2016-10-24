@@ -36,7 +36,7 @@ exports.execute = function (rune, state) {
       "runeType":"SetMana",
       "controllerGuid":rune["controllerGuid"],
       "mana":controller["mana"] - card["cost"],
-      "ai_proto": true
+      "ai_proto": rune["ai_proto"]
     }
     
     card["totalHealth"] = card["baseHealth"];
@@ -68,7 +68,8 @@ exports.CreateRune = function (controllerGuid, cardGuid, playOption, fieldIndex)
        "controllerGuid":controllerGuid,
        "cardGuid":cardGuid,
        "playOption":playOption,
-       "index":fieldIndex
+       "index":fieldIndex,
+       "ai_proto": false
    }
 
    return rune;

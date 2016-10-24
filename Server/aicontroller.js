@@ -163,6 +163,44 @@ var knapsackMatrix = function(state, controller){
     return false
 }
 
+/*
+*This function will be used to calculate the best possible set of moves from 
+        a players hand and then actually plays those cards on the live board
+*
+*INPUTS:
+    controller: the controller the best move is being calculated for
+    options: a set of known options which will be used to calculate 
+        targetted events when a card is played such as spells or 
+        battlecries
+    state: the state object which will be copied, and then modified. 
+*
+*Output:
+    This function is void but the modifications made will be reflected in the live game
+*/
+exports.play_from_hand = function(controller, options, state){
+    //run knapsack matrix and get the 2d array back
+    var KM = knapsackMatrix(state, controller);
+    //how many eligible cards there were
+    var hand_size = KM.length;
+    //just grab the bottom right hand, thats the result, we already memoized how we got there
+    var bottom_right = KM[hand_size-1][(KM[hand_size-1].length)-1];
+    //how many runes were already executed before we started playing with them
+    var index_rune_begin = state["runes"].length;
+    //iterate through the new rune list starting with the first rune we added
+    for(var i = index_rune_begin; i<bottom_right["currentState"]["runes"].length; i++){
+        //get the I'th rune and flip it's ai_proto status so changes happen
+        var re_execute = bottom_right["currentState"]["runes"][i];
+        re_execute["ai_proto"] = false;
+        //execute it
+        Rune.executeRune(re_execute);
+    }
+    //sanity check state should be == to KM[hand_size-1][(KM[hand_size-1].length)-1]
+    console.log(bottom_right);
+    console.log(state);
+
+}
+
+
 
 exports.calculateMove = function(controller, options, state) {
     

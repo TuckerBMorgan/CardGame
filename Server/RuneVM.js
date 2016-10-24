@@ -48,13 +48,17 @@ function procesRune(rune, state) {
         count--;
     }
 
+    //ex is used to determine whether the ai_proto is enabled
     var ex = true;
-
     if(rune.hasOwnProperty("ai_proto")){
         if(rune["ai_proto"]){
             ex = false
         }
     }
+    //if ai_proto is enabled then we dont want to send a message to the GUI
+    //  it means the AI is playing with board set ups and we dont want to muck
+    //  up the game
+    //otherwise tell the GUI what just happened
     if(ex){
         var keys = Object.keys(state.controllers);
         keys.forEach(function (elements) {
