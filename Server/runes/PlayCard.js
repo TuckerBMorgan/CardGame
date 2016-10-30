@@ -35,8 +35,7 @@ exports.execute = function (rune, state) {
     var setMana = {
       "runeType":"SetMana",
       "controllerGuid":rune["controllerGuid"],
-      "mana":controller["mana"] - card["cost"],
-      "ai_proto": rune["ai_proto"]
+      "mana":controller["mana"] - card["cost"]
     }
     
     card["totalHealth"] = card["baseHealth"];
@@ -45,18 +44,17 @@ exports.execute = function (rune, state) {
     card["currentAttack"] = card["baseAttack"];
     card["team"] = controller["team"];
     card["state"] = "InPlay";
-    if(!rune.hasOwnProperty("ai_proto")){
-        var keys = Object.keys(state["controllers"]);
-        keys.forEach(function (element) {
-            if(!(rune["cardGuid"] in state["controllers"][element]["seenCards"]))
+     
+    var keys = Object.keys(state["controllers"]);
+    keys.forEach(function (element) {
+        if(!(rune["cardGuid"] in state["controllers"][element]["seenCards"]))
+        {
+            if(state["controllers"][element]["type"] == cont.PLAYER_CONTROLLER)
             {
-                if(state["controllers"][element]["type"] == cont.PLAYER_CONTROLLER)
-                {
-                   server.sendMessage(JSON.stringify(card), state["controllers"][element]["socket"]);
-                }
+               server.sendMessage(JSON.stringify(card), state["controllers"][element]["socket"]);
             }
-        })
-      }
+        }
+    })
      
     Rune.executeRune(setMana, state);
 }
@@ -68,8 +66,7 @@ exports.CreateRune = function (controllerGuid, cardGuid, playOption, fieldIndex)
        "controllerGuid":controllerGuid,
        "cardGuid":cardGuid,
        "playOption":playOption,
-       "index":fieldIndex,
-       "ai_proto": false
+       "index":fieldIndex
    }
 
    return rune;
