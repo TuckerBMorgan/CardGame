@@ -267,13 +267,15 @@ exports.calculateMove = function(controller, options, state) {
 
 
 exports.evaluateMulligan = function (controller, state) {
+    /*
     var shouldMul = [];
     controller.hand.forEach(function (element, index) {
       if(element.cost > 3){
           shouldMul.push[index];
         }  
     })
-    control.executeMulligan(shouldMul, controller, state);
+    */
+    control.executeMulligan([], controller, state);
 }
 
 exports.processRune = function (rune, state) {
