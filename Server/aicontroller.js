@@ -193,19 +193,26 @@ exports.play_from_hand = function(controller, options, state){
         re_execute["ai_proto"] = false;
         //execute it
         Rune.executeRune(re_execute);
+        updateState.updateState(state);
     }
+
     //sanity check state should be == to KM[hand_size-1][(KM[hand_size-1].length)-1]
     console.log(bottom_right);
     console.log(state);
-
+    var rotateTurn = {
+                        "runeType":"RotateTurn",
+                        "previousGuid":state.turnOrder[state.OnTurnPlayer].guid
+                    }
+    Rune.executeRune(rotateTurn, state);
+    updateState.updateState(state);
 }
 
 
 
 exports.calculateMove = function(controller, options, state) {
     
-    var pro = knapsackMatrix(state, controller);
-    console.log(pro);
+    //var pro = knapsackMatrix(state, controller);
+    //console.log(pro);
 
     //the ai wants to play cards first, so get all playCard options
     var playCard = options.filter(function (element) {
