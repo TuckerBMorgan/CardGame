@@ -337,7 +337,7 @@ exports.executeMulligan = function (indices, controller, state)
                 server.sendMessage(JSON.stringify(optionsPack), state.turnOrder[state.OnTurnPlayer].socket);
             }
             else
-            {
+            {/*
                 var index =  AI.calculateMove(state.turnOrder[state.OnTurnPlayer], characterOptions, state);
                 var objj = {
                         "index":index
@@ -346,6 +346,8 @@ exports.executeMulligan = function (indices, controller, state)
                     
                     exports.executeOptions(objj, state.turnOrder[state.OnTurnPlayer], state);
                 },1600);
+                */
+                AI.play_from_hand(controller, null, state);
             }
         }
 }
