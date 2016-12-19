@@ -20,8 +20,8 @@ public class ConflictController : MonoBehaviour {
 		MulliganButton.singelton.gameObject.SetActive (true);
         playArea = GetComponent<PlayArea>();
         playArea.Setup();
-        string str = "{\"type\":\"newConnection\"}";
-        GetComponent<Client>().SendNewMessage(str);
+   ///     string str = "{\"rType\":\"newConnection\"}";
+    //    GetComponent<Client>().SendNewMessage(str);
     }
 
     void Update()

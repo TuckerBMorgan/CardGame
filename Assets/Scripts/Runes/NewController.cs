@@ -9,19 +9,20 @@ public class NewController : Rune
     public static string AI_CONTROLLER = "AiController";
     public static string CONTROLLERS_FILE_PATH = "Controllers/";
 
-    public string controllerGuid { get; set; }
-    public string type { get; set; }
-    public string controllerName { get; set; }
+    public string uid { get; set; }
+    public string controller_type { get; set; }
     public string hero { get; set; }
+    public string controllerName { get; set; }
     public bool isMe { get; set; }
 
     public NewController()
     {
-
+        
     }
 
     public override void Execute(System.Action action)
     {
+    /*
         GameObject go = null;
         if (type == PLAYER_CONTROLLER)
         {
@@ -35,6 +36,7 @@ public class NewController : Rune
         go.GetComponent<Controller>().Setup();
         go.GetComponent<Controller>().SetGuid(controllerGuid);
         EntityManager.Singelton.AddEntity(controllerGuid, go.GetComponent<Controller>());
+        */
         action();
     }
 

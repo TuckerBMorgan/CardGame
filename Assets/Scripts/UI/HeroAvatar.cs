@@ -73,6 +73,7 @@ public class HeroAvatar : MonoBehaviour {
 
     public void SetHero(Rune rune, System.Action action)
     {
+        /*
         NewController nc = rune as NewController;
        // string str = HERO_PORTRAIT_PATH + nc.hero + "Port";
         
@@ -85,6 +86,7 @@ public class HeroAvatar : MonoBehaviour {
         }
         portrait.overrideSprite = heroPort;
         this.heroPower.overrideSprite = heroPower;
+    */
         action();
     }
 

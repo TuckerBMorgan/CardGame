@@ -339,10 +339,11 @@ public class PlayArea : MonoBehaviour
 
     public void SummonMinionRune(Rune rune, Action action)
     {
+    /*
         SummonMinion sm = rune as SummonMinion;
         Controller player = EntityManager.Singelton.GetEntity(sm.controllerGuid) as Controller;
 
-        Card card = EntityManager.Singelton.GetEntity(sm.cardGuid) as Card;
+        Card card = EntityManager.Singelton.GetEntity(sm.card_uid) as Card;
 
         float yPos = 0;
         if (sm.controllerGuid == homeGuid)
@@ -377,7 +378,7 @@ public class PlayArea : MonoBehaviour
 
         EntityManager.Singelton.AddEntity(useGuid, go.GetComponent<CardAvatar>());
 		AddCardToPlayArea(card.GetCardAvatar(), player.GetGuid(), OriginOfCard.SUMMON, sm.fieldIndex);
-        
+        */
         action();
         action = null;
     }
@@ -440,14 +441,13 @@ public class PlayArea : MonoBehaviour
         }
         if (nc.isMe)
         {
-            this.homeGuid = nc.controllerGuid;
+            this.homeGuid = nc.uid;
             playFields.Add(homeGuid, new List<CardAvatar>());
             playHands.Add(homeGuid, new List<CardAvatar>());
-
         }
         else
         {
-            this.awayGuid = nc.controllerGuid;
+            this.awayGuid = nc.uid;
             playFields.Add(awayGuid, new List<CardAvatar>());
             playHands.Add(awayGuid, new List<CardAvatar>());
         }

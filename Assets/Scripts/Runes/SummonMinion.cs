@@ -3,11 +3,9 @@ using System.Collections;
 
 public class SummonMinion : Rune {
 
-    public string controllerGuid{get;set;}
-    public string sourceCardGuid { get; set; }
-    public string cardGuid { get; set; }
-    public string cardId { get; set; }
-	public int fieldIndex{ get; set; }
+    public string controller_uid{get;set;}
+    public string card_uid { get; set; }
+	public int field_index{ get; set; }
 
     public override void Execute(System.Action action)
     {

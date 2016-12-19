@@ -17,7 +17,7 @@ public class Client : MonoBehaviour {
     public void Setup()
     {
         Singelton = this;
-        client = new TcpClient("127.0.0.1", 4884);
+        client = new TcpClient("127.0.0.1", 1337);
         NetworkStream stream = client.GetStream();
         reader = new Reader();
         writer = new Writer();
@@ -27,6 +27,7 @@ public class Client : MonoBehaviour {
 
     public void SendNewMessage(string message)
     {
+		Debug.Log (message);
         writer.SendMessage(message);
     }
 
@@ -86,8 +87,7 @@ public class Reader
         LookForMessage();
     }
 
-	public void LookForMessage()
-	{
+	public void LookForMessage(){	
 		bool foundMessage = false;
 		int newLineCount = 0;
 		for (int i = 0; i < messageBuffer.Count; i++) 

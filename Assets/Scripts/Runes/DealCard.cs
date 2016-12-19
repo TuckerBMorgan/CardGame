@@ -7,8 +7,6 @@ public class DealCard : Rune {
 
     public string controllerGuid { get; set; }
     public string cardGuid { get; set; }
-    public bool faceDown { get; set; }
-
 
     public DealCard()
     {
