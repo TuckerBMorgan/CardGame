@@ -65,7 +65,15 @@ public class RuneManager : MonoBehaviour
                         property.SetValue(runeObj, jsonObject[jsonObject.keys[i]].str, null);
                         break;
                     case JSONObject.Type.NUMBER:
-                        property.SetValue(runeObj, (int)jsonObject[jsonObject.keys[i]].i, null);
+                        
+                        if (!jsonObject.keys[i].Contains("uid"))
+                        {
+                            property.SetValue(runeObj, (int)jsonObject[jsonObject.keys[i]].i, null);
+                        }
+                        else
+                        {
+                            property.SetValue(runeObj, jsonObject[jsonObject.keys[i]].i.ToString(), null);
+                        }
                         break;
                     case JSONObject.Type.BOOL:
                         property.SetValue(runeObj, jsonObject[jsonObject.keys[i]].b, null);

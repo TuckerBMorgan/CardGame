@@ -29,6 +29,7 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
     protected string targetingEntity;
     private CardAvatar careAboutCard;
     
+    
 
     public void Setup()
     {

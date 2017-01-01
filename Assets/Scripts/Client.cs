@@ -27,12 +27,12 @@ public class Client : MonoBehaviour {
 
     public void SendNewMessage(string message)
     {
-		Debug.Log (message);
         writer.SendMessage(message);
     }
 
     public void ReportMessageToMainProgram(string message)
     {
+       
         RuneManager.Singelton.PlaceMessageInQueue(message);
     }
 

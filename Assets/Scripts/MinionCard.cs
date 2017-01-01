@@ -19,7 +19,7 @@ public class MinionCard : Card, damageable {
     public void SetBaseHealth(int baseHealth)
     {
         this.baseHealth = baseHealth;
-    }
+    } 
     public int GetBaseHealth()
     {
         return baseHealth;
