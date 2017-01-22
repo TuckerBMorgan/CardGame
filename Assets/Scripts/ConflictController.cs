@@ -12,14 +12,19 @@ public class ConflictController : MonoBehaviour {
 
     void Awake()
     {
-
     }
 
     public void StartConflict(string conflictFile)
     {
-		MulliganButton.singelton.gameObject.SetActive (true);
         playArea = GetComponent<PlayArea>();
         playArea.Setup();
+        RuneManager.Singelton.AddListener(typeof(Mulligan), OnMulliganRune);
+    }
+
+    public void OnMulliganRune(Rune rune, System.Action action)
+    {   
+        MulliganButton.singelton.gameObject.SetActive(true);
+        action();
     }
 
     void Update()

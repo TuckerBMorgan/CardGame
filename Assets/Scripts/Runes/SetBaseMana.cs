@@ -3,19 +3,19 @@ using System.Collections;
 
 public class SetBaseMana : Rune {
 
-    public string controllerGuid { get; set; }
-    public int baseMana { get; set; }
+    public string controller_uid { get; set; }
+    public int base_mana { get; set; }
 
     public override void Execute(System.Action action)
     {
-        Controller playerController = EntityManager.Singelton.GetEntity(controllerGuid) as Controller;
+        Controller playerController = EntityManager.Singelton.GetEntity(controller_uid) as Controller;
         if(playerController == null)
         {
-            Debug.Log("Program finding Controller with guid" + controllerGuid);
+            Debug.Log("Program finding Controller with guid" + controller_uid);
             action();
             return;
         }
-        playerController.SetBaseMana(baseMana);
+        playerController.SetBaseMana(base_mana);
         action();
     }
     public override void OnGUI()

@@ -8,6 +8,7 @@ public class MulliganButton : MonoBehaviour {
 	void Awake()
 	{
 		singelton = this;
+        
 	}
 
 
@@ -21,6 +22,11 @@ public class MulliganButton : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    public void OnMulliganRune()
+    {
+
+    }
 
     public void MulliganCards()
     {

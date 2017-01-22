@@ -394,7 +394,7 @@ public class PlayArea : MonoBehaviour
         }
 
 
-        Controller player = EntityManager.Singelton.GetEntity(sc.controllerGuid) as Controller;
+        Controller player = EntityManager.Singelton.GetEntity(sc.controller_uid) as Controller;
         if (player == null)
         {
             Debug.Log("Could not find controller in EntityManager, bad Guid");
@@ -402,7 +402,7 @@ public class PlayArea : MonoBehaviour
             return;
         }
 
-        Card card = EntityManager.Singelton.GetEntity(sc.cardGuid) as Card;
+        Card card = EntityManager.Singelton.GetEntity(sc.card_uid) as Card;
         if (card == null)
         {
             Debug.Log("Could not find card in EntityManager, bad Guid");

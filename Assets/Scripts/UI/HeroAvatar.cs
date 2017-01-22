@@ -93,12 +93,12 @@ public class HeroAvatar : MonoBehaviour {
     public void OnSetBaseMana(Rune rune, System.Action action)
     {
         SetBaseMana sbm = rune as SetBaseMana;
-        if (sbm.controllerGuid != careAboutGuid)
+        if (sbm.controller_uid != careAboutGuid)
         {
             action();
             return;
         }
-        currentTopMana = sbm.baseMana;
+        currentTopMana = sbm.base_mana;
         mana.text = currentMana + " : " + currentTopMana;
 
         action();
@@ -108,7 +108,7 @@ public class HeroAvatar : MonoBehaviour {
     {
 
         SetMana sm = rune as SetMana;
-        if(sm.controllerGuid != careAboutGuid)
+        if(sm.controller_uid != careAboutGuid)
         {
             action();
             return;

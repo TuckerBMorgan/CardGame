@@ -187,13 +187,6 @@ public class NoMulligan : Option
 
 }
 
-public class Mulligan : Option
-{
-    public string cardGuid;
-}
-
-
-
 public class EndTurn : Option
 {
     
