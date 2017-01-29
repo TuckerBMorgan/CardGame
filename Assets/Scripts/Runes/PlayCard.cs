@@ -19,19 +19,21 @@ public enum TypeOfRemoveFromHand
 
 public class PlayCard : Rune {
     
-    public string controllerGuid { get; set; }
-    public string cardGuid { get; set; }
-    public OriginOfCard originOfCard { get; set; }
-    public TypeOfRemoveFromHand typeOfRemoveFromHand { get; set; }
-	public int index{ get; set; }
-
+    public string controller_uid { get; set; }
+    public string card_uid { get; set; }
+	public int field_index{ get; set; }
+	public string target_uid{ get; set; }
 
     public PlayCard()
     {
+		
     }
 
     public override void Execute(Action action)
     {
+
+
+		/*
         Controller player = EntityManager.Singelton.GetEntity(controllerGuid) as Controller;
         if(player == null)
         {
@@ -50,7 +52,8 @@ public class PlayCard : Rune {
 
         player.RemoveCardFromHand(card);
         player.AddCardToPlay(card);
-        action();
+		*/
+		action();
     }
 
     public override void OnGUI()
