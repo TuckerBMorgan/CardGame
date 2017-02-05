@@ -14,7 +14,7 @@ public class NewController : Rune
     public int client_id { get; set; }
     public string deck { get; set; }
     public string controllerName { get; set; }
-    public bool isMe { get; set; }
+    public bool is_me { get; set; }
 
     public NewController()
     {
@@ -25,7 +25,7 @@ public class NewController : Rune
     {
     
         GameObject go = null;
-        if (isMe)
+        if (is_me)
         {
             go = Resources.Load<GameObject>(CONTROLLERS_FILE_PATH + PLAYER_CONTROLLER);
         }

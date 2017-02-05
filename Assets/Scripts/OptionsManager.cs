@@ -7,12 +7,12 @@ public class OptionsManager : MonoBehaviour {
 
     public static OptionsManager Singleton;
 
-    public const string MULLIGAN = "mulligan";
+    public const string MULLIGAN = "Emulligan";
     public const string NO_MULLIGAN = "noMulligan";
-    public const string END_TURN = "EndTurn";
-    public const string PLAY_CARD = "PlayCard";
-    public const string ATTACK = "Attack";
-    public const string PLAY_SPELL = "PlaySpell";
+    public const string END_TURN = "EEndTurn";
+    public const string PLAY_CARD = "EPlayCard";
+    public const string ATTACK = "EAttack";
+    public const string PLAY_SPELL = "EPlaySpell";
     public const string HERO_POWER = "HERO_POWER";
 
     public string endTurnKey = "EndTurn";
@@ -33,8 +33,7 @@ public class OptionsManager : MonoBehaviour {
         int count = 0;
         foreach(JSONObject j in jsonObject["options"].list)
         {
-            
-            switch(j["option"].str)
+            switch(j["option_type"].str)
             {
                 case MULLIGAN:
                     //WHY DID I DO THIS
@@ -81,8 +80,8 @@ public class OptionsManager : MonoBehaviour {
 
                     PlayCardOption pc = new PlayCardOption();
                     pc.n = count;
-                    pc.cardGuid = j["cardGuid"].str;
-                    pc.targetGuid = j["target"].str;
+					pc.cardGuid = j["source_uid"].n.ToString();
+					pc.targetGuid = j["target_uid"].n.ToString();
 
                     count++;
                     if(!options.ContainsKey(pc.cardGuid))
@@ -92,12 +91,12 @@ public class OptionsManager : MonoBehaviour {
 
                     options[pc.cardGuid].Add(pc);
                     break;
-                case ATTACK:
+			case ATTACK:
 
-                    AttackOption a = new AttackOption();
-                    a.n = count;
-                    a.cardGuid = j["attackGuid"].str;
-                    a.defenderGuid = j["defenderGuid"].str;
+					AttackOption a = new AttackOption ();
+					a.n = count;
+					a.cardGuid = j ["source_uid"].n.ToString ();
+					a.defenderGuid = j["target_uid"].n.ToString();
 
                     count++;
                     if(!options.ContainsKey(a.cardGuid))
@@ -115,8 +114,8 @@ public class OptionsManager : MonoBehaviour {
                     
                     PlaySpellOption ps = new PlaySpellOption();
                     ps.n = count;
-                    ps.cardGuid = j["cardGuid"].str;
-                    ps.target = j["targetGuid"].str;
+					ps.cardGuid = j["cardGuid"].n.ToString();
+					ps.target = j["targetGuid"].n.ToString();
                     
                     count++;
                     if (!options.ContainsKey(ps.cardGuid))
@@ -126,8 +125,8 @@ public class OptionsManager : MonoBehaviour {
                     options[ps.cardGuid].Add(ps);
 
                     break;
-                default:
-                        
+			default:
+				
                     break;
             }
         }
@@ -140,7 +139,7 @@ public class OptionsManager : MonoBehaviour {
 
     public void PickUpOption(Option op)
     {
-        string str = "{\"type\":\"option\",";
+        string str = "{\"message_type\":\"option\",";
         str += "\"index\":" + op.n + ",";
         str += "\"timeStamp\":" + DateTime.Now.Second.ToString() + "}";
         Client.Singelton.SendNewMessage(str);
@@ -149,10 +148,9 @@ public class OptionsManager : MonoBehaviour {
 
 	public void PickUpOption(Option op, int index)
 	{
-		string str = "{\"type\":\"option\",";
+		string str = "{\"message_type\":\"option\",";
 		str += "\"index\":" + op.n + ",";
-		str += "\"boardIndex\":" + index + ",";
-		str += "\"timeStamp\":" + DateTime.Now.Second.ToString() + "}";
+		str += "\"board_index\":" + index + "}";
 		Client.Singelton.SendNewMessage(str);
 		FlushOptions();
 	}

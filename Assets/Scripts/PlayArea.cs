@@ -132,7 +132,7 @@ public class PlayArea : MonoBehaviour
         action();
     }
 
-    public void RemoveCardFromHand(CardAvatar cardAvatar, string controllerGuid, TypeOfRemoveFromHand typeOfRemoveFromHand)
+    public void RemoveCardFromHand(CardAvatar cardAvatar, string controllerGuid)
     {
         float yPos = 0;
         if (controllerGuid == homeGuid)
@@ -154,19 +154,13 @@ public class PlayArea : MonoBehaviour
             for (int i = 0; i < playHands[controllerGuid].Count; i++)
             {
                 playHands[controllerGuid][i].GetComponent<CardAvatar>().SetDestination(new Vector3(-startPoint + (halfWidth * i), yPos, -3));
-            }
-
-            switch (typeOfRemoveFromHand)
-            {
-                case TypeOfRemoveFromHand.INTO_PLAY:
-                    //A non case, this gets handeled by the AddCardToPlay function which will move it then
-                    break;
-            }
+            }          
         }
     }
 
-	public void AddCardToPlayArea(CardAvatar cardAvatar, string controllerGuid, OriginOfCard originOfCard, int index)
+	public void AddCardToPlayArea(CardAvatar cardAvatar, string controllerGuid, int index)
     {
+		OriginOfCard oc = OriginOfCard.HAND;
         float yPos = 0;
         if (controllerGuid == homeGuid)
         {
@@ -184,10 +178,10 @@ public class PlayArea : MonoBehaviour
             float halfWidth = width + epsilon;
             float startPoint = playFields[controllerGuid].Count * halfWidth;
                     
-            switch (originOfCard)
+            switch (oc)
             {
                 case OriginOfCard.HAND:
-                    RemoveCardFromHand(cardAvatar, controllerGuid, TypeOfRemoveFromHand.INTO_PLAY);
+                    RemoveCardFromHand(cardAvatar, controllerGuid);
 					
 					playFields[controllerGuid].Insert(index, cardAvatar);
                     for (int i = 0; i < playFields[controllerGuid].Count; i++)
@@ -317,7 +311,7 @@ public class PlayArea : MonoBehaviour
     {
         PlayCard pc = rune as PlayCard;
 
-        Controller player = EntityManager.Singelton.GetEntity(pc.controllerGuid) as Controller;
+        Controller player = EntityManager.Singelton.GetEntity(pc.controller_uid) as Controller;
         if (player == null)
         {
             Debug.Log("Could not find controller in EntityManager, bad Guid");
@@ -325,15 +319,15 @@ public class PlayArea : MonoBehaviour
             return;
         }
 
-        Card card = EntityManager.Singelton.GetEntity(pc.cardGuid) as Card;
+        Card card = EntityManager.Singelton.GetEntity(pc.card_uid) as Card;
         if (card == null)
         {
             Debug.Log("Could not find card in EntityManager, bad Guid");
             action();
             return;
         }
-        RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid(), pc.typeOfRemoveFromHand);
-		AddCardToPlayArea(card.GetCardAvatar(), player.GetGuid(), pc.originOfCard, pc.index);
+		RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid());
+		AddCardToPlayArea(card.GetCardAvatar(), player.GetGuid(), pc.field_index);
         action();
         action = null;
     }
@@ -409,7 +403,7 @@ public class PlayArea : MonoBehaviour
             action();
             return;
         }
-        RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid(), TypeOfRemoveFromHand.DISCARDED);
+        RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid());
         card.GetCardAvatar().DeckIt();
         action();
     }
@@ -440,7 +434,7 @@ public class PlayArea : MonoBehaviour
             playFields = new Dictionary<string, List<CardAvatar>>();
             playHands = new Dictionary<string, List<CardAvatar>>();
         }
-        if (nc.isMe)
+        if (nc.is_me)
         {
             this.homeGuid = nc.uid.ToString();
             playFields.Add(homeGuid, new List<CardAvatar>());
@@ -499,7 +493,7 @@ public class PlayArea : MonoBehaviour
 
         Controller player = EntityManager.Singelton.GetEntity(ps.controllerGuid) as Controller;
 
-        RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid(), TypeOfRemoveFromHand.INTO_PLAY);
+        RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid());
 		card.GetCardAvatar().transform.position = card.GetCardAvatar().transform.position + new Vector3(10000,0,0);
 		card.GetCardAvatar().cardAvatarState = CardAvatarState.inGraveyad;
 		card.GetCardAvatar().gameObject.SetActive(false);	

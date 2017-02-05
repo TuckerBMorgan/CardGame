@@ -146,16 +146,16 @@ public abstract class Controller : MonoBehaviour, entity, damageable {
             {
                 if (controllerState == ControllerState.movingCard)
                 {
-                    if (PlayArea.Singelton.InPlayArea(careAboutCard.transform.position))
+				   if (PlayArea.Singelton.InPlayArea(careAboutCard.transform.position))
                     {
-                        if (OptionsManager.Singleton.options.ContainsKey(careAboutCard.GetGuid()))
+				        if (OptionsManager.Singleton.options.ContainsKey(careAboutCard.GetGuid()))
                         {
-                            var options = OptionsManager.Singleton.options[careAboutCard.GetGuid()];
+				            var options = OptionsManager.Singleton.options[careAboutCard.GetGuid()];
                             foreach (Option op in options)
                             {
-                                if (op.GetType() == typeof(PlayCardOption))
+				                if (op.GetType() == typeof(PlayCardOption))
                                 {
-                                    if ((op as PlayCardOption).targetGuid == "-1")
+				                    if ((op as PlayCardOption).targetGuid == "0")
                                     {
 										int placeIndex = PlayArea.Singelton.GetPossibleCardIndex (careAboutCard);
 										OptionsManager.Singleton.PickUpOption(op, placeIndex);

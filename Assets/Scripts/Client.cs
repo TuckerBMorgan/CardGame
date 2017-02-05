@@ -19,6 +19,9 @@ public class Client : MonoBehaviour {
         Singelton = this;
         client = new TcpClient("127.0.0.1", 1337);
         NetworkStream stream = client.GetStream();
+		if (client.Connected) {
+			Debug.Log ("I am connected to a sever");
+		}
         reader = new Reader();
         writer = new Writer();
         reader.Setup(stream, this);
