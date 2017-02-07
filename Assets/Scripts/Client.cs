@@ -17,8 +17,11 @@ public class Client : MonoBehaviour {
     public void Setup()
     {
         Singelton = this;
-        client = new TcpClient("127.0.0.1", 4884);
+        client = new TcpClient("127.0.0.1", 1337);
         NetworkStream stream = client.GetStream();
+		if (client.Connected) {
+			Debug.Log ("I am connected to a sever");
+		}
         reader = new Reader();
         writer = new Writer();
         reader.Setup(stream, this);
@@ -32,6 +35,7 @@ public class Client : MonoBehaviour {
 
     public void ReportMessageToMainProgram(string message)
     {
+       
         RuneManager.Singelton.PlaceMessageInQueue(message);
     }
 
@@ -86,8 +90,7 @@ public class Reader
         LookForMessage();
     }
 
-	public void LookForMessage()
-	{
+	public void LookForMessage(){	
 		bool foundMessage = false;
 		int newLineCount = 0;
 		for (int i = 0; i < messageBuffer.Count; i++) 

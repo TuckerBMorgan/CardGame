@@ -34,6 +34,7 @@ public class CreateCard : Rune {
     public EntityType entityType { get; set; }
     public string controllerGuid { get; set; }
     public string id { get; set; }
+    public string uid;
     
     public CreateCard()
     {

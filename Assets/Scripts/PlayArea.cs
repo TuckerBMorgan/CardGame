@@ -75,6 +75,7 @@ public class PlayArea : MonoBehaviour
 
     public void Setup()
     {
+
         gameStarted = false;   
         Singelton = this;
 
@@ -131,7 +132,7 @@ public class PlayArea : MonoBehaviour
         action();
     }
 
-    public void RemoveCardFromHand(CardAvatar cardAvatar, string controllerGuid, TypeOfRemoveFromHand typeOfRemoveFromHand)
+    public void RemoveCardFromHand(CardAvatar cardAvatar, string controllerGuid)
     {
         float yPos = 0;
         if (controllerGuid == homeGuid)
@@ -153,19 +154,13 @@ public class PlayArea : MonoBehaviour
             for (int i = 0; i < playHands[controllerGuid].Count; i++)
             {
                 playHands[controllerGuid][i].GetComponent<CardAvatar>().SetDestination(new Vector3(-startPoint + (halfWidth * i), yPos, -3));
-            }
-
-            switch (typeOfRemoveFromHand)
-            {
-                case TypeOfRemoveFromHand.INTO_PLAY:
-                    //A non case, this gets handeled by the AddCardToPlay function which will move it then
-                    break;
-            }
+            }          
         }
     }
 
-	public void AddCardToPlayArea(CardAvatar cardAvatar, string controllerGuid, OriginOfCard originOfCard, int index)
+	public void AddCardToPlayArea(CardAvatar cardAvatar, string controllerGuid, int index)
     {
+		OriginOfCard oc = OriginOfCard.HAND;
         float yPos = 0;
         if (controllerGuid == homeGuid)
         {
@@ -183,10 +178,10 @@ public class PlayArea : MonoBehaviour
             float halfWidth = width + epsilon;
             float startPoint = playFields[controllerGuid].Count * halfWidth;
                     
-            switch (originOfCard)
+            switch (oc)
             {
                 case OriginOfCard.HAND:
-                    RemoveCardFromHand(cardAvatar, controllerGuid, TypeOfRemoveFromHand.INTO_PLAY);
+                    RemoveCardFromHand(cardAvatar, controllerGuid);
 					
 					playFields[controllerGuid].Insert(index, cardAvatar);
                     for (int i = 0; i < playFields[controllerGuid].Count; i++)
@@ -229,7 +224,7 @@ public class PlayArea : MonoBehaviour
 
     public void OnMulliganButtonClick()
     {
-        string str = "{\"type\":\"mulligan\",\n";
+        string str = "{\"message_type\":\"mulligan\",\n";
         str += "\"index\":[";
         for(int i = 0;i<indexes.Count;i++)
         {
@@ -258,7 +253,7 @@ public class PlayArea : MonoBehaviour
     {
 
         DealCard dc = rune as DealCard; 
-        Controller player = EntityManager.Singelton.GetEntity(dc.controllerGuid) as Controller;
+        Controller player = EntityManager.Singelton.GetEntity(dc.controller_uid) as Controller;
         if (player == null)
         {
             Debug.Log("Could not find controller in EntityManager, bad Guid");
@@ -266,19 +261,19 @@ public class PlayArea : MonoBehaviour
             return;
         }
 
-        Card card = EntityManager.Singelton.GetEntity(dc.cardGuid) as Card;
+        Card card = EntityManager.Singelton.GetEntity(dc.card_uid) as Card;
         if (card == null)
         {
-            Debug.Log("Could not find card in EntityManager, bad Guid " + dc.cardGuid);
+            Debug.Log("Could not find card in EntityManager, bad Guid " + dc.card_uid);
             action();
             return;
         }
         float yPos = 0;
-        if (dc.controllerGuid == homeGuid)
+        if (dc.controller_uid == homeGuid)
         {
             yPos = -2.0f;
         }
-        else if (dc.controllerGuid == awayGuid)
+        else if (dc.controller_uid == awayGuid)
         {
             yPos = 4.0f;
         }
@@ -286,7 +281,7 @@ public class PlayArea : MonoBehaviour
         GameObject go = Resources.Load<GameObject>(CARD_AVATAR_PREFAB_LOCATION);
         go = GameObject.Instantiate(go);
 
-		go.name = card.GetName() + " " + dc.cardGuid;
+		go.name = card.GetName() + " " + dc.card_uid;
         if(String.IsNullOrEmpty(card.GetName()))
         {
             go.name = "UnknowCard";
@@ -306,17 +301,17 @@ public class PlayArea : MonoBehaviour
             go.GetComponent<CardAvatar>().Setup(card, useGuid, player.GetGuid());
         }
         card.SetCardAvatar(go.GetComponent<CardAvatar>());
-        go.GetComponent<CardAvatar>().SetControllerGuid(dc.controllerGuid);
+        go.GetComponent<CardAvatar>().SetControllerGuid(dc.controller_uid);
 
         EntityManager.Singelton.AddEntity(useGuid, go.GetComponent<CardAvatar>());
-        AddCardToHand(go.GetComponent<CardAvatar>(), dc.controllerGuid, action);
+        AddCardToHand(go.GetComponent<CardAvatar>(), dc.controller_uid, action);
     }
 
     public void PlayRune(Rune rune, Action action)
     {
         PlayCard pc = rune as PlayCard;
 
-        Controller player = EntityManager.Singelton.GetEntity(pc.controllerGuid) as Controller;
+        Controller player = EntityManager.Singelton.GetEntity(pc.controller_uid) as Controller;
         if (player == null)
         {
             Debug.Log("Could not find controller in EntityManager, bad Guid");
@@ -324,25 +319,26 @@ public class PlayArea : MonoBehaviour
             return;
         }
 
-        Card card = EntityManager.Singelton.GetEntity(pc.cardGuid) as Card;
+        Card card = EntityManager.Singelton.GetEntity(pc.card_uid) as Card;
         if (card == null)
         {
             Debug.Log("Could not find card in EntityManager, bad Guid");
             action();
             return;
         }
-        RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid(), pc.typeOfRemoveFromHand);
-		AddCardToPlayArea(card.GetCardAvatar(), player.GetGuid(), pc.originOfCard, pc.index);
+		RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid());
+		AddCardToPlayArea(card.GetCardAvatar(), player.GetGuid(), pc.field_index);
         action();
         action = null;
     }
 
     public void SummonMinionRune(Rune rune, Action action)
     {
+    /*
         SummonMinion sm = rune as SummonMinion;
         Controller player = EntityManager.Singelton.GetEntity(sm.controllerGuid) as Controller;
 
-        Card card = EntityManager.Singelton.GetEntity(sm.cardGuid) as Card;
+        Card card = EntityManager.Singelton.GetEntity(sm.card_uid) as Card;
 
         float yPos = 0;
         if (sm.controllerGuid == homeGuid)
@@ -377,7 +373,7 @@ public class PlayArea : MonoBehaviour
 
         EntityManager.Singelton.AddEntity(useGuid, go.GetComponent<CardAvatar>());
 		AddCardToPlayArea(card.GetCardAvatar(), player.GetGuid(), OriginOfCard.SUMMON, sm.fieldIndex);
-        
+        */
         action();
         action = null;
     }
@@ -392,7 +388,7 @@ public class PlayArea : MonoBehaviour
         }
 
 
-        Controller player = EntityManager.Singelton.GetEntity(sc.controllerGuid) as Controller;
+        Controller player = EntityManager.Singelton.GetEntity(sc.controller_uid) as Controller;
         if (player == null)
         {
             Debug.Log("Could not find controller in EntityManager, bad Guid");
@@ -400,14 +396,14 @@ public class PlayArea : MonoBehaviour
             return;
         }
 
-        Card card = EntityManager.Singelton.GetEntity(sc.cardGuid) as Card;
+        Card card = EntityManager.Singelton.GetEntity(sc.card_uid) as Card;
         if (card == null)
         {
             Debug.Log("Could not find card in EntityManager, bad Guid");
             action();
             return;
         }
-        RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid(), TypeOfRemoveFromHand.DISCARDED);
+        RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid());
         card.GetCardAvatar().DeckIt();
         action();
     }
@@ -438,22 +434,21 @@ public class PlayArea : MonoBehaviour
             playFields = new Dictionary<string, List<CardAvatar>>();
             playHands = new Dictionary<string, List<CardAvatar>>();
         }
-        if (nc.isMe)
+        if (nc.is_me)
         {
-            this.homeGuid = nc.controllerGuid;
+            this.homeGuid = nc.uid.ToString();
             playFields.Add(homeGuid, new List<CardAvatar>());
             playHands.Add(homeGuid, new List<CardAvatar>());
-
         }
         else
         {
-            this.awayGuid = nc.controllerGuid;
+            this.awayGuid = nc.uid.ToString();
             playFields.Add(awayGuid, new List<CardAvatar>());
             playHands.Add(awayGuid, new List<CardAvatar>());
         }
         if(awayGuid != null && homeGuid != null)
         {
-            string str = "{\"type\":\"ready\"}";
+            string str = "{\"message_type\":\"ready\"}";
             GetComponent<Client>().SendNewMessage(str);
         }
 
@@ -463,7 +458,6 @@ public class PlayArea : MonoBehaviour
 
     public void StarGameRune(Rune rune, Action action)
     {
-		Debug.Log ("SSDFSDF))))");
         gameStarted = true;
 
         float yPos = -2.0f;
@@ -499,7 +493,7 @@ public class PlayArea : MonoBehaviour
 
         Controller player = EntityManager.Singelton.GetEntity(ps.controllerGuid) as Controller;
 
-        RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid(), TypeOfRemoveFromHand.INTO_PLAY);
+        RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid());
 		card.GetCardAvatar().transform.position = card.GetCardAvatar().transform.position + new Vector3(10000,0,0);
 		card.GetCardAvatar().cardAvatarState = CardAvatarState.inGraveyad;
 		card.GetCardAvatar().gameObject.SetActive(false);	

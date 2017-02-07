@@ -4,12 +4,12 @@ using System.Collections;
 public class ShuffleCard : Rune
 {
 
-    public string controllerGuid { get; set; }
-    public string cardGuid { get; set; }
+    public string controller_uid { get; set; }
+    public string card_uid { get; set; }
 
     public override void Execute(System.Action action)
     {
-        Controller controller = EntityManager.Singelton.GetEntity(controllerGuid) as Controller;
+        Controller controller = EntityManager.Singelton.GetEntity(controller_uid) as Controller;
 
         if (controller == null)
         {
@@ -17,7 +17,7 @@ public class ShuffleCard : Rune
             return;
         }
 
-        Card card = EntityManager.Singelton.GetEntity(cardGuid) as Card;
+        Card card = EntityManager.Singelton.GetEntity(card_uid) as Card;
         if (card == null)
         {
             Debug.Log("Bad Card");

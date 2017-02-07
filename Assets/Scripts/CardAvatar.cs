@@ -149,7 +149,7 @@ public class CardAvatar : MonoBehaviour, entity
             return;
         }
 
-        if(pc.cardGuid == card.GetGuid())
+        if(pc.card_uid == card.GetGuid())
         {
             cardAvatarState = CardAvatarState.inPlay;
         } 

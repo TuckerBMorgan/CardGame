@@ -3,10 +3,12 @@ using System.Collections;
 
 public class MulliganButton : MonoBehaviour {
 	public static MulliganButton singelton;
+    public bool stop = false;
 
 	void Awake()
 	{
 		singelton = this;
+        
 	}
 
 
@@ -21,11 +23,20 @@ public class MulliganButton : MonoBehaviour {
 	
 	}
 
+    public void OnMulliganRune()
+    {
+
+    }
+
     public void MulliganCards()
     {
 		if (PlayArea.Singelton != null) 
 		{
-			PlayArea.Singelton.OnMulliganButtonClick ();
+            if (!stop)
+            {
+                PlayArea.Singelton.OnMulliganButtonClick();
+                stop = true;
+            }
 		}
     }
 

@@ -10,7 +10,7 @@ public class CardGame : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        GetComponent<Client>().Setup();
+
     }
 
     // Update is called once per frame
@@ -22,5 +22,6 @@ public class CardGame : MonoBehaviour
     public void StartConflict()
     {
         currentConflict.StartConflict("testScenario");
+        GetComponent<Client>().Setup();
     }
 }

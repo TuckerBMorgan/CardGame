@@ -1,14 +1,15 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
-public class SummonMinion : Rune {
+public class PlayMinion : Rune {
 
-    public string controller_uid{get;set;}
     public string minion_uid { get; set; }
+	public string controller_uid{get;set;}
 	public int field_index{ get; set; }
+	public string target_uid { get; set; }
 
     public override void Execute(System.Action action)
-    {
+    {	
         action();    
     }
 

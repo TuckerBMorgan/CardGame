@@ -73,6 +73,7 @@ public class HeroAvatar : MonoBehaviour {
 
     public void SetHero(Rune rune, System.Action action)
     {
+        /*
         NewController nc = rune as NewController;
        // string str = HERO_PORTRAIT_PATH + nc.hero + "Port";
         
@@ -85,18 +86,19 @@ public class HeroAvatar : MonoBehaviour {
         }
         portrait.overrideSprite = heroPort;
         this.heroPower.overrideSprite = heroPower;
+    */
         action();
     }
 
     public void OnSetBaseMana(Rune rune, System.Action action)
     {
         SetBaseMana sbm = rune as SetBaseMana;
-        if (sbm.controllerGuid != careAboutGuid)
+        if (sbm.controller_uid != careAboutGuid)
         {
             action();
             return;
         }
-        currentTopMana = sbm.baseMana;
+        currentTopMana = sbm.base_mana;
         mana.text = currentMana + " : " + currentTopMana;
 
         action();
@@ -106,7 +108,7 @@ public class HeroAvatar : MonoBehaviour {
     {
 
         SetMana sm = rune as SetMana;
-        if(sm.controllerGuid != careAboutGuid)
+        if(sm.controller_uid != careAboutGuid)
         {
             action();
             return;

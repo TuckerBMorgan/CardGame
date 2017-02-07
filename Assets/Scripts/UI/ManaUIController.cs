@@ -20,7 +20,7 @@ public class ManaUIController : MonoBehaviour {
     public void OnSetBaseMana(Rune rune, Action action)
     {
         SetBaseMana sbm = rune as SetBaseMana;
-        text.text = sbm.baseMana.ToString();
+        text.text = sbm.base_mana.ToString();
         action();
     }
 
