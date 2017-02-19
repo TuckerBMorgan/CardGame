@@ -2,15 +2,14 @@
 using System.Collections;
 
 public class ModifyHealth : Rune {
-
-    public string source { get; set; }
-    public string target { get; set; }
+	
+    public string target_uid { get; set; }
     public int amount { get; set; }
 
 
     public override void Execute(System.Action action)
     {
-        var ent = EntityManager.Singelton.GetEntity(target) as damageable;
+        var ent = EntityManager.Singelton.GetEntity(target_uid) as damageable;
         ent.ModifyHealth(amount);
         action();
     }

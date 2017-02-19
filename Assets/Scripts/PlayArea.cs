@@ -410,17 +410,6 @@ public class PlayArea : MonoBehaviour
 
     public void DamageRuneCall(Rune rune, Action action)
     {
-        DamageRune dr = rune as DamageRune;
-
-        if (dr.targetType == TargetType.minion)
-        {
-          //Not sure why I have this, I think it might have been because of reasons  
-          
-        }
-        else if (dr.targetType == TargetType.player)
-        {
-            //once we have player avatars in do this
-        }
         action();
         action = null;
     }

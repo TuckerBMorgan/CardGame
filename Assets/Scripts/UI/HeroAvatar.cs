@@ -42,7 +42,7 @@ public class HeroAvatar : MonoBehaviour {
     {
         ModifyHealth mh = rune as ModifyHealth;
 
-        if(mh.target == careAboutGuid)
+        if(mh.target_uid == careAboutGuid)
         {
             action();
             return;
