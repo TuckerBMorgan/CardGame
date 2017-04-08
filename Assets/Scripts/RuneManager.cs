@@ -68,7 +68,7 @@ public class RuneManager : MonoBehaviour
                         
                         if (!jsonObject.keys[i].Contains("uid"))
                         {
-							Debug.Log (jsonObject.keys [i]);
+//							Debug.Log (jsonObject.keys [i]);
                             property.SetValue(runeObj, (int)jsonObject[jsonObject.keys[i]].i, null);
                         }
                         else

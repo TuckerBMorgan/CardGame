@@ -3,8 +3,8 @@ using System.Collections;
 
 public class Attack : Rune {
 
-    public string source { get; set; }
-    public string target { get; set; }
+    public string source_uid { get; set; }
+    public string target_uid { get; set; }
 
     public override void Execute(System.Action action)
     {

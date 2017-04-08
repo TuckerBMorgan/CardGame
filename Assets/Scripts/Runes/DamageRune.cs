@@ -13,10 +13,9 @@ public class DamageRune : Rune
     //damage must be a negative number as in Current Amount + amount to get new health
     
     public int amount { get; set; }
-    public string source { get; set; }
-    public string target { get; set; }
-    public TargetType targetType { get; set; }
-
+    public string source_uid { get; set; }
+    public string target_uid { get; set; }
+    
 
     public DamageRune()
     {
