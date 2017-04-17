@@ -141,6 +141,7 @@ public class OptionsManager : MonoBehaviour {
     {
         string str = "{\"message_type\":\"option\",";
         str += "\"index\":" + op.n + ",";
+		str += "\"board_index\":" + 0 + ",";	
         str += "\"timeStamp\":" + DateTime.Now.Second.ToString() + "}";
         Client.Singelton.SendNewMessage(str);
         FlushOptions();

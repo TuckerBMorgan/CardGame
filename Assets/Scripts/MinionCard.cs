@@ -48,8 +48,8 @@ public class MinionCard : Card, damageable {
 
     public void SetHealth(int health)   
     {
-        useHealth = health;
-		cardAvatar.SetHealth (useHealth);
+        baseHealth = health;
+		cardAvatar.SetTotalHealth (baseHealth);
     }
 
 	public void SetAttack(int attack)

@@ -60,7 +60,7 @@ public class HeroAvatar : MonoBehaviour {
     {
         SetHeroHealth shh = rune as SetHeroHealth;
 
-        if (shh.heroGuid != careAboutGuid)
+        if (shh.hero_uid != careAboutGuid)
         {
             action();
             return;

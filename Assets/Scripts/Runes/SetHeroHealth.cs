@@ -4,7 +4,7 @@ using System;
 
 public class SetHeroHealth : Rune {
 
-    public string heroGuid { get; set; }
+    public string hero_uid { get; set; }
     public int health { get; set; }
 
     public override void Execute(Action action)

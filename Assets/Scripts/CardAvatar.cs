@@ -21,7 +21,7 @@ public class CardAvatar : MonoBehaviour, entity
     public GameObject costText;
     public GameObject cardText;
     public CardAvatarState cardAvatarState;
-
+	private int total_health;
 
     public GameObject Front;
     public GameObject Back;
@@ -196,9 +196,10 @@ public class CardAvatar : MonoBehaviour, entity
         return card.GetGuid();
     }
 
-    public void SetHealth(int amount)
+    public void SetTotalHealth(int amount)
     {
-        healthText.GetComponent<Text>().text = amount.ToString();
+		total_health = amount;
+       // healthText.GetComponent<Text>().text = amount.ToString();
     }
 
     public void ModifyHealth(int amount)
