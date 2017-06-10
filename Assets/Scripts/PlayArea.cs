@@ -327,25 +327,25 @@ public class PlayArea : MonoBehaviour
             return;
         }
 		RemoveCardFromHand(card.GetCardAvatar(), player.GetGuid());
-		AddCardToPlayArea(card.GetCardAvatar(), player.GetGuid(), pc.field_index);
+
         action();
         action = null;
     }
 
     public void SummonMinionRune(Rune rune, Action action)
     {
-    /*
+   
         SummonMinion sm = rune as SummonMinion;
-        Controller player = EntityManager.Singelton.GetEntity(sm.controllerGuid) as Controller;
+        Controller player = EntityManager.Singelton.GetEntity(sm.controller_uid) as Controller;
 
-        Card card = EntityManager.Singelton.GetEntity(sm.card_uid) as Card;
+        Card card = EntityManager.Singelton.GetEntity(sm.minion_uid) as Card;
 
         float yPos = 0;
-        if (sm.controllerGuid == homeGuid)
+        if (sm.controller_uid == homeGuid)
         {
             yPos = -2.0f;
         }
-        else if (sm.controllerGuid == awayGuid)
+        else if (sm.controller_uid == awayGuid)
         {
             yPos = 4.0f;
         }
@@ -369,11 +369,11 @@ public class PlayArea : MonoBehaviour
             go.GetComponent<CardAvatar>().Setup(card, useGuid, player.GetGuid());
         }
         card.SetCardAvatar(go.GetComponent<CardAvatar>());
-        go.GetComponent<CardAvatar>().SetControllerGuid(sm.controllerGuid);
+        go.GetComponent<CardAvatar>().SetControllerGuid(sm.controller_uid);
 
         EntityManager.Singelton.AddEntity(useGuid, go.GetComponent<CardAvatar>());
-		AddCardToPlayArea(card.GetCardAvatar(), player.GetGuid(), OriginOfCard.SUMMON, sm.fieldIndex);
-        */
+		AddCardToPlayArea(card.GetCardAvatar(), player.GetGuid(), sm.field_index);
+        
         action();
         action = null;
     }
