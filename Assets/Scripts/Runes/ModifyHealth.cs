@@ -10,7 +10,10 @@ public class ModifyHealth : Rune {
     public override void Execute(System.Action action)
     {
         var ent = EntityManager.Singelton.GetEntity(target_uid) as damageable;
-        ent.ModifyHealth(amount);
+        if (ent!=null){
+            Debug.Log(amount);
+            ent.ModifyHealth(amount);
+        }
         action();
     }
 

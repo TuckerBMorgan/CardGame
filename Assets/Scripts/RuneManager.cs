@@ -73,6 +73,7 @@ public class RuneManager : MonoBehaviour
                         }
                         else
                         {
+                            Debug.Log(jsonObject.keys[i]);
                             property.SetValue(runeObj, jsonObject[jsonObject.keys[i]].i.ToString(), null);
                         }
                         break;
